@@ -16,10 +16,15 @@ export function Inspector({ selectedModule, onChangeModule }: InspectorProps) {
 
   const { type, data } = selectedModule
 
+  const getModuleDisplayName = (type: ModuleInstance['type']) => {
+    if (type === 'media') return 'MUSIC PLAYER'
+    return type.toUpperCase()
+  }
+
   return (
     <div className="inspector">
       <div style={{ marginBottom: '0.5rem', fontWeight: 600 }}>
-        {type.toUpperCase()} MODULE
+        {getModuleDisplayName(type)} MODULE
       </div>
       {/* Position */}
       <div style={{ marginBottom: '0.5rem' }}>

@@ -191,5 +191,229 @@ export const compositionRules: CompositionRule[] = [
       },
     ],
   },
+  // Search → Map: populate map from search query
+  {
+    from: 'search',
+    to: 'map',
+    actions: [
+      {
+        label: 'Populate map from search query',
+        apply: (from, to) => {
+          if (from.type !== 'search' || to.type !== 'map') return [from, to]
+
+          const query = from.data.query.trim()
+          const description = query ? `Searching for ${query}…` : undefined
+
+          const updatedTo: ModuleInstance = {
+            ...to,
+            data: {
+              ...to.data,
+              locationQuery: query,
+              description,
+            },
+          }
+
+          return [from, updatedTo]
+        },
+      },
+    ],
+  },
+  // Search → Text: add search query to note
+  {
+    from: 'search',
+    to: 'text',
+    actions: [
+      {
+        label: 'Add search query to note',
+        apply: (from, to) => {
+          if (from.type !== 'search' || to.type !== 'text') return [from, to]
+
+          const query = from.data.query.trim()
+          const prevText = to.data.text || ''
+          const newText = prevText ? prevText + '\n' + query : query
+
+          const updatedTo: ModuleInstance = {
+            ...to,
+            data: {
+              ...to.data,
+              text: newText,
+            },
+          }
+
+          return [from, updatedTo]
+        },
+      },
+      {
+        label: 'Populate note with search results',
+        apply: (from, to) => {
+          if (from.type !== 'search' || to.type !== 'text') return [from, to]
+
+          const query = from.data.query.trim()
+          const results = from.data.results || []
+          const prevText = to.data.text || ''
+
+          let resultsText = ''
+          if (results.length > 0) {
+            resultsText = results
+              .map((r) => `• ${r.title}\n  ${r.snippet}`)
+              .join('\n\n')
+          } else {
+            resultsText = `Search query: ${query}\n(No results yet)`
+          }
+
+          const newText = prevText
+            ? prevText + '\n\n' + resultsText
+            : resultsText
+
+          const updatedTo: ModuleInstance = {
+            ...to,
+            data: {
+              ...to.data,
+              text: newText,
+            },
+          }
+
+          return [from, updatedTo]
+        },
+      },
+    ],
+  },
+  // Search → Media: use search query as track title
+  {
+    from: 'search',
+    to: 'media',
+    actions: [
+      {
+        label: 'Use search query as track title',
+        apply: (from, to) => {
+          if (from.type !== 'search' || to.type !== 'media') return [from, to]
+
+          const title = from.data.query.trim()
+
+          const updatedTo: ModuleInstance = {
+            ...to,
+            data: {
+              ...to.data,
+              title,
+            },
+          }
+
+          return [from, updatedTo]
+        },
+      },
+    ],
+  },
+  // Media → Text: add track info to note
+  {
+    from: 'media',
+    to: 'text',
+    actions: [
+      {
+        label: 'Add track info to note',
+        apply: (from, to) => {
+          if (from.type !== 'media' || to.type !== 'text') return [from, to]
+
+          const trackInfo = `Track: ${from.data.title}\nURL: ${from.data.audioUrl || '(no URL)'}`
+          const prevText = to.data.text || ''
+          const newText = prevText ? prevText + '\n\n' + trackInfo : trackInfo
+
+          const updatedTo: ModuleInstance = {
+            ...to,
+            data: {
+              ...to.data,
+              text: newText,
+            },
+          }
+
+          return [from, updatedTo]
+        },
+      },
+    ],
+  },
+  // Media → Search: search for this track
+  {
+    from: 'media',
+    to: 'search',
+    actions: [
+      {
+        label: 'Search for this track',
+        apply: (from, to) => {
+          if (from.type !== 'media' || to.type !== 'search') return [from, to]
+
+          const query = from.data.title.trim()
+
+          const updatedTo: ModuleInstance = {
+            ...to,
+            data: {
+              ...to.data,
+              query,
+            },
+          }
+
+          return [from, updatedTo]
+        },
+      },
+    ],
+  },
+  // Media → Image: find image of artist/band
+  {
+    from: 'media',
+    to: 'image',
+    actions: [
+      {
+        label: 'Find image of artist/band',
+        apply: (from, to) => {
+          if (from.type !== 'media' || to.type !== 'image') return [from, to]
+
+          const title = from.data.title.trim()
+          // Use title as label (represents artist/band name)
+          // In a real implementation, this would trigger an image search API
+
+          const updatedTo: ModuleInstance = {
+            ...to,
+            data: {
+              ...to.data,
+              label: title,
+              // imageUrl could be populated by a future API call
+            },
+          }
+
+          return [from, updatedTo]
+        },
+      },
+    ],
+  },
+  // Map → Text: add location to note
+  {
+    from: 'map',
+    to: 'text',
+    actions: [
+      {
+        label: 'Add location to note',
+        apply: (from, to) => {
+          if (from.type !== 'map' || to.type !== 'text') return [from, to]
+
+          const location = from.data.locationQuery.trim()
+          const description = from.data.description || ''
+          const locationInfo = description
+            ? `Location: ${location}\n${description}`
+            : `Location: ${location}`
+
+          const prevText = to.data.text || ''
+          const newText = prevText ? prevText + '\n\n' + locationInfo : locationInfo
+
+          const updatedTo: ModuleInstance = {
+            ...to,
+            data: {
+              ...to.data,
+              text: newText,
+            },
+          }
+
+          return [from, updatedTo]
+        },
+      },
+    ],
+  },
 ]
 

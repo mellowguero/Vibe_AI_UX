@@ -2,7 +2,7 @@ import { useState, useRef, useCallback } from 'react'
 import type { ModuleType, ModuleInstance, ImageModuleData, MediaModuleData, TextModuleData, MapModuleData, SearchModuleData } from './types/modules'
 import { ModuleCard } from './components/ModuleCard'
 import { Inspector } from './components/Inspector'
-import { CompositionMenu } from './CompositionMenu'
+import { CompositionMenu } from './components/CompositionMenu'
 import { compositionRules } from './compositionRules'
 import type { CompositionAction } from './compositionRules'
 
@@ -255,7 +255,7 @@ function App() {
     <div className="app">
       <aside className="sidebar">
         <button onClick={() => addModule('image')}>Add Image</button>
-        <button onClick={() => addModule('media')}>Add Media</button>
+        <button onClick={() => addModule('media')}>Add Music Player</button>
         <button onClick={() => addModule('text')}>Add Text</button>
         <button onClick={() => addModule('map')}>Add Map</button>
         <button onClick={() => addModule('search')}>Add Search</button>

@@ -29,7 +29,7 @@ export function ModuleCard({ module, isSelected, onSelect, onMouseDown, onUpdate
       case 'image':
         return 'Image'
       case 'media':
-        return 'Media'
+        return 'Music Player'
       case 'text':
         return 'Text'
       case 'map':
