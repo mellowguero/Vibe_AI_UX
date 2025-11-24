@@ -11,6 +11,24 @@ npm run dev
 
 The dev server runs on `localhost` (typically `http://localhost:5173`).
 
+### API Setup (Optional)
+
+**Search API**: Uses DuckDuckGo Instant Answer API (no key needed) - works out of the box!
+
+**Image Search API**: Uses Unsplash API (free tier, key required):
+1. Get a free API key from [Unsplash Developers](https://unsplash.com/developers)
+2. Create a `.env` file in the project root
+3. Add: `VITE_UNSPLASH_ACCESS_KEY=your_key_here`
+4. Restart the dev server
+
+**YouTube Music API**: Uses YouTube Data API v3 (free tier, key required):
+1. Get a free API key from [Google Cloud Console](https://console.cloud.google.com/)
+   - Enable "YouTube Data API v3" for your project
+2. Add to your `.env` file: `VITE_YOUTUBE_API_KEY=your_key_here`
+3. Restart the dev server
+
+Without API keys, those features will be disabled but other features work fine.
+
 ## Project Overview
 
 See [PROJECT_SUMMARY.md](./PROJECT_SUMMARY.md) for complete documentation of:
@@ -30,17 +48,18 @@ See [PROJECT_SUMMARY.md](./PROJECT_SUMMARY.md) for complete documentation of:
 ## Module Types
 
 - **Image**: Display images with labels
-- **Music Player**: Audio player with track info
+- **Music Player**: YouTube music player - search and play music automatically
 - **Text**: Editable text notes
 - **Map**: Location queries and descriptions
-- **Search**: Search queries (UI-ready for API integration)
+- **Search**: Real-time search with DuckDuckGo API (auto-searches as you type)
 
 ## Composition Examples
 
-- Text → Search → Map → Text (full loop)
-- Music Player → Image (find artist/band image)
-- Search → Music Player (use query as track title)
-- And many more bidirectional flows...
+- Text → Search → Map → Text (full loop with real search results)
+- Text → Music Player (auto-searches YouTube for the song)
+- Search → Music Player (use query as track title, auto-finds on YouTube)
+- Music Player → Image (find artist/band image via Unsplash)
+- And many more bidirectional flows with real API integrations...
 
 ## Tech Stack
 

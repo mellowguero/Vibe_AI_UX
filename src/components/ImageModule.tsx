@@ -22,7 +22,12 @@ export function ImageModule({ data, onUpdate }: ImageModuleProps) {
         onChange={(e) => onUpdate({ ...data, label: e.target.value })}
         className="module-input"
       />
-      {data.imageUrl && (
+      {data.isLoading && (
+        <div style={{ padding: '0.5rem', fontSize: '0.75rem', color: '#666' }}>
+          Searching for image...
+        </div>
+      )}
+      {data.imageUrl && !data.isLoading && (
         <img src={data.imageUrl} alt={data.label || 'Image'} className="image-preview" />
       )}
     </div>

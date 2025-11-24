@@ -63,7 +63,7 @@ function App() {
           y: 140,
           z: maxZ + 1,
           data: {
-            title: 'New track',
+            title: '',
             audioUrl: '',
           },
         }
@@ -284,24 +284,28 @@ function App() {
             <CompositionMenu
               actions={pendingComposition.actions}
               position={pendingComposition.position}
-              onSelect={(action) => {
-                setModules((prev) => {
-                  const from = prev.find(
-                    (m) => m.id === pendingComposition.fromId
-                  )
-                  const to = prev.find(
-                    (m) => m.id === pendingComposition.toId
-                  )
-                  if (!from || !to) return prev
+              onSelect={async (action) => {
+                const from = modules.find(
+                  (m) => m.id === pendingComposition.fromId
+                )
+                const to = modules.find(
+                  (m) => m.id === pendingComposition.toId
+                )
+                if (!from || !to) {
+                  setPendingComposition(null)
+                  return
+                }
 
-                  const [updatedFrom, updatedTo] = action.apply(from, to)
+                const result = action.apply(from, to)
+                const [updatedFrom, updatedTo] = await Promise.resolve(result)
 
-                  return prev.map((m) => {
+                setModules((prev) =>
+                  prev.map((m) => {
                     if (m.id === updatedFrom.id) return updatedFrom
                     if (m.id === updatedTo.id) return updatedTo
                     return m
                   })
-                })
+                )
 
                 setPendingComposition(null)
               }}

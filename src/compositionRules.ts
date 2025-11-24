@@ -1,8 +1,10 @@
 import type { ModuleInstance, ModuleType } from './types/modules'
+import { searchUnsplashImages } from './api/services'
+import { extractArtistNameWithAI } from './utils/textParsing'
 
 export type CompositionAction = {
   label: string
-  apply: (from: ModuleInstance, to: ModuleInstance) => ModuleInstance[]
+  apply: (from: ModuleInstance, to: ModuleInstance) => ModuleInstance[] | Promise<ModuleInstance[]>
 }
 
 export type CompositionRule = {
@@ -353,6 +355,26 @@ export const compositionRules: CompositionRule[] = [
           return [from, updatedTo]
         },
       },
+      {
+        label: 'Search for artist name only',
+        apply: async (from, to) => {
+          if (from.type !== 'media' || to.type !== 'search') return [from, to]
+
+          const title = from.data.title.trim()
+          // Use AI if available, otherwise use pattern matching
+          const artistName = await extractArtistNameWithAI(title)
+
+          const updatedTo: ModuleInstance = {
+            ...to,
+            data: {
+              ...to.data,
+              query: artistName,
+            },
+          }
+
+          return [from, updatedTo]
+        },
+      },
     ],
   },
   // Media → Image: find image of artist/band
@@ -362,23 +384,54 @@ export const compositionRules: CompositionRule[] = [
     actions: [
       {
         label: 'Find image of artist/band',
-        apply: (from, to) => {
+        apply: async (from, to) => {
           if (from.type !== 'media' || to.type !== 'image') return [from, to]
 
           const title = from.data.title.trim()
-          // Use title as label (represents artist/band name)
-          // In a real implementation, this would trigger an image search API
-
+          
+          // Update label immediately and set loading state
           const updatedTo: ModuleInstance = {
             ...to,
             data: {
               ...to.data,
               label: title,
-              // imageUrl could be populated by a future API call
+              isLoading: true,
             },
           }
 
-          return [from, updatedTo]
+          // Search for image asynchronously
+          if (title) {
+            try {
+              const imageResult = await searchUnsplashImages(title)
+              if (imageResult) {
+                return [
+                  from,
+                  {
+                    ...updatedTo,
+                    data: {
+                      ...updatedTo.data,
+                      imageUrl: imageResult.imageUrl,
+                      label: imageResult.label || title,
+                      isLoading: false,
+                    },
+                  },
+                ]
+              }
+            } catch (error) {
+              console.error('Image search failed:', error)
+            }
+          }
+
+          return [
+            from,
+            {
+              ...updatedTo,
+              data: {
+                ...updatedTo.data,
+                isLoading: false,
+              },
+            },
+          ]
         },
       },
     ],

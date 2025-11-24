@@ -3,11 +3,16 @@ export type ModuleType = 'image' | 'media' | 'text' | 'map' | 'search'
 export type ImageModuleData = {
   imageUrl: string
   label?: string
+  isLoading?: boolean
 }
 
 export type MediaModuleData = {
   title: string
   audioUrl: string
+  videoId?: string // YouTube video ID
+  channelTitle?: string
+  thumbnailUrl?: string
+  isLoading?: boolean
 }
 
 export type TextModuleData = {
@@ -27,6 +32,7 @@ export type SearchModuleData = {
     title: string
     snippet: string
   }[]
+  isLoading?: boolean
 }
 
 export type ModuleInstance =
