@@ -9,7 +9,7 @@ type SearchModuleProps = {
 
 export function SearchModule({ data, onChange }: SearchModuleProps) {
   const hasResults = data.results && data.results.length > 0
-  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null)
+  const debounceTimerRef = useRef<number | null>(null)
 
   useEffect(() => {
     // Clear previous timer

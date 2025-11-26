@@ -123,9 +123,12 @@ function App() {
 
   const updateModule = (moduleId: string, newData: ImageModuleData | MediaModuleData | TextModuleData | MapModuleData | SearchModuleData) => {
     setModules((prevModules) =>
-      prevModules.map((module) =>
-        module.id === moduleId ? { ...module, data: newData } : module
-      )
+      prevModules.map((module) => {
+        if (module.id === moduleId) {
+          return { ...module, data: newData } as ModuleInstance
+        }
+        return module
+      })
     )
   }
 

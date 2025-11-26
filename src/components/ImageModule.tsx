@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import type { ImageModuleData } from '../types/modules'
-import { searchUnsplashImages } from '../api/services'
+import { searchImages } from '../api/services'
 
 interface ImageModuleProps {
   data: ImageModuleData
@@ -27,13 +27,45 @@ export function ImageModule({ data, onUpdate }: ImageModuleProps) {
       return
     }
 
-    // Set loading state
+    // Debounce image search
+    const provider = data.imageProvider || 'unsplash'
+    
+    // Check for required API keys before searching
+    if (provider === 'google') {
+      const apiKey = import.meta.env.VITE_GOOGLE_API_KEY || import.meta.env.VITE_GOOGLE_MAPS_API_KEY
+      const cseId = import.meta.env.VITE_GOOGLE_CSE_ID || import.meta.env.VITE_GOOGLE_CUSTOM_SEARCH_ENGINE_ID
+      
+      if (!apiKey || !cseId) {
+        onUpdate({
+          ...currentData,
+          isLoading: false,
+          error: !apiKey && !cseId 
+            ? 'Missing VITE_GOOGLE_API_KEY and VITE_GOOGLE_CSE_ID (or VITE_GOOGLE_CUSTOM_SEARCH_ENGINE_ID) in .env'
+            : !apiKey 
+            ? 'Missing VITE_GOOGLE_API_KEY in .env'
+            : 'Missing VITE_GOOGLE_CSE_ID (or VITE_GOOGLE_CUSTOM_SEARCH_ENGINE_ID) in .env',
+        })
+        return
+      }
+    } else if (provider === 'unsplash') {
+      const apiKey = import.meta.env.VITE_UNSPLASH_ACCESS_KEY
+      if (!apiKey) {
+        onUpdate({
+          ...currentData,
+          isLoading: false,
+          error: 'Missing VITE_UNSPLASH_ACCESS_KEY in .env',
+        })
+        return
+      }
+    }
+    
+    // Set loading state and clear any previous errors
     onUpdate({
       ...currentData,
       isLoading: true,
+      error: undefined,
     })
-
-    // Debounce Unsplash search
+    
     debounceTimerRef.current = setTimeout(async () => {
       // Double-check imageUrl wasn't set while we were waiting
       const latestData = { ...data }
@@ -41,25 +73,61 @@ export function ImageModule({ data, onUpdate }: ImageModuleProps) {
         onUpdate({
           ...latestData,
           isLoading: false,
+          error: undefined,
         })
         return
       }
 
-      const result = await searchUnsplashImages(searchQuery)
-      if (result) {
+      try {
+        const result = await searchImages(searchQuery, provider)
+        if (result) {
+          onUpdate({
+            ...latestData,
+            imageUrl: result.imageUrl,
+            label: result.label || searchQuery,
+            isLoading: false,
+            error: undefined,
+          })
+        } else {
+          // Check again for API keys to provide helpful error message
+          let errorMsg: string | undefined
+          if (provider === 'google') {
+            const apiKey = import.meta.env.VITE_GOOGLE_API_KEY || import.meta.env.VITE_GOOGLE_MAPS_API_KEY
+            const cseId = import.meta.env.VITE_GOOGLE_CSE_ID || import.meta.env.VITE_GOOGLE_CUSTOM_SEARCH_ENGINE_ID
+            if (!apiKey || !cseId) {
+              errorMsg = !apiKey && !cseId 
+                ? 'Missing VITE_GOOGLE_API_KEY and VITE_GOOGLE_CSE_ID (or VITE_GOOGLE_CUSTOM_SEARCH_ENGINE_ID) in .env'
+                : !apiKey 
+                ? 'Missing VITE_GOOGLE_API_KEY in .env'
+                : 'Missing VITE_GOOGLE_CSE_ID (or VITE_GOOGLE_CUSTOM_SEARCH_ENGINE_ID) in .env'
+            } else {
+              errorMsg = 'No images found. Check console for details.'
+            }
+          } else {
+            const apiKey = import.meta.env.VITE_UNSPLASH_ACCESS_KEY
+            if (!apiKey) {
+              errorMsg = 'Missing VITE_UNSPLASH_ACCESS_KEY in .env'
+            } else {
+              errorMsg = 'No images found. Check console for details.'
+            }
+          }
+          
+          onUpdate({
+            ...latestData,
+            isLoading: false,
+            error: errorMsg,
+          })
+        }
+      } catch (error) {
+        // Catch and display API errors (like API not enabled)
+        const errorMsg = error instanceof Error ? error.message : 'Failed to search images. Check console for details.'
         onUpdate({
           ...latestData,
-          imageUrl: result.imageUrl,
-          label: result.label || searchQuery,
           isLoading: false,
-        })
-      } else {
-        onUpdate({
-          ...latestData,
-          isLoading: false,
+          error: errorMsg,
         })
       }
-    }, 800) // 800ms debounce for Unsplash search
+    }, 800) // 800ms debounce for image search
 
     return () => {
       if (debounceTimerRef.current) {
@@ -67,10 +135,45 @@ export function ImageModule({ data, onUpdate }: ImageModuleProps) {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data.searchQuery, data.imageUrl])
+  }, [data.searchQuery, data.imageUrl, data.imageProvider])
+
+  const provider = data.imageProvider || 'unsplash'
 
   return (
     <div className="image-module">
+      <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', marginBottom: '0.5rem' }}>
+        <label style={{ fontSize: '0.75rem', color: '#666' }}>Provider:</label>
+        <button
+          type="button"
+          onClick={() => onUpdate({ ...data, imageProvider: 'unsplash', error: undefined })}
+          style={{
+            padding: '0.25rem 0.5rem',
+            fontSize: '0.75rem',
+            border: '1px solid #ccc',
+            borderRadius: '4px',
+            background: provider === 'unsplash' ? '#007bff' : '#fff',
+            color: provider === 'unsplash' ? '#fff' : '#333',
+            cursor: 'pointer',
+          }}
+        >
+          Unsplash
+        </button>
+        <button
+          type="button"
+          onClick={() => onUpdate({ ...data, imageProvider: 'google', error: undefined })}
+          style={{
+            padding: '0.25rem 0.5rem',
+            fontSize: '0.75rem',
+            border: '1px solid #ccc',
+            borderRadius: '4px',
+            background: provider === 'google' ? '#007bff' : '#fff',
+            color: provider === 'google' ? '#fff' : '#333',
+            cursor: 'pointer',
+          }}
+        >
+          Google
+        </button>
+      </div>
       <input
         type="text"
         placeholder="Search for image (e.g. mountain, sunset, cat)"
@@ -83,6 +186,7 @@ export function ImageModule({ data, onUpdate }: ImageModuleProps) {
             searchQuery: newSearchQuery,
             imageUrl: newSearchQuery.trim() ? '' : data.imageUrl, // Clear URL if searching
             isLoading: newSearchQuery.trim() ? true : false,
+            error: undefined, // Clear error when user types
           })
         }}
         className="module-input"
@@ -111,7 +215,20 @@ export function ImageModule({ data, onUpdate }: ImageModuleProps) {
       />
       {data.isLoading && (
         <div style={{ padding: '0.5rem', fontSize: '0.75rem', color: '#666' }}>
-          Searching for image...
+          Searching {provider === 'google' ? 'Google Images' : 'Unsplash'}...
+        </div>
+      )}
+      {data.error && !data.isLoading && (
+        <div style={{ 
+          padding: '0.5rem', 
+          fontSize: '0.75rem', 
+          color: '#dc3545',
+          backgroundColor: '#f8d7da',
+          border: '1px solid #f5c6cb',
+          borderRadius: '4px',
+          marginTop: '0.5rem',
+        }}>
+          ⚠️ {data.error}
         </div>
       )}
       {data.imageUrl && !data.isLoading && (

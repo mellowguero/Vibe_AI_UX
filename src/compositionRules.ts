@@ -1,5 +1,5 @@
 import type { ModuleInstance, ModuleType } from './types/modules'
-import { searchUnsplashImages } from './api/services'
+import { searchImages } from './api/services'
 import { extractArtistNameWithAI, extractArtistName } from './utils/textParsing'
 
 export type CompositionAction = {
@@ -330,8 +330,9 @@ export const compositionRules: CompositionRule[] = [
           // Search for image asynchronously
           if (query) {
             try {
-              console.log('Searching Unsplash for:', query)
-              const imageResult = await searchUnsplashImages(query)
+              const provider = to.data.imageProvider || 'unsplash'
+              console.log(`Searching ${provider === 'google' ? 'Google Images' : 'Unsplash'} for:`, query)
+              const imageResult = await searchImages(query, provider)
               if (imageResult) {
                 console.log('Found image:', imageResult.imageUrl)
                 return [
@@ -469,8 +470,9 @@ export const compositionRules: CompositionRule[] = [
           // Search for image asynchronously
           if (searchQuery) {
             try {
-              console.log('Searching Unsplash for:', searchQuery)
-              const imageResult = await searchUnsplashImages(searchQuery)
+              const provider = to.data.imageProvider || 'unsplash'
+              console.log(`Searching ${provider === 'google' ? 'Google Images' : 'Unsplash'} for:`, searchQuery)
+              const imageResult = await searchImages(searchQuery, provider)
               if (imageResult) {
                 console.log('Found image:', imageResult.imageUrl)
                 return [

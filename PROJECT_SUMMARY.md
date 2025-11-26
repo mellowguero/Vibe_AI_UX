@@ -12,10 +12,12 @@
 
 ### **Image Module**
 
-- Fields: imageUrl, label, searchQuery, isLoading.
-- Unsplash integration: Auto-searches Unsplash when you type in the search field (800ms debounce).
-- Can search for images directly from the module (e.g., "mountain", "sunset", "cat").
-- Also supports manual image URLs.
+- Fields: imageUrl, label, searchQuery, isLoading, imageProvider, error.
+- **Dual provider support**: Can search via Unsplash API or Google Custom Search API.
+- Provider toggle: Switch between Unsplash and Google Images with UI buttons.
+- Unsplash integration: Requires `VITE_UNSPLASH_ACCESS_KEY`.
+- Google Images integration: Requires `VITE_GOOGLE_API_KEY` (or `VITE_GOOGLE_MAPS_API_KEY`) and `VITE_GOOGLE_CSE_ID` (or `VITE_GOOGLE_CUSTOM_SEARCH_ENGINE_ID`).
+- Visible error messages: Shows helpful error messages in UI when APIs fail or keys are missing.
 - Displays preview or placeholder.
 
 ### **Music Player Module** (formerly "Media Module")
@@ -33,8 +35,13 @@
 
 ### **Map Module**
 
-- Fields: locationQuery, description.
-- Styled placeholder resembling a map view.
+- Fields: locationQuery, description, latitude, longitude, formattedAddress, isLoading, error.
+- **Google Maps integration**: Real interactive maps with geocoding.
+- Auto-geocodes location queries (800ms debounce).
+- Displays interactive Google Maps with markers/pins.
+- Shows formatted address when location is geocoded.
+- Smooth location updates when query changes.
+- Requires `VITE_GOOGLE_MAPS_API_KEY` (Geocoding API and Maps JavaScript API must be enabled).
 
 ### **Search Module**
 
@@ -49,7 +56,6 @@
 - Z-index stacking places active card on top.
 - Modules can be selected, highlighted, and edited.
 - Inspector updates all type-specific fields.
-- Close button (X) in top-right corner of each module to delete it.
 
 ## **4. Composition Engine**
 
@@ -78,10 +84,7 @@
 - Media → Text: Add track info to note
 - Media → Search: Search for this track (full title)
 - Media → Search: Search for artist name only (extracts artist from title)
-- Media → Image: Find image of artist/band (via Unsplash API)
-
-**Search Module:**
-- Search → Image: Find image from search query (via Unsplash API)
+- Media → Image: Find image of artist/band (respects selected image provider)
 
 **Map Module:**
 - Map → Search: Use map location as search query
@@ -92,7 +95,7 @@
 - Search → Text: Add search query to note
 - Search → Text: Populate note with search results
 - Search → Media: Use search query as track title
-- Search → Image: Find image from search query (via Unsplash API)
+- Search → Image: Find image from search query (respects selected image provider)
 
 ### **Floating Composition Menu**
 
@@ -107,11 +110,21 @@
 - Returns instant answers, abstracts, and related topics.
 - Detects music queries and provides helpful fallback messages.
 
-### **Image Search API (Unsplash)**
+### **Image Search APIs**
+
+**Unsplash API:**
 - Searches for images via Unsplash API.
-- Requires API key (free tier available).
-- Used in Media → Image composition rule.
+- Requires API key (free tier available): `VITE_UNSPLASH_ACCESS_KEY`
 - Returns high-quality images with metadata.
+- Used in Media → Image and Search → Image composition rules.
+
+**Google Custom Search API:**
+- Searches Google Images via Custom Search API.
+- Requires API key: `VITE_GOOGLE_API_KEY` (or `VITE_GOOGLE_MAPS_API_KEY`)
+- Requires Custom Search Engine ID: `VITE_GOOGLE_CSE_ID` (or `VITE_GOOGLE_CUSTOM_SEARCH_ENGINE_ID`)
+- Must enable "Custom Search API" in Google Cloud Console.
+- Returns web images with broader coverage than Unsplash.
+- Used in Media → Image and Search → Image composition rules.
 
 ### **YouTube Music API**
 - Searches YouTube for music videos.
@@ -119,6 +132,15 @@
 - Auto-searches when song title is entered in Music Player.
 - Embeds YouTube player for playback.
 - Supports manual audio URLs as fallback.
+
+### **Google Maps API**
+- **Geocoding API**: Converts location queries to coordinates and formatted addresses.
+- **Maps JavaScript API**: Displays interactive Google Maps with markers.
+- Requires `VITE_GOOGLE_MAPS_API_KEY` (free tier available).
+- Free tier: 40,000 geocoding requests/month, 28,000 map loads/month.
+- Auto-geocodes when location query is entered in Map module.
+- Interactive maps with zoom, pan, and marker pins.
+- Used in all Map module composition rules (Image → Map, Text → Map, Search → Map).
 
 ## **6. Composition Chains Enabled**
 
@@ -130,17 +152,70 @@ The system now supports rich composition chains:
 - **Media → Text → Search → Media**
 - **Map → Text → Search → Map**
 - **Media → Image** (find artist/band image)
+- **Search → Image** (find image from search query)
 - And many more combinations...
 
 **Chain = agentic.** The system feels alive as modules can flow data between each other.
 
 ## **7. Recent Updates**
 
-### **API Integrations (Latest Session)**
+### **Google Maps API Integration (Latest Session)**
+
+1. **Real Map Integration**: 
+   - Replaced placeholder map with full Google Maps JavaScript API integration
+   - Interactive maps with zoom, pan, and marker pins
+   - Real-time geocoding via Google Geocoding API
+   - Auto-geocodes location queries with 800ms debounce
+
+2. **Map Module Enhancements**: 
+   - Added geocoding fields: `latitude`, `longitude`, `formattedAddress`
+   - Added `isLoading` and `error` states for better UX
+   - Map container stays mounted to prevent rendering issues
+   - Smooth location updates when query changes
+
+3. **API Integration**: 
+   - Implemented `geocodeLocation()` function in `src/api/services.ts`
+   - Dynamic Google Maps script loading
+   - Proper error handling for API key restrictions and geocoding failures
+   - Map instance management with proper cleanup
+
+4. **Environment Variables**: 
+   - Added `VITE_GOOGLE_MAPS_API_KEY` to `.env` template
+   - Requires Geocoding API and Maps JavaScript API to be enabled in Google Cloud Console
+
+### **Image Search Provider Toggle (Previous Session)**
+
+1. **Google Images Integration**: 
+   - Added Google Custom Search API as an alternative image search provider
+   - Implemented `searchGoogleImages()` function in `src/api/services.ts`
+   - Created unified `searchImages()` helper function that routes to the selected provider
+
+2. **Provider Toggle UI**: 
+   - Added toggle buttons in Image Module to switch between Unsplash and Google Images
+   - Provider preference is saved per module instance (`imageProvider` field)
+   - Visual feedback shows which provider is currently selected
+
+3. **Enhanced Error Handling**: 
+   - Added visible error messages in Image Module UI (red error boxes)
+   - Error messages guide users when API keys are missing or APIs aren't enabled
+   - Specific error messages for common issues (API not enabled, missing keys, etc.)
+   - Errors clear automatically when switching providers or starting new searches
+
+4. **Environment Variable Support**: 
+   - Supports both `VITE_GOOGLE_CSE_ID` and `VITE_GOOGLE_CUSTOM_SEARCH_ENGINE_ID` for flexibility
+   - Can use `VITE_GOOGLE_API_KEY` or fallback to `VITE_GOOGLE_MAPS_API_KEY`
+   - Clear error messages indicate which environment variables are needed
+
+5. **Composition Rules Updated**: 
+   - Media → Image and Search → Image rules now respect the selected image provider
+   - Automatically uses the provider preference from the target Image module
+
+### **API Integrations (Previous Sessions)**
 
 1. **Search API (DuckDuckGo)**: Real-time search with instant answers
 2. **Image Search API (Unsplash)**: Find artist/band images via Media → Image
 3. **YouTube Music API**: Auto-search and play music videos in Music Player
+4. **Google Maps API**: Real maps with geocoding and interactive markers
 
 ### **New Features**
 
@@ -162,76 +237,34 @@ The system now supports rich composition chains:
 1. **Search → Map**: Populate map from search query (with description)
 2. **Search → Text** (2 actions): Add query to note, or populate with search results
 3. **Search → Media**: Use search query as track title
-4. **Media → Text**: Add track info to note
-5. **Media → Search** (2 actions): Search for full track, or extract artist name only
-6. **Map → Text**: Add location to note
-7. **Media → Image**: Find image of artist/band (via Unsplash API)
+4. **Search → Image**: Find image from search query (respects selected provider)
+5. **Media → Text**: Add track info to note
+6. **Media → Search** (2 actions): Search for full track, or extract artist name only
+7. **Map → Text**: Add location to note
+8. **Media → Image**: Find image of artist/band (respects selected provider)
 
 ### **UI Updates**
 
 - Renamed "Media" module to "Music Player" throughout the UI
 - Added loading states to all API-integrated modules
-- Better error handling and user feedback
+- Better error handling and user feedback with visible error messages
 - Improved placeholder text and help messages
-- Added close button (X) to all modules for easy deletion
-- Image module now has direct search input for Unsplash
+- Provider toggle UI in Image Module
 
 ### **Technical Improvements**
 
 - Created `src/api/services.ts` for all API integrations
 - Created `src/utils/textParsing.ts` for text extraction utilities
-- Added `.env` file support for API keys (VITE_YOUTUBE_API_KEY, VITE_UNSPLASH_ACCESS_KEY, VITE_OPENAI_API_KEY)
+- Added `.env` file support for API keys
 - Fixed CORS issues with API calls
 - Improved state management for async operations
-- Enhanced YouTube integration: Music Player now stores full video title when YouTube finds a match
-- Image module now supports direct Unsplash search with auto-complete
+- Added `imageProvider` and `error` fields to `ImageModuleData` type
+- Enhanced error handling with try-catch blocks and helpful error messages
+- Better API response parsing for Google Custom Search API
+- Enhanced logging for debugging API issues
 
-## **8. Project Plan & Roadmap**
+## **8. Not Implemented Yet (Future Work)**
 
-### **Vision**
-Build a foundational layer for an **agentic operating system** where modules are intelligent, composable building blocks that can autonomously transform and flow data between each other. The system should feel "alive" - modules understand context, suggest actions, and create dynamic workflows without explicit user commands.
-
-### **Phase 1: Core Foundation** ✅ **COMPLETE**
-- [x] Modular canvas-based UI
-- [x] Drag-and-drop interaction model
-- [x] Basic module types (Image, Text, Map, Search, Music Player)
-- [x] Composition engine with overlap detection
-- [x] Inspector panel for module editing
-- [x] Basic composition rules
-
-### **Phase 2: Real API Integrations** ✅ **COMPLETE**
-- [x] Search API (DuckDuckGo)
-- [x] Image Search API (Unsplash)
-- [x] YouTube Music API
-- [x] Loading states and error handling
-- [x] Smart text parsing (artist extraction)
-
-### **Phase 3: Enhanced Interactions** 🚧 **IN PROGRESS**
-- [ ] Map API integration (real maps, geocoding, pins)
-- [ ] Spawn collision avoidance (smart module placement)
-- [ ] Module merging (combine modules into one)
-- [ ] Multi-select and grouping
-- [ ] Keyboard shortcuts
-- [ ] Better animations/transitions
-
-### **Phase 4: Intelligence & Automation** 📋 **PLANNED**
-- [ ] Agent-driven actions (modules act autonomously)
-- [ ] Context-aware suggestions (modules suggest relevant compositions)
-- [ ] Smart composition chains (auto-detect and suggest workflows)
-- [ ] Enhanced AI integration (beyond artist extraction)
-- [ ] Module linking/graph visualization
-- [ ] Workspace persistence (save/load states)
-
-### **Phase 5: OS-Level Features** 📋 **FUTURE**
-- [ ] OS-level chrome (dock, toolbar, spaces)
-- [ ] Window management
-- [ ] System integrations
-- [ ] Multi-workspace support
-- [ ] Collaboration features
-
-## **9. Not Implemented Yet (Future Work)**
-
-- Real map results / pins (Map API integration).
 - Spawn collision avoidance.
 - Module merging.
 - Module linking or graph system.
@@ -241,7 +274,7 @@ Build a foundational layer for an **agentic operating system** where modules are
 - Agent-driven actions and automation.
 - Enhanced AI integration (currently optional for artist extraction).
 
-## **10. Current System Overview**
+## **9. Current System Overview**
 
 - Fully functional modular UI.
 - Robust inspector.
@@ -250,7 +283,7 @@ Build a foundational layer for an **agentic operating system** where modules are
 - Rich bidirectional data flow between modules.
 - A real foundational layer for an agentic OS.
 
-## **11. Technical Details**
+## **10. Technical Details**
 
 ### **File Structure**
 
@@ -261,7 +294,7 @@ Build a foundational layer for an **agentic operating system** where modules are
 - `src/components/Inspector.tsx` - Module property editor
 - `src/components/ModuleCard.tsx` - Wrapper for draggable modules
 - `src/components/CompositionMenu.tsx` - Floating menu for composition actions
-- `src/api/services.ts` - API service functions (Search, Images, YouTube)
+- `src/api/services.ts` - API service functions (Search, Images, YouTube, Google Images, Geocoding)
 - `src/utils/textParsing.ts` - Text extraction utilities (artist name, etc.)
 - `.env` - Environment variables for API keys (not committed to git)
 
@@ -275,5 +308,4 @@ The dev server runs on `localhost` (typically `http://localhost:5173`). VPN is n
 
 ---
 
-**Last Updated:** Latest session added close buttons to modules, direct Unsplash search in Image module, Search → Image composition rule, and improved YouTube title handling.
-
+**Last Updated:** Latest session added Google Maps API integration with real interactive maps, geocoding, and markers. Map Module now fully functional with smooth location updates. Previous session added Google Images integration with provider toggle, enhanced error handling with visible UI messages, and improved environment variable support.

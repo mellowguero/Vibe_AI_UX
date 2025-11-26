@@ -109,6 +109,7 @@ export function ModuleCard({ module, isSelected, onSelect, onMouseDown, onUpdate
           <MapModule
             data={module.data}
             onChange={(data) => onUpdate(data)}
+            moduleId={module.id}
           />
         )}
         {module.type === 'search' && (

@@ -3,8 +3,10 @@ export type ModuleType = 'image' | 'media' | 'text' | 'map' | 'search'
 export type ImageModuleData = {
   imageUrl: string
   label?: string
-  searchQuery?: string // For searching Unsplash
+  searchQuery?: string // For searching images
   isLoading?: boolean
+  imageProvider?: 'unsplash' | 'google' // Image search provider
+  error?: string // Error message to display
 }
 
 export type MediaModuleData = {
@@ -23,6 +25,11 @@ export type TextModuleData = {
 export type MapModuleData = {
   locationQuery: string
   description?: string
+  latitude?: number
+  longitude?: number
+  formattedAddress?: string
+  isLoading?: boolean
+  error?: string
 }
 
 export type SearchModuleData = {
