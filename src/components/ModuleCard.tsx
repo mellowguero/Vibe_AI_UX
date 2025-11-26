@@ -14,9 +14,10 @@ interface ModuleCardProps {
   onUpdate: (newData: ImageModuleData | MediaModuleData | TextModuleData | MapModuleData | SearchModuleData) => void
   moduleRef: (element: HTMLDivElement | null) => void
   onBringToFront: () => void
+  onDelete: () => void
 }
 
-export function ModuleCard({ module, isSelected, onSelect, onMouseDown, onUpdate, moduleRef, onBringToFront }: ModuleCardProps) {
+export function ModuleCard({ module, isSelected, onSelect, onMouseDown, onUpdate, moduleRef, onBringToFront, onDelete }: ModuleCardProps) {
   const cardRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -73,6 +74,17 @@ export function ModuleCard({ module, isSelected, onSelect, onMouseDown, onUpdate
         }}
       >
         {getModuleLabel(module.type)}
+        <button
+          className="module-close-button"
+          onClick={(e) => {
+            e.stopPropagation()
+            onDelete()
+          }}
+          onMouseDown={(e) => e.stopPropagation()}
+          title="Close module"
+        >
+          ×
+        </button>
       </div>
       <div className="module-content">
         {module.type === 'image' && (

@@ -59,6 +59,7 @@ export function MediaModule({ data, onUpdate }: MediaModuleProps) {
       if (result) {
         onUpdate({
           ...latestData,
+          title: result.title, // Update title with full YouTube video title
           videoId: result.videoId,
           channelTitle: result.channelTitle,
           thumbnailUrl: result.thumbnailUrl,

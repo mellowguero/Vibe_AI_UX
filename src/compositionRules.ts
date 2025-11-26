@@ -1,6 +1,6 @@
 import type { ModuleInstance, ModuleType } from './types/modules'
 import { searchUnsplashImages } from './api/services'
-import { extractArtistNameWithAI } from './utils/textParsing'
+import { extractArtistNameWithAI, extractArtistName } from './utils/textParsing'
 
 export type CompositionAction = {
   label: string
@@ -305,6 +305,69 @@ export const compositionRules: CompositionRule[] = [
       },
     ],
   },
+  // Search → Image: find image from search query
+  {
+    from: 'search',
+    to: 'image',
+    actions: [
+      {
+        label: 'Find image from search query',
+        apply: async (from, to) => {
+          if (from.type !== 'search' || to.type !== 'image') return [from, to]
+
+          const query = from.data.query.trim()
+          
+          // Update label immediately and set loading state
+          const updatedTo: ModuleInstance = {
+            ...to,
+            data: {
+              ...to.data,
+              label: query,
+              isLoading: true,
+            },
+          }
+
+          // Search for image asynchronously
+          if (query) {
+            try {
+              console.log('Searching Unsplash for:', query)
+              const imageResult = await searchUnsplashImages(query)
+              if (imageResult) {
+                console.log('Found image:', imageResult.imageUrl)
+                return [
+                  from,
+                  {
+                    ...updatedTo,
+                    data: {
+                      ...updatedTo.data,
+                      imageUrl: imageResult.imageUrl,
+                      label: imageResult.label || query,
+                      isLoading: false,
+                    },
+                  },
+                ]
+              } else {
+                console.warn('No image found for:', query)
+              }
+            } catch (error) {
+              console.error('Image search failed:', error)
+            }
+          }
+
+          return [
+            from,
+            {
+              ...updatedTo,
+              data: {
+                ...updatedTo.data,
+                isLoading: false,
+              },
+            },
+          ]
+        },
+      },
+    ],
+  },
   // Media → Text: add track info to note
   {
     from: 'media',
@@ -389,21 +452,27 @@ export const compositionRules: CompositionRule[] = [
 
           const title = from.data.title.trim()
           
+          // Extract artist name from song title (e.g., "Queen - Bohemian Rhapsody" -> "Queen")
+          const artistName = extractArtistName(title)
+          const searchQuery = artistName || title
+          
           // Update label immediately and set loading state
           const updatedTo: ModuleInstance = {
             ...to,
             data: {
               ...to.data,
-              label: title,
+              label: searchQuery,
               isLoading: true,
             },
           }
 
           // Search for image asynchronously
-          if (title) {
+          if (searchQuery) {
             try {
-              const imageResult = await searchUnsplashImages(title)
+              console.log('Searching Unsplash for:', searchQuery)
+              const imageResult = await searchUnsplashImages(searchQuery)
               if (imageResult) {
+                console.log('Found image:', imageResult.imageUrl)
                 return [
                   from,
                   {
@@ -411,11 +480,13 @@ export const compositionRules: CompositionRule[] = [
                     data: {
                       ...updatedTo.data,
                       imageUrl: imageResult.imageUrl,
-                      label: imageResult.label || title,
+                      label: imageResult.label || searchQuery,
                       isLoading: false,
                     },
                   },
                 ]
+              } else {
+                console.warn('No image found for:', searchQuery)
               }
             } catch (error) {
               console.error('Image search failed:', error)

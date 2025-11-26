@@ -102,13 +102,17 @@ export async function searchUnsplashImages(query: string): Promise<{
     return null
   }
 
+  console.log('Unsplash API key loaded:', apiKey ? `${apiKey.substring(0, 10)}...` : 'missing')
+
   try {
     const response = await fetch(
       `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=1&client_id=${apiKey}`
     )
 
     if (!response.ok) {
-      throw new Error('Image search failed')
+      const errorText = await response.text()
+      console.error(`Unsplash API error (${response.status}):`, errorText)
+      throw new Error(`Image search failed: ${response.status} ${response.statusText}`)
     }
 
     const data = await response.json()
@@ -122,6 +126,7 @@ export async function searchUnsplashImages(query: string): Promise<{
       }
     }
 
+    console.warn('Unsplash search returned no results for:', query)
     return null
   } catch (error) {
     console.error('Image search error:', error)

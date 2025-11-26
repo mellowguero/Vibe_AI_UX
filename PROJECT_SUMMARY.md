@@ -12,8 +12,10 @@
 
 ### **Image Module**
 
-- Fields: imageUrl, label, isLoading.
-- Unsplash integration: Can search for images via API (requires key).
+- Fields: imageUrl, label, searchQuery, isLoading.
+- Unsplash integration: Auto-searches Unsplash when you type in the search field (800ms debounce).
+- Can search for images directly from the module (e.g., "mountain", "sunset", "cat").
+- Also supports manual image URLs.
 - Displays preview or placeholder.
 
 ### **Music Player Module** (formerly "Media Module")
@@ -47,6 +49,7 @@
 - Z-index stacking places active card on top.
 - Modules can be selected, highlighted, and edited.
 - Inspector updates all type-specific fields.
+- Close button (X) in top-right corner of each module to delete it.
 
 ## **4. Composition Engine**
 
@@ -77,6 +80,9 @@
 - Media → Search: Search for artist name only (extracts artist from title)
 - Media → Image: Find image of artist/band (via Unsplash API)
 
+**Search Module:**
+- Search → Image: Find image from search query (via Unsplash API)
+
 **Map Module:**
 - Map → Search: Use map location as search query
 - Map → Text: Add location to note
@@ -86,6 +92,7 @@
 - Search → Text: Add search query to note
 - Search → Text: Populate note with search results
 - Search → Media: Use search query as track title
+- Search → Image: Find image from search query (via Unsplash API)
 
 ### **Floating Composition Menu**
 
@@ -166,14 +173,18 @@ The system now supports rich composition chains:
 - Added loading states to all API-integrated modules
 - Better error handling and user feedback
 - Improved placeholder text and help messages
+- Added close button (X) to all modules for easy deletion
+- Image module now has direct search input for Unsplash
 
 ### **Technical Improvements**
 
 - Created `src/api/services.ts` for all API integrations
 - Created `src/utils/textParsing.ts` for text extraction utilities
-- Added `.env` file support for API keys
+- Added `.env` file support for API keys (VITE_YOUTUBE_API_KEY, VITE_UNSPLASH_ACCESS_KEY, VITE_OPENAI_API_KEY)
 - Fixed CORS issues with API calls
 - Improved state management for async operations
+- Enhanced YouTube integration: Music Player now stores full video title when YouTube finds a match
+- Image module now supports direct Unsplash search with auto-complete
 
 ## **8. Project Plan & Roadmap**
 
@@ -264,5 +275,5 @@ The dev server runs on `localhost` (typically `http://localhost:5173`). VPN is n
 
 ---
 
-**Last Updated:** Latest session added real API integrations (Search, Images, YouTube), artist name extraction, and enhanced composition rules.
+**Last Updated:** Latest session added close buttons to modules, direct Unsplash search in Image module, Search → Image composition rule, and improved YouTube title handling.
 

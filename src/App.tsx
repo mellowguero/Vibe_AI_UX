@@ -53,6 +53,7 @@ function App() {
           data: {
             imageUrl: '',
             label: '',
+            searchQuery: '',
           },
         }
       } else if (type === 'media') {
@@ -126,6 +127,13 @@ function App() {
         module.id === moduleId ? { ...module, data: newData } : module
       )
     )
+  }
+
+  const deleteModule = (moduleId: string) => {
+    setModules((prev) => prev.filter((m) => m.id !== moduleId))
+    if (selectedModuleId === moduleId) {
+      setSelectedModuleId(null)
+    }
   }
 
   const bringToFront = (moduleId: string) => {
@@ -278,6 +286,7 @@ function App() {
               onUpdate={(newData) => updateModule(module.id, newData)}
               moduleRef={(el) => registerModuleRef(module.id, el)}
               onBringToFront={() => bringToFront(module.id)}
+              onDelete={() => deleteModule(module.id)}
             />
           ))}
           {pendingComposition && (

@@ -90,10 +90,44 @@ body {
   border-radius: 6px 6px 0 0;
   cursor: grab;
   user-select: none;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .module-header:active {
   cursor: grabbing;
+}
+
+.module-close-button {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  width: 20px;
+  height: 20px;
+  border: none;
+  background-color: transparent;
+  color: #999;
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  transition: background-color 0.2s, color 0.2s;
+  z-index: 10;
+}
+
+.module-close-button:hover {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+.module-close-button:active {
+  background-color: #d0d0d0;
 }
 
 .module-content {

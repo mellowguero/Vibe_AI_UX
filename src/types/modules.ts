@@ -3,6 +3,7 @@ export type ModuleType = 'image' | 'media' | 'text' | 'map' | 'search'
 export type ImageModuleData = {
   imageUrl: string
   label?: string
+  searchQuery?: string // For searching Unsplash
   isLoading?: boolean
 }
 
