@@ -287,12 +287,23 @@ export async function searchYouTubeMusic(query: string): Promise<{
   }
 
   try {
-    // Search for music videos - add "music" to query for better results
-    const searchQuery = `${query} music`
-    // YouTube Data API v3 supports CORS, so we can call it directly
-    const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(searchQuery)}&type=video&maxResults=1&key=${apiKey}`
+    // For better results, construct search query based on format
+    let searchQuery = query.trim()
     
-    console.log('Searching YouTube for:', query)
+    // If query contains "Artist - Song" format, use it directly with "official"
+    if (searchQuery.includes(' - ')) {
+      // For "Artist - Song" format, add "official" for better matching
+      searchQuery = `${searchQuery} official`
+    } else {
+      // For single song title, add "official music video" for better results
+      searchQuery = `${searchQuery} official music video`
+    }
+    
+    // YouTube Data API v3 supports CORS, so we can call it directly
+    // Use videoCategoryId=10 for Music category to get better music results
+    const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(searchQuery)}&type=video&videoCategoryId=10&maxResults=1&key=${apiKey}`
+    
+    console.log('Searching YouTube for:', query, '(search query:', searchQuery, ')')
     const response = await fetch(apiUrl)
 
     if (!response.ok) {
@@ -384,6 +395,143 @@ export async function geocodeLocation(query: string): Promise<{
   } catch (error) {
     console.error('Geocoding error:', error)
     return null
+  }
+}
+
+// OpenAI Chat API - Chat Completions API (requires API key)
+import type { ChatMessage } from '../types/modules'
+
+export async function chatWithAI(messages: ChatMessage[]): Promise<ChatMessage> {
+  const apiKey = import.meta.env.VITE_OPENAI_API_KEY
+
+  if (!apiKey) {
+    console.warn('OpenAI API key not found. Set VITE_OPENAI_API_KEY in .env')
+    throw new Error('OpenAI API key not configured')
+  }
+
+  try {
+    // Convert ChatMessage[] to OpenAI format
+    const openAIMessages = messages.map(msg => ({
+      role: msg.sender === 'user' ? 'user' : 'assistant',
+      content: msg.text,
+    }))
+
+    // Add system message to guide AI behavior
+    const systemMessage = {
+      role: 'system' as const,
+      content: 'You are Alex Oskie, a designer and good dude from New York. You have a dry, silly sense of humor and love exchanging music recommendations with friends. Keep your responses casual, witty, and a bit deadpan. When recommending songs, always include both the artist/band name and song title in the format "Artist - Song Title" or "Band Name - Song Title". For example: "The Beatles - Hey Jude" or "Queen - Bohemian Rhapsody". Be yourself - a bit sarcastic, funny, but genuinely helpful with music suggestions.',
+    }
+
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: 'gpt-3.5-turbo',
+        messages: [systemMessage, ...openAIMessages],
+        temperature: 0.7,
+      }),
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}))
+      const errorMsg = errorData.error?.message || `HTTP ${response.status}: ${response.statusText}`
+      console.error('OpenAI API error:', errorMsg)
+      throw new Error(`OpenAI API error: ${errorMsg}`)
+    }
+
+    const data = await response.json()
+    const aiText = data.choices[0]?.message?.content || 'Sorry, I could not generate a response.'
+
+    // Detect song recommendations in AI response
+    // Look for patterns like "Artist - Song", "Band - Song", etc.
+    // Priority: Look for "Artist - Song" format first, then other patterns
+    const songPatterns = [
+      // "Artist - Song" format (most common)
+      /["']?([^"'\n]+?)\s*-\s*([^"'\n]+?)["']?/,
+      // "I recommend Artist - Song"
+      /(?:recommend|suggest|check out|listen to|try|you should|you'll love)\s+["']?([^"'\n]+?)\s*-\s*([^"'\n]+?)["']?/i,
+      // "Song by Artist"
+      /["']?([^"'\n]+?)["']?\s+(?:by|from)\s+([^"'\n]+)/i,
+      // Just a song title (fallback)
+      /(?:recommend|suggest|check out|listen to|try)\s+["']?([^"'\n]+?)["']?/i,
+    ]
+
+    let nestedModule: { type: 'media', data: any } | undefined
+    let searchQuery = ''
+
+    for (const pattern of songPatterns) {
+      const match = aiText.match(pattern)
+      if (match) {
+        let artist = ''
+        let song = ''
+        
+        if (match[1] && match[2]) {
+          // Has both artist and song
+          artist = match[1].trim()
+          song = match[2].trim()
+          // Use "Artist - Song" format for better YouTube search results
+          searchQuery = `${artist} - ${song}`
+        } else if (match[1]) {
+          // Just song title
+          song = match[1].trim()
+          searchQuery = song
+        }
+        
+        if (searchQuery && searchQuery.length > 0) {
+          console.log('Detected song recommendation:', searchQuery)
+          
+          // Search YouTube for the song with the full query
+          const youtubeResult = await searchYouTubeMusic(searchQuery)
+          
+          if (youtubeResult) {
+            console.log('Found YouTube video:', youtubeResult.title, 'by', youtubeResult.channelTitle)
+            nestedModule = {
+              type: 'media',
+              data: {
+                title: artist && song ? `${artist} - ${song}` : searchQuery,
+                audioUrl: '',
+                videoId: youtubeResult.videoId,
+                channelTitle: youtubeResult.channelTitle,
+                thumbnailUrl: youtubeResult.thumbnailUrl,
+                isLoading: false,
+              },
+            }
+          } else {
+            console.warn('YouTube search failed for:', searchQuery)
+            // Still create module even if YouTube search fails
+            nestedModule = {
+              type: 'media',
+              data: {
+                title: artist && song ? `${artist} - ${song}` : searchQuery,
+                audioUrl: '',
+                isLoading: false,
+              },
+            }
+          }
+          break
+        }
+      }
+    }
+
+    // Create AI message
+    const aiMessage: ChatMessage = {
+      id: crypto.randomUUID(),
+      sender: 'ai',
+      text: aiText,
+      timestamp: Date.now(),
+      nestedModule,
+    }
+
+    return aiMessage
+  } catch (error) {
+    console.error('OpenAI chat error:', error)
+    if (error instanceof Error) {
+      throw error
+    }
+    throw new Error('Failed to chat with AI. Check console for details.')
   }
 }
 

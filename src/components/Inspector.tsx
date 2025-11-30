@@ -18,6 +18,7 @@ export function Inspector({ selectedModule, onChangeModule }: InspectorProps) {
 
   const getModuleDisplayName = (type: ModuleInstance['type']) => {
     if (type === 'media') return 'MUSIC PLAYER'
+    if (type === 'chat') return 'CHAT'
     return type.toUpperCase()
   }
 
@@ -183,6 +184,52 @@ export function Inspector({ selectedModule, onChangeModule }: InspectorProps) {
               </div>
             </>
           )}
+        </>
+      )}
+      {/* Chat */}
+      {type === 'chat' && (
+        <>
+          <div style={{ marginTop: '0.5rem' }}>Messages ({data.messages.length})</div>
+          <div
+            style={{
+              maxHeight: 200,
+              overflowY: 'auto',
+              fontSize: '0.75rem',
+              color: '#555',
+              border: '1px solid #e0e0e0',
+              borderRadius: '4px',
+              padding: '0.5rem',
+              marginTop: '0.25rem',
+            }}
+          >
+            {data.messages.length === 0 ? (
+              <div style={{ color: '#999', fontStyle: 'italic' }}>No messages yet</div>
+            ) : (
+              data.messages.map((msg: any) => (
+                <div
+                  key={msg.id}
+                  style={{
+                    marginBottom: '0.5rem',
+                    paddingBottom: '0.5rem',
+                    borderBottom: '1px solid #eee',
+                  }}
+                >
+                  <div style={{ fontWeight: 500, marginBottom: '0.25rem' }}>
+                    {msg.sender === 'user' ? 'You' : 'AI'}
+                  </div>
+                  <div style={{ color: '#666' }}>{msg.text || '(no text)'}</div>
+                  {msg.nestedModule && (
+                    <div style={{ marginTop: '0.25rem', fontSize: '0.7rem', color: '#999' }}>
+                      Contains: {msg.nestedModule.type} module
+                    </div>
+                  )}
+                  <div style={{ fontSize: '0.65rem', color: '#999', marginTop: '0.25rem' }}>
+                    {new Date(msg.timestamp).toLocaleString()}
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
         </>
       )}
     </div>

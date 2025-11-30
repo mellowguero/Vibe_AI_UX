@@ -24,7 +24,8 @@ export function MediaModule({ data, onUpdate }: MediaModuleProps) {
     // - Title is empty
     // - User has manually set an audioUrl (they want to use their own URL)
     // - audioUrl is not empty (user is pasting their own URL)
-    if (!title.trim() || audioUrl.trim()) {
+    // - videoId already exists (module was extracted from chat or already has a video)
+    if (!title.trim() || audioUrl.trim() || data.videoId) {
       // If user has a URL, clear any YouTube video
       if (audioUrl.trim() && data.videoId) {
         onUpdate({
@@ -55,11 +56,23 @@ export function MediaModule({ data, onUpdate }: MediaModuleProps) {
         return
       }
 
-      const result = await searchYouTubeMusic(title)
-      if (result) {
+      // Check if videoId was set while we were waiting (e.g., from chat extraction)
+      if (latestData.videoId) {
         onUpdate({
           ...latestData,
-          title: result.title, // Update title with full YouTube video title
+          isLoading: false,
+        })
+        return
+      }
+
+      const result = await searchYouTubeMusic(title)
+      if (result) {
+        // Only update title if it's different and we don't already have a videoId
+        // This preserves the original "Artist - Song" format from chat
+        const newTitle = latestData.videoId ? latestData.title : result.title
+        onUpdate({
+          ...latestData,
+          title: newTitle,
           videoId: result.videoId,
           channelTitle: result.channelTitle,
           thumbnailUrl: result.thumbnailUrl,
@@ -79,7 +92,7 @@ export function MediaModule({ data, onUpdate }: MediaModuleProps) {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data.title, data.audioUrl])
+  }, [data.title, data.audioUrl, data.videoId])
 
   return (
     <div className="media-module">

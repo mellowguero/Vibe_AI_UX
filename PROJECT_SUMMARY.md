@@ -50,6 +50,18 @@
 - Auto-searches as you type (500ms debounce).
 - Detects music queries and provides helpful suggestions.
 
+### **Chat Module**
+
+- Fields: messages (array), isLoading, error.
+- **iMessage-style UI**: User messages on right (blue), AI messages on left (gray).
+- **AI Friend Integration**: Uses OpenAI Chat Completions API for conversational responses.
+- **Nested Module Support**: Messages can contain embedded modules (especially Music Player for song recommendations).
+- **Drag-Out Functionality**: Extract nested modules from chat to desktop canvas (both button and drag handle).
+- **Auto-Song Recommendations**: AI automatically creates Music Player modules when recommending songs, with YouTube search integration.
+- **Character Customization**: AI character is "Alex Oskie" - a designer from New York with dry, silly sense of humor.
+- Requires `VITE_OPENAI_API_KEY` for AI chat functionality.
+- Full conversation history stored in module data.
+
 ## **3. Interaction Model**
 
 - Cards are draggable via header.
@@ -97,6 +109,12 @@
 - Search → Media: Use search query as track title
 - Search → Image: Find image from search query (respects selected image provider)
 
+**Chat Module:**
+- Media → Chat: Send song recommendation to chat
+- Text → Chat: Send text message to chat
+- Chat → Media: Extract nested Music Player from chat
+- Chat → Text: Extract text from chat message
+
 ### **Floating Composition Menu**
 
 - Shows available actions when modules overlap.
@@ -142,6 +160,14 @@
 - Interactive maps with zoom, pan, and marker pins.
 - Used in all Map module composition rules (Image → Map, Text → Map, Search → Map).
 
+### **OpenAI Chat API**
+- **Chat Completions API**: Powers conversational AI friend in Chat module.
+- Requires `VITE_OPENAI_API_KEY` (paid API, pay-per-use).
+- Customizable AI character via system message.
+- Automatically detects song recommendations and creates nested Music Player modules.
+- Enhanced YouTube search integration for finding correct bands/artists.
+- Used exclusively in Chat module for AI conversations.
+
 ## **6. Composition Chains Enabled**
 
 The system now supports rich composition chains:
@@ -159,7 +185,54 @@ The system now supports rich composition chains:
 
 ## **7. Recent Updates**
 
-### **Google Maps API Integration (Latest Session)**
+### **Chat Module with AI Friend (Latest Session)**
+
+1. **Chat Module Implementation**:
+   - Created new Chat module with iMessage-style UI
+   - User messages appear on right (blue bubbles), AI messages on left (gray bubbles)
+   - Scrollable message list with auto-scroll to bottom
+   - Input field with send button and Enter key support
+   - Loading states and error handling for API failures
+
+2. **OpenAI Integration**:
+   - Added `chatWithAI()` function in `src/api/services.ts`
+   - Uses OpenAI Chat Completions API (gpt-3.5-turbo)
+   - Customizable AI character via system message
+   - Currently configured as "Alex Oskie" - designer from New York with dry, silly humor
+
+3. **Nested Module Support**:
+   - Messages can contain embedded modules (preview and expanded views)
+   - AI automatically creates Music Player modules when recommending songs
+   - Enhanced song detection with better regex patterns for "Artist - Song" format
+   - Improved YouTube search to find correct bands/artists
+   - Preserves original "Artist - Song" title when extracting from chat
+
+4. **Drag-Out Functionality**:
+   - Extract nested modules from chat to desktop canvas
+   - Two methods: "Extract to Desktop" button and drag handle
+   - Creates new ModuleInstance at drag position
+   - Fixed title preservation - extracted Music Player modules keep original title
+
+5. **Composition Rules**:
+   - Media → Chat: Send song recommendation to chat
+   - Text → Chat: Send text message to chat
+   - Chat → Media: Extract nested Music Player from chat
+   - Chat → Text: Extract text from chat message
+
+6. **UI Enhancements**:
+   - Chat modules are wider (320px) to accommodate messages
+   - Nested module previews with icons and compact display
+   - Expandable nested modules for full view
+   - Inspector shows chat message history
+
+7. **Technical Improvements**:
+   - Added ChatMessage and ChatModuleData types
+   - Enhanced YouTube search with Music category filter
+   - Better song title extraction from AI responses
+   - Fixed MediaModule to preserve titles when videoId exists
+   - Added chat-specific CSS styling
+
+### **Google Maps API Integration (Previous Session)**
 
 1. **Real Map Integration**: 
    - Replaced placeholder map with full Google Maps JavaScript API integration
@@ -294,8 +367,9 @@ The system now supports rich composition chains:
 - `src/components/Inspector.tsx` - Module property editor
 - `src/components/ModuleCard.tsx` - Wrapper for draggable modules
 - `src/components/CompositionMenu.tsx` - Floating menu for composition actions
-- `src/api/services.ts` - API service functions (Search, Images, YouTube, Google Images, Geocoding)
+- `src/api/services.ts` - API service functions (Search, Images, YouTube, Google Images, Geocoding, OpenAI Chat)
 - `src/utils/textParsing.ts` - Text extraction utilities (artist name, etc.)
+- `src/components/ChatModule.tsx` - Chat module component with AI integration
 - `.env` - Environment variables for API keys (not committed to git)
 
 ### **Running the Project**
@@ -308,4 +382,4 @@ The dev server runs on `localhost` (typically `http://localhost:5173`). VPN is n
 
 ---
 
-**Last Updated:** Latest session added Google Maps API integration with real interactive maps, geocoding, and markers. Map Module now fully functional with smooth location updates. Previous session added Google Images integration with provider toggle, enhanced error handling with visible UI messages, and improved environment variable support.
+**Last Updated:** Latest session added Chat Module with AI friend integration (OpenAI), iMessage-style UI, nested module support, and drag-out functionality. AI character customized as "Alex Oskie" with dry, silly humor. Enhanced YouTube search for better band/artist detection. Fixed Music Player title preservation when extracting from chat. Previous session added Google Maps API integration with real interactive maps, geocoding, and markers.

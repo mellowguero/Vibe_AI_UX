@@ -1,4 +1,4 @@
-export type ModuleType = 'image' | 'media' | 'text' | 'map' | 'search'
+export type ModuleType = 'image' | 'media' | 'text' | 'map' | 'search' | 'chat'
 
 export type ImageModuleData = {
   imageUrl: string
@@ -43,6 +43,23 @@ export type SearchModuleData = {
   isLoading?: boolean
 }
 
+export type ChatMessage = {
+  id: string
+  sender: 'user' | 'ai'
+  text: string
+  timestamp: number
+  nestedModule?: {
+    type: ModuleType
+    data: any
+  }
+}
+
+export type ChatModuleData = {
+  messages: ChatMessage[]
+  isLoading?: boolean
+  error?: string
+}
+
 export type ModuleInstance =
   | {
       id: string
@@ -83,5 +100,13 @@ export type ModuleInstance =
       y: number
       z: number
       data: SearchModuleData
+    }
+  | {
+      id: string
+      type: 'chat'
+      x: number
+      y: number
+      z: number
+      data: ChatModuleData
     }
 

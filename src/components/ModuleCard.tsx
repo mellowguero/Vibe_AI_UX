@@ -1,23 +1,25 @@
 import { useRef, useEffect } from 'react'
-import type { ModuleInstance, ImageModuleData, MediaModuleData, TextModuleData, MapModuleData, SearchModuleData } from '../types/modules'
+import type { ModuleInstance, ImageModuleData, MediaModuleData, TextModuleData, MapModuleData, SearchModuleData, ChatModuleData, ModuleType } from '../types/modules'
 import { ImageModule } from './ImageModule'
 import { MediaModule } from './MediaModule'
 import { TextModule } from './TextModule'
 import { MapModule } from './MapModule'
 import { SearchModule } from './SearchModule'
+import { ChatModule } from './ChatModule'
 
 interface ModuleCardProps {
   module: ModuleInstance
   isSelected: boolean
   onSelect: () => void
   onMouseDown: (e: React.MouseEvent, moduleId: string, moduleX: number, moduleY: number) => void
-  onUpdate: (newData: ImageModuleData | MediaModuleData | TextModuleData | MapModuleData | SearchModuleData) => void
+  onUpdate: (newData: ImageModuleData | MediaModuleData | TextModuleData | MapModuleData | SearchModuleData | ChatModuleData) => void
   moduleRef: (element: HTMLDivElement | null) => void
   onBringToFront: () => void
   onDelete: () => void
+  onExtractModule?: (moduleType: ModuleType, moduleData: any, position: { x: number; y: number }) => void
 }
 
-export function ModuleCard({ module, isSelected, onSelect, onMouseDown, onUpdate, moduleRef, onBringToFront, onDelete }: ModuleCardProps) {
+export function ModuleCard({ module, isSelected, onSelect, onMouseDown, onUpdate, moduleRef, onBringToFront, onDelete, onExtractModule }: ModuleCardProps) {
   const cardRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -37,13 +39,15 @@ export function ModuleCard({ module, isSelected, onSelect, onMouseDown, onUpdate
         return 'Map'
       case 'search':
         return 'Search'
+      case 'chat':
+        return 'Chat'
     }
   }
 
   return (
     <div
       ref={cardRef}
-      className="module-card"
+      className={`module-card ${module.type === 'chat' ? 'chat-module-card' : ''}`}
       style={{
         left: `${module.x}px`,
         top: `${module.y}px`,
@@ -116,6 +120,13 @@ export function ModuleCard({ module, isSelected, onSelect, onMouseDown, onUpdate
           <SearchModule
             data={module.data}
             onChange={(data) => onUpdate(data)}
+          />
+        )}
+        {module.type === 'chat' && (
+          <ChatModule
+            data={module.data}
+            onUpdate={(data) => onUpdate(data)}
+            onExtractModule={onExtractModule}
           />
         )}
       </div>

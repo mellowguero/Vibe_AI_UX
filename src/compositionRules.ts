@@ -541,5 +541,133 @@ export const compositionRules: CompositionRule[] = [
       },
     ],
   },
+  // Media → Chat: send song recommendation to chat
+  {
+    from: 'media',
+    to: 'chat',
+    actions: [
+      {
+        label: 'Send song recommendation to chat',
+        apply: (from, to) => {
+          if (from.type !== 'media' || to.type !== 'chat') return [from, to]
+
+          const title = from.data.title.trim()
+          const messageText = title ? `Check out this song: ${title}` : 'Check out this song!'
+          
+          const userMessage = {
+            id: crypto.randomUUID(),
+            sender: 'user' as const,
+            text: messageText,
+            timestamp: Date.now(),
+            nestedModule: {
+              type: 'media' as const,
+              data: from.data,
+            },
+          }
+
+          const updatedTo: ModuleInstance = {
+            ...to,
+            data: {
+              ...to.data,
+              messages: [...to.data.messages, userMessage],
+            },
+          }
+
+          return [from, updatedTo]
+        },
+      },
+    ],
+  },
+  // Text → Chat: send text to chat
+  {
+    from: 'text',
+    to: 'chat',
+    actions: [
+      {
+        label: 'Send text to chat',
+        apply: (from, to) => {
+          if (from.type !== 'text' || to.type !== 'chat') return [from, to]
+
+          const text = from.data.text.trim()
+          if (!text) return [from, to]
+
+          const userMessage = {
+            id: crypto.randomUUID(),
+            sender: 'user' as const,
+            text: text,
+            timestamp: Date.now(),
+          }
+
+          const updatedTo: ModuleInstance = {
+            ...to,
+            data: {
+              ...to.data,
+              messages: [...to.data.messages, userMessage],
+            },
+          }
+
+          return [from, updatedTo]
+        },
+      },
+    ],
+  },
+  // Chat → Media: extract nested Music Player from chat
+  {
+    from: 'chat',
+    to: 'media',
+    actions: [
+      {
+        label: 'Extract Music Player from chat',
+        apply: (from, to) => {
+          if (from.type !== 'chat' || to.type !== 'media') return [from, to]
+
+          // Find the most recent message with a nested media module
+          const mediaMessage = [...from.data.messages]
+            .reverse()
+            .find(msg => msg.nestedModule?.type === 'media')
+
+          if (!mediaMessage?.nestedModule) {
+            return [from, to]
+          }
+
+          const updatedTo: ModuleInstance = {
+            ...to,
+            data: mediaMessage.nestedModule.data,
+          }
+
+          return [from, updatedTo]
+        },
+      },
+    ],
+  },
+  // Chat → Text: extract text from chat message
+  {
+    from: 'chat',
+    to: 'text',
+    actions: [
+      {
+        label: 'Extract text from last chat message',
+        apply: (from, to) => {
+          if (from.type !== 'chat' || to.type !== 'text') return [from, to]
+
+          const lastMessage = from.data.messages[from.data.messages.length - 1]
+          if (!lastMessage?.text) return [from, to]
+
+          const prevText = to.data.text || ''
+          const newText = prevText ? prevText + '\n\n' + lastMessage.text : lastMessage.text
+
+          const updatedTo: ModuleInstance = {
+            ...to,
+            data: {
+              ...to.data,
+              text: newText,
+            },
+          }
+
+          return [from, updatedTo]
+        },
+      },
+    ],
+  },
 ]
 

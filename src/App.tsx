@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback } from 'react'
-import type { ModuleType, ModuleInstance, ImageModuleData, MediaModuleData, TextModuleData, MapModuleData, SearchModuleData } from './types/modules'
+import type { ModuleType, ModuleInstance, ImageModuleData, MediaModuleData, TextModuleData, MapModuleData, SearchModuleData, ChatModuleData } from './types/modules'
 import { ModuleCard } from './components/ModuleCard'
 import { Inspector } from './components/Inspector'
 import { CompositionMenu } from './components/CompositionMenu'
@@ -91,8 +91,7 @@ function App() {
             description: '',
           },
         }
-      } else {
-        // search
+      } else if (type === 'search') {
         newModule = {
           id: crypto.randomUUID(),
           type: 'search',
@@ -102,6 +101,18 @@ function App() {
           data: {
             query: '',
             results: [],
+          },
+        }
+      } else {
+        // chat
+        newModule = {
+          id: crypto.randomUUID(),
+          type: 'chat',
+          x: 180,
+          y: 180,
+          z: maxZ + 1,
+          data: {
+            messages: [],
           },
         }
       }
@@ -121,7 +132,7 @@ function App() {
     })
   }
 
-  const updateModule = (moduleId: string, newData: ImageModuleData | MediaModuleData | TextModuleData | MapModuleData | SearchModuleData) => {
+  const updateModule = (moduleId: string, newData: ImageModuleData | MediaModuleData | TextModuleData | MapModuleData | SearchModuleData | ChatModuleData) => {
     setModules((prevModules) =>
       prevModules.map((module) => {
         if (module.id === moduleId) {
@@ -131,6 +142,65 @@ function App() {
       })
     )
   }
+
+  const handleExtractModule = useCallback((moduleType: ModuleType, moduleData: any, position: { x: number; y: number }) => {
+    setModules((prev) => {
+      const maxZ = prev.length ? Math.max(...prev.map((m) => m.z)) : 0
+      let newModule: ModuleInstance
+
+      if (moduleType === 'image') {
+        newModule = {
+          id: crypto.randomUUID(),
+          type: 'image',
+          x: position.x,
+          y: position.y,
+          z: maxZ + 1,
+          data: moduleData,
+        }
+      } else if (moduleType === 'media') {
+        newModule = {
+          id: crypto.randomUUID(),
+          type: 'media',
+          x: position.x,
+          y: position.y,
+          z: maxZ + 1,
+          data: moduleData,
+        }
+      } else if (moduleType === 'text') {
+        newModule = {
+          id: crypto.randomUUID(),
+          type: 'text',
+          x: position.x,
+          y: position.y,
+          z: maxZ + 1,
+          data: moduleData,
+        }
+      } else if (moduleType === 'map') {
+        newModule = {
+          id: crypto.randomUUID(),
+          type: 'map',
+          x: position.x,
+          y: position.y,
+          z: maxZ + 1,
+          data: moduleData,
+        }
+      } else if (moduleType === 'search') {
+        newModule = {
+          id: crypto.randomUUID(),
+          type: 'search',
+          x: position.x,
+          y: position.y,
+          z: maxZ + 1,
+          data: moduleData,
+        }
+      } else {
+        // Should not happen, but return empty array to satisfy type
+        return prev
+      }
+
+      return [...prev, newModule]
+    })
+  }, [])
 
   const deleteModule = (moduleId: string) => {
     setModules((prev) => prev.filter((m) => m.id !== moduleId))
@@ -270,6 +340,7 @@ function App() {
         <button onClick={() => addModule('text')}>Add Text</button>
         <button onClick={() => addModule('map')}>Add Map</button>
         <button onClick={() => addModule('search')}>Add Search</button>
+        <button onClick={() => addModule('chat')}>Add Chat</button>
       </aside>
       <div className="main-area">
         <div
@@ -290,6 +361,7 @@ function App() {
               moduleRef={(el) => registerModuleRef(module.id, el)}
               onBringToFront={() => bringToFront(module.id)}
               onDelete={() => deleteModule(module.id)}
+              onExtractModule={handleExtractModule}
             />
           ))}
           {pendingComposition && (
