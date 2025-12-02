@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module Playground</title>
+  <link rel="stylesheet" href="playground.css">
+  <style>
+    /* Quick inline experiments here */
+  </style>
+</head>
+<body>
+  <div class="playground-container">
+    <header class="playground-header">
+      <h1>Module Playground</h1>
+      <p>Experiment with module composition, states, and styling</p>
+    </header>
+
+    <!-- Chat Module Play Area -->
+    <section class="play-area" id="chat-module-area">
+      <h2 class="play-area-title">Chat Module</h2>
+      <div class="play-area-content">
+        <!-- Full Chat Module -->
+        <div class="state-group full-width">
+          <h3>Full Chat Module</h3>
+          <div class="chat-module-example">
+            <div class="chat-messages">
+              <div class="chat-message chat-message-user">
+                <div class="chat-message-bubble tail-bottom">
+                  <div class="chat-message-text">Hey, check out this song!</div>
+                </div>
+                <div class="chat-message-time">07:16 PM</div>
+              </div>
+              <div class="chat-message chat-message-ai">
+                <div class="chat-message-bubble tail-bottom">
+                  <div class="chat-message-text">give 'Bob Dylan - Like a Rolling Stone' a spin. It's like a musical time machine back to the 60s.</div>
+                  <div class="music-module-placeholder"></div>
+                </div>
+                <div class="chat-message-time">07:17 PM</div>
+              </div>
+            </div>
+            <div class="chat-input-container">
+              <input type="text" class="chat-input" placeholder="Type a message...">
+              <button class="chat-send-button">Send</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Collapsed Chat Module -->
+        <div class="state-group">
+          <h3>Collapsed Chat Module</h3>
+          <div class="chat-module-collapsed">
+            <div class="chat-module-header-collapsed">
+              <span>Chat</span>
+              <button class="chat-expand-button">+</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Message Bubbles -->
+        <div class="state-group">
+          <h3>User Message Bubble - Bottom Tail (Short Text)</h3>
+          <div class="chat-message chat-message-user">
+            <div class="chat-message-bubble tail-bottom">
+              <div class="chat-message-text">This is a user message</div>
+            </div>
+            <div class="chat-message-time">07:16 PM</div>
+          </div>
+        </div>
+
+        <div class="state-group">
+          <h3>User Message Bubble - Top Tail (Short Text)</h3>
+          <div class="chat-message chat-message-user">
+            <div class="chat-message-bubble tail-top">
+              <div class="chat-message-text">This is a user message</div>
+            </div>
+            <div class="chat-message-time">07:16 PM</div>
+          </div>
+        </div>
+
+        <div class="state-group">
+          <h3>User Message Bubble - Bottom Tail (Long Text - Scaling)</h3>
+          <div class="chat-message chat-message-user">
+            <div class="chat-message-bubble tail-bottom">
+              <div class="chat-message-text">This is a longer user message that demonstrates how the bubble scales with content. The text will wrap naturally and the bubble will grow to accommodate it, but it will never exceed the maximum width of 400px as specified in the design.</div>
+            </div>
+            <div class="chat-message-time">07:16 PM</div>
+          </div>
+        </div>
+
+        <div class="state-group">
+          <h3>User Message Bubble - Top Tail (Long Text - Scaling)</h3>
+          <div class="chat-message chat-message-user">
+            <div class="chat-message-bubble tail-top">
+              <div class="chat-message-text">This is a longer user message that demonstrates how the bubble scales with content. The text will wrap naturally and the bubble will grow to accommodate it, but it will never exceed the maximum width of 400px as specified in the design.</div>
+            </div>
+            <div class="chat-message-time">07:16 PM</div>
+          </div>
+        </div>
+
+        <div class="state-group">
+          <h3>User Message Bubble - Bottom Tail with Music Placeholder</h3>
+          <div class="chat-message chat-message-user">
+            <div class="chat-message-bubble tail-bottom">
+              <div class="chat-message-text">Hey, check out this song!</div>
+              <div class="music-module-placeholder"></div>
+            </div>
+            <div class="chat-message-time">07:16 PM</div>
+          </div>
+        </div>
+
+        <div class="state-group">
+          <h3>User Message Bubble - Top Tail with Music Placeholder</h3>
+          <div class="chat-message chat-message-user">
+            <div class="chat-message-bubble tail-top">
+              <div class="chat-message-text">Hey, check out this song!</div>
+              <div class="music-module-placeholder"></div>
+            </div>
+            <div class="chat-message-time">07:16 PM</div>
+          </div>
+        </div>
+
+        <div class="state-group">
+          <h3>AI Message Bubble - Bottom Tail (Short Text)</h3>
+          <div class="chat-message chat-message-ai">
+            <div class="chat-message-bubble tail-bottom">
+              <div class="chat-message-text">This is an AI message from Alex Oskie</div>
+            </div>
+            <div class="chat-message-time">07:17 PM</div>
+          </div>
+        </div>
+
+        <div class="state-group">
+          <h3>AI Message Bubble - Top Tail (Short Text)</h3>
+          <div class="chat-message chat-message-ai">
+            <div class="chat-message-bubble tail-top">
+              <div class="chat-message-text">This is an AI message from Alex Oskie</div>
+            </div>
+            <div class="chat-message-time">07:17 PM</div>
+          </div>
+        </div>
+
+        <div class="state-group">
+          <h3>AI Message Bubble - Bottom Tail (Long Text - Scaling)</h3>
+          <div class="chat-message chat-message-ai">
+            <div class="chat-message-bubble tail-bottom">
+              <div class="chat-message-text">This is a longer AI message that demonstrates how the bubble scales with content. The text will wrap naturally and the bubble will grow to accommodate it, but it will never exceed the maximum width of 400px as specified in the design.</div>
+            </div>
+            <div class="chat-message-time">07:17 PM</div>
+          </div>
+        </div>
+
+        <div class="state-group">
+          <h3>AI Message Bubble - Top Tail (Long Text - Scaling)</h3>
+          <div class="chat-message chat-message-ai">
+            <div class="chat-message-bubble tail-top">
+              <div class="chat-message-text">This is a longer AI message that demonstrates how the bubble scales with content. The text will wrap naturally and the bubble will grow to accommodate it, but it will never exceed the maximum width of 400px as specified in the design.</div>
+            </div>
+            <div class="chat-message-time">07:17 PM</div>
+          </div>
+        </div>
+
+        <div class="state-group">
+          <h3>AI Message Bubble - Bottom Tail with Music Placeholder</h3>
+          <div class="chat-message chat-message-ai">
+            <div class="chat-message-bubble tail-bottom">
+              <div class="chat-message-text">AI message here.</div>
+              <div class="music-module-placeholder"></div>
+            </div>
+            <div class="chat-message-time">07:17 PM</div>
+          </div>
+        </div>
+
+        <div class="state-group">
+          <h3>AI Message Bubble - Top Tail with Music Placeholder</h3>
+          <div class="chat-message chat-message-ai">
+            <div class="chat-message-bubble tail-top">
+              <div class="chat-message-text">AI message here.</div>
+              <div class="music-module-placeholder"></div>
+            </div>
+            <div class="chat-message-time">07:17 PM</div>
+          </div>
+        </div>
+
+        <div class="state-group">
+          <h3>AI Message Bubble - Bottom Tail with Long Text + Music</h3>
+          <div class="chat-message chat-message-ai">
+            <div class="chat-message-bubble tail-bottom">
+              <div class="chat-message-text">give 'Bob Dylan - Like a Rolling Stone' a spin. It's like a musical time machine back to the 60s.</div>
+              <div class="music-module-placeholder"></div>
+            </div>
+            <div class="chat-message-time">07:17 PM</div>
+          </div>
+        </div>
+
+        <div class="state-group">
+          <h3>AI Message Bubble - Top Tail with Long Text + Music</h3>
+          <div class="chat-message chat-message-ai">
+            <div class="chat-message-bubble tail-top">
+              <div class="chat-message-text">give 'Bob Dylan - Like a Rolling Stone' a spin. It's like a musical time machine back to the 60s.</div>
+              <div class="music-module-placeholder"></div>
+            </div>
+            <div class="chat-message-time">07:17 PM</div>
+          </div>
+        </div>
+
+        <!-- Nested Module Expanded -->
+        <div class="state-group full-width">
+          <h3>Nested Module Expanded</h3>
+          <div class="chat-message chat-message-ai">
+            <div class="chat-message-bubble">
+              <div class="chat-message-text">Check out this song:</div>
+              <div class="chat-message-nested">
+                <div class="nested-module-expanded">
+                  <div class="media-module-nested">
+                    <div class="media-title-nested">Bob Dylan - Like a Rolling Stone</div>
+                    <div class="media-channel-nested">BobDylanVEVO</div>
+                    <div class="media-embed-nested">
+                      <div class="youtube-thumbnail-placeholder">
+                        <div class="play-button">▶</div>
+                        <div class="youtube-logo">YouTube</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="nested-module-actions">
+                  <button class="nested-module-toggle">−</button>
+                  <button class="nested-module-extract">↗</button>
+                  <div class="nested-module-drag-handle">⋮⋮</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="state-group">
+          <h3>Empty State</h3>
+          <div class="chat-module-example">
+            <div class="chat-messages">
+              <div class="chat-empty-state">
+                Start a conversation with your AI friend!
+              </div>
+            </div>
+            <div class="chat-input-container">
+              <input type="text" class="chat-input" placeholder="Type a message...">
+              <button class="chat-send-button">Send</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Media Player Play Area -->
+    <section class="play-area" id="media-player-area">
+      <h2 class="play-area-title">Media Player</h2>
+      <div class="play-area-content">
+        <!-- Desktop Standalone -->
+        <div class="state-group full-width">
+          <h3>Desktop Standalone</h3>
+          <div class="media-module-desktop">
+            <input type="text" class="module-input" value="Bob Dylan - Like a Rolling Stone" placeholder="Song title">
+            <div class="media-channel">BobDylanVEVO</div>
+            <div class="media-embed">
+              <div class="youtube-thumbnail-placeholder">
+                <div class="play-button">▶</div>
+                <div class="youtube-logo">YouTube</div>
+              </div>
+            </div>
+            <div class="media-link">
+              <a href="#" class="youtube-link">Open in YouTube ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Nested Preview (Chat) -->
+        <div class="state-group">
+          <h3>Nested Preview (Chat)</h3>
+          <div class="nested-module-preview">
+            <div class="nested-module-preview-content">
+              <div class="nested-module-preview-icon">🎵</div>
+              <div class="nested-module-preview-text">
+                <div class="nested-module-preview-title">Music Player</div>
+                <div class="nested-module-preview-subtitle">Bob Dylan - Like a Rolling Stone</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Nested Expanded (Chat) -->
+        <div class="state-group full-width">
+          <h3>Nested Expanded (Chat)</h3>
+          <div class="media-module-nested">
+            <div class="media-title-nested">Bob Dylan - Like a Rolling Stone</div>
+            <div class="media-channel-nested">BobDylanVEVO</div>
+            <div class="media-embed-nested">
+              <div class="youtube-thumbnail-placeholder">
+                <div class="play-button">▶</div>
+                <div class="youtube-logo">YouTube</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Loading State -->
+        <div class="state-group">
+          <h3>Loading State</h3>
+          <div class="media-module-desktop">
+            <input type="text" class="module-input" value="Bob Dylan - Like a Rolling Stone" placeholder="Song title">
+            <div class="media-loading">Searching YouTube...</div>
+          </div>
+        </div>
+
+        <!-- With Video -->
+        <div class="state-group full-width">
+          <h3>With Video</h3>
+          <div class="media-module-desktop">
+            <input type="text" class="module-input" value="Bob Dylan - Like a Rolling Stone" placeholder="Song title">
+            <div class="media-channel">BobDylanVEVO</div>
+            <div class="media-embed">
+              <div class="youtube-thumbnail-placeholder">
+                <div class="play-button">▶</div>
+                <div class="youtube-logo">YouTube</div>
+              </div>
+            </div>
+            <div class="media-link">
+              <a href="#" class="youtube-link">Open in YouTube ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Audio Only -->
+        <div class="state-group">
+          <h3>Audio Only</h3>
+          <div class="media-module-desktop">
+            <input type="text" class="module-input" value="Song Title" placeholder="Song title">
+            <input type="text" class="module-input" value="https://example.com/audio.mp3" placeholder="Audio URL">
+            <div class="audio-player-placeholder">
+              <div class="audio-controls">
+                <button class="audio-play">▶</button>
+                <div class="audio-progress">
+                  <div class="audio-progress-bar"></div>
+                </div>
+                <div class="audio-time">0:00 / 3:45</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Image Module Play Area -->
+    <section class="play-area" id="image-module-area">
+      <h2 class="play-area-title">Image Module</h2>
+      <div class="play-area-content">
+        <!-- Image module states will go here -->
+        <div class="state-group">
+          <h3>States Placeholder</h3>
+          <p class="placeholder-text">Image module states to be added</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Text Module Play Area -->
+    <section class="play-area" id="text-module-area">
+      <h2 class="play-area-title">Text Module</h2>
+      <div class="play-area-content">
+        <!-- Text module states will go here -->
+        <div class="state-group">
+          <h3>States Placeholder</h3>
+          <p class="placeholder-text">Text module states to be added</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Map Module Play Area -->
+    <section class="play-area" id="map-module-area">
+      <h2 class="play-area-title">Map Module</h2>
+      <div class="play-area-content">
+        <!-- Map module states will go here -->
+        <div class="state-group">
+          <h3>States Placeholder</h3>
+          <p class="placeholder-text">Map module states to be added</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Search Module Play Area -->
+    <section class="play-area" id="search-module-area">
+      <h2 class="play-area-title">Search Module</h2>
+      <div class="play-area-content">
+        <!-- Search module states will go here -->
+        <div class="state-group">
+          <h3>States Placeholder</h3>
+          <p class="placeholder-text">Search module states to be added</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
+

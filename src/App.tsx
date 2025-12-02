@@ -5,6 +5,8 @@ import { Inspector } from './components/Inspector'
 import { CompositionMenu } from './components/CompositionMenu'
 import { compositionRules } from './compositionRules'
 import type { CompositionAction } from './compositionRules'
+import { extractArtistName } from './utils/textParsing'
+import { searchImages } from './api/services'
 
 type PendingComposition = {
   fromId: string
@@ -166,6 +168,98 @@ function App() {
           z: maxZ + 1,
           data: moduleData,
         }
+
+        // Auto-spawn Image module above Music Player
+        const title = moduleData.title || ''
+        const artistName = extractArtistName(title)
+        const searchQuery = artistName || title
+
+        // Calculate position above Music Player (with bounds checking)
+        const imageY = Math.max(0, position.y - CARD_HEIGHT - 16)
+        const imageX = position.x
+
+        const imageModule: ModuleInstance = {
+          id: crypto.randomUUID(),
+          type: 'image',
+          x: imageX,
+          y: imageY,
+          z: maxZ + 2,
+          data: {
+            imageUrl: '',
+            label: searchQuery,
+            searchQuery: searchQuery,
+            isLoading: true,
+            imageProvider: 'google',
+          },
+        }
+
+        // Trigger image search asynchronously
+        if (searchQuery) {
+          const imageModuleId = imageModule.id
+
+          // Use the composition rule logic to search for image
+          setTimeout(async () => {
+            try {
+              const provider = imageModule.data.imageProvider || 'google'
+              const imageResult = await searchImages(searchQuery, provider)
+              
+              if (imageResult) {
+                setModules((current) =>
+                  current.map((m) => {
+                    if (m.id === imageModuleId) {
+                      return {
+                        ...m,
+                        data: {
+                          ...m.data,
+                          imageUrl: imageResult.imageUrl,
+                          label: imageResult.label || searchQuery,
+                          isLoading: false,
+                        },
+                      } as ModuleInstance
+                    }
+                    return m
+                  })
+                )
+              } else {
+                // No image found, just clear loading state
+                setModules((current) =>
+                  current.map((m) => {
+                    if (m.id === imageModuleId) {
+                      return {
+                        ...m,
+                        data: {
+                          ...m.data,
+                          isLoading: false,
+                        },
+                      } as ModuleInstance
+                    }
+                    return m
+                  })
+                )
+              }
+            } catch (error) {
+              console.error('Image search failed:', error)
+              // Clear loading state on error
+              setModules((current) =>
+                current.map((m) => {
+                  if (m.id === imageModuleId) {
+                    return {
+                      ...m,
+                      data: {
+                        ...m.data,
+                        isLoading: false,
+                        error: 'Failed to load image',
+                      },
+                    } as ModuleInstance
+                  }
+                  return m
+                })
+              )
+            }
+          }, 0)
+        }
+
+        return [...prev, newModule, imageModule]
       } else if (moduleType === 'text') {
         newModule = {
           id: crypto.randomUUID(),

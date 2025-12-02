@@ -253,7 +253,10 @@ export function ChatModule({ data, onUpdate, onExtractModule }: ChatModuleProps)
               {message.text && (
                 <div className="chat-message-text">{message.text}</div>
               )}
-              {message.nestedModule && (
+              {message.nestedModule?.type === 'media' && (
+                <div className="music-module-placeholder"></div>
+              )}
+              {message.nestedModule && message.nestedModule.type !== 'media' && (
                 <div className="chat-message-nested">
                   {renderNestedModule(message, expandedModuleId === message.id)}
                   <div className="nested-module-actions">

@@ -470,9 +470,16 @@ body {
 }
 
 .chat-message-ai .chat-message-bubble {
-  background-color: #E5E5EA;
-  color: #000;
-  border-bottom-left-radius: 4px;
+  background: linear-gradient(to right, #26252A 0%, #352965 100%);
+  color: #f6f3ff;
+  max-width: 400px;
+  padding: 8px;
+  border-radius: 16px;
+  border-bottom-left-radius: 2px;
+  font-family: 'Satoshi Medium', 'Satoshi', system-ui, -apple-system, sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: normal;
 }
 
 .chat-message-text {
@@ -647,4 +654,13 @@ body {
 
 .nested-module-drag-handle:active {
   cursor: grabbing;
+}
+
+/* Music Module Placeholder */
+.music-module-placeholder {
+  background-color: #ff0000;
+  height: 56px;
+  border-radius: 8px;
+  margin-top: 8px;
+  width: 100%;
 }
