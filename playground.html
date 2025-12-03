@@ -46,6 +46,172 @@
           </div>
         </div>
 
+        <!-- Full Modal Chat Container -->
+        <div class="state-group full-width chat-container-bg">
+          <h3>Full Modal Chat Container</h3>
+          <div class="chat-container-wrapper">
+            <div class="chat-module-full" id="glass-container" style="height: 600px;">
+              <div class="chat-messages-area">
+                <div class="chat-message chat-message-ai">
+                  <div class="chat-message-bubble tail-bottom">
+                    <div class="chat-message-text">AI message here.</div>
+                  </div>
+                </div>
+                <div class="chat-message chat-message-user">
+                  <div class="chat-message-bubble tail-bottom">
+                    <div class="chat-message-text">Hi there</div>
+                  </div>
+                </div>
+                <div class="chat-message chat-message-ai">
+                  <div class="chat-message-bubble tail-bottom">
+                    <div class="chat-message-text">AI message here.</div>
+                  </div>
+                </div>
+                <div class="chat-message chat-message-user">
+                  <div class="chat-message-bubble tail-bottom">
+                    <div class="chat-message-text">Ok here we go</div>
+                  </div>
+                </div>
+                <div class="chat-message chat-message-ai">
+                  <div class="chat-message-bubble tail-top">
+                    <div class="chat-message-text">This is a longer AI message that demonstrates how the bubble scales with content. The text will wrap naturally and the bubble will grow to accommodate it, but it will never exceed the maximum width of 400px as specified in the design.</div>
+                  </div>
+                </div>
+                <div class="chat-message chat-message-user">
+                  <div class="chat-message-bubble tail-top">
+                    <div class="chat-message-text">This is a longer user message that demonstrates how the bubble scales with content. The text will wrap naturally and the bubble will grow to accommodate it, but it will never exceed the maximum width of 400px as specified in the design.</div>
+                  </div>
+                </div>
+                <div class="chat-message chat-message-ai">
+                  <div class="chat-message-bubble tail-bottom">
+                    <div class="chat-message-text">give 'Bob Dylan - Like a Rolling Stone' a spin. It's like a musical time machine back to the 60s.</div>
+                    <div class="music-module-placeholder"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="chat-input-area">
+                <input type="text" class="chat-input" placeholder="Test">
+                <button class="chat-send-button">Send</button>
+              </div>
+            </div>
+            
+            <!-- Glass Effect Controls -->
+            <div class="glass-controls-panel">
+              <div class="glass-controls-header">
+                <span>Glass</span>
+                <span class="beta-tag">Beta</span>
+              </div>
+              
+              <div class="glass-control-section">
+                <div class="glass-control-label">
+                  <span>Light</span>
+                  <div class="light-preview"></div>
+                </div>
+                <div class="glass-control-item">
+                  <label>Intensity</label>
+                  <div class="slider-container">
+                    <input type="range" id="light-intensity" min="0" max="100" value="80" class="glass-slider">
+                    <span class="slider-value" id="light-intensity-value">80%</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="glass-control-section">
+                <div class="glass-control-item">
+                  <label>Refraction</label>
+                  <div class="slider-container">
+                    <input type="range" id="refraction" min="0" max="100" value="80" class="glass-slider">
+                    <span class="slider-value" id="refraction-value">80</span>
+                  </div>
+                </div>
+                <div class="glass-control-item">
+                  <label>Depth</label>
+                  <div class="slider-container">
+                    <input type="range" id="depth" min="0" max="100" value="63" class="glass-slider">
+                    <span class="slider-value" id="depth-value">63</span>
+                  </div>
+                </div>
+                <div class="glass-control-item">
+                  <label>Dispersion</label>
+                  <div class="slider-container">
+                    <input type="range" id="dispersion" min="0" max="100" value="67" class="glass-slider">
+                    <span class="slider-value" id="dispersion-value">67</span>
+                  </div>
+                </div>
+                <div class="glass-control-item">
+                  <label>Frost</label>
+                  <div class="slider-container">
+                    <input type="range" id="frost" min="0" max="100" value="19" class="glass-slider">
+                    <span class="slider-value" id="frost-value">19</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="glass-control-section">
+                <div class="glass-control-item">
+                  <label>Background R</label>
+                  <div class="slider-container">
+                    <input type="range" id="bg-r" min="0" max="255" value="255" class="glass-slider">
+                    <span class="slider-value" id="bg-r-value">255</span>
+                  </div>
+                </div>
+                <div class="glass-control-item">
+                  <label>Background G</label>
+                  <div class="slider-container">
+                    <input type="range" id="bg-g" min="0" max="255" value="255" class="glass-slider">
+                    <span class="slider-value" id="bg-g-value">255</span>
+                  </div>
+                </div>
+                <div class="glass-control-item">
+                  <label>Background B</label>
+                  <div class="slider-container">
+                    <input type="range" id="bg-b" min="0" max="255" value="255" class="glass-slider">
+                    <span class="slider-value" id="bg-b-value">255</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="glass-control-section">
+                <div class="glass-control-item">
+                  <label>Border Width</label>
+                  <div class="slider-container">
+                    <input type="range" id="border-width" min="0" max="5" value="1" class="glass-slider">
+                    <span class="slider-value" id="border-width-value">1px</span>
+                  </div>
+                </div>
+                <div class="glass-control-item">
+                  <label>Shadow Blur</label>
+                  <div class="slider-container">
+                    <input type="range" id="shadow-blur" min="0" max="50" value="6" class="glass-slider">
+                    <span class="slider-value" id="shadow-blur-value">6px</span>
+                  </div>
+                </div>
+                <div class="glass-control-item">
+                  <label>Shadow Spread</label>
+                  <div class="slider-container">
+                    <input type="range" id="shadow-spread" min="0" max="20" value="0" class="glass-slider">
+                    <span class="slider-value" id="shadow-spread-value">0px</span>
+                  </div>
+                </div>
+                <div class="glass-control-item">
+                  <label>Saturation</label>
+                  <div class="slider-container">
+                    <input type="range" id="saturation" min="0" max="200" value="100" class="glass-slider">
+                    <span class="slider-value" id="saturation-value">100%</span>
+                  </div>
+                </div>
+                <div class="glass-control-item">
+                  <label>Brightness</label>
+                  <div class="slider-container">
+                    <input type="range" id="brightness" min="0" max="200" value="100" class="glass-slider">
+                    <span class="slider-value" id="brightness-value">100%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Collapsed Chat Module -->
         <div class="state-group">
           <h3>Collapsed Chat Module</h3>
@@ -397,6 +563,85 @@
       </div>
     </section>
   </div>
+  
+  <script>
+    // Glass effect controls - scoped to chat-container-bg
+    const glassContainer = document.getElementById('glass-container');
+    if (glassContainer) {
+      const sliders = {
+        'light-intensity': { element: document.getElementById('light-intensity'), value: document.getElementById('light-intensity-value'), unit: '%' },
+        'refraction': { element: document.getElementById('refraction'), value: document.getElementById('refraction-value'), unit: '' },
+        'depth': { element: document.getElementById('depth'), value: document.getElementById('depth-value'), unit: '' },
+        'dispersion': { element: document.getElementById('dispersion'), value: document.getElementById('dispersion-value'), unit: '' },
+        'frost': { element: document.getElementById('frost'), value: document.getElementById('frost-value'), unit: '' },
+        'bg-r': { element: document.getElementById('bg-r'), value: document.getElementById('bg-r-value'), unit: '' },
+        'bg-g': { element: document.getElementById('bg-g'), value: document.getElementById('bg-g-value'), unit: '' },
+        'bg-b': { element: document.getElementById('bg-b'), value: document.getElementById('bg-b-value'), unit: '' },
+        'border-width': { element: document.getElementById('border-width'), value: document.getElementById('border-width-value'), unit: 'px' },
+        'shadow-blur': { element: document.getElementById('shadow-blur'), value: document.getElementById('shadow-blur-value'), unit: 'px' },
+        'shadow-spread': { element: document.getElementById('shadow-spread'), value: document.getElementById('shadow-spread-value'), unit: 'px' },
+        'saturation': { element: document.getElementById('saturation'), value: document.getElementById('saturation-value'), unit: '%' },
+        'brightness': { element: document.getElementById('brightness'), value: document.getElementById('brightness-value'), unit: '%' }
+      };
+
+      function updateGlassEffect() {
+        const lightIntensity = parseInt(sliders['light-intensity'].element.value);
+        const refraction = parseInt(sliders['refraction'].element.value);
+        const depth = parseInt(sliders['depth'].element.value);
+        const dispersion = parseInt(sliders['dispersion'].element.value);
+        const frost = parseInt(sliders['frost'].element.value);
+        const bgR = parseInt(sliders['bg-r'].element.value);
+        const bgG = parseInt(sliders['bg-g'].element.value);
+        const bgB = parseInt(sliders['bg-b'].element.value);
+        const borderWidth = parseInt(sliders['border-width'].element.value);
+        const shadowBlur = parseInt(sliders['shadow-blur'].element.value);
+        const shadowSpread = parseInt(sliders['shadow-spread'].element.value);
+        const saturation = parseInt(sliders['saturation'].element.value);
+        const brightness = parseInt(sliders['brightness'].element.value);
+
+        // Calculate blur based on frost value
+        const blurAmount = 5 + (frost / 100) * 15; // 5px to 20px
+        
+        // Calculate background opacity based on depth and intensity
+        const baseOpacity = 0.1;
+        const opacity = baseOpacity + (depth / 100) * 0.15 + (lightIntensity / 100) * 0.1;
+        
+        // Calculate border opacity based on refraction
+        const borderOpacity = 0.18 + (refraction / 100) * 0.12;
+        
+        // Apply background color with saturation and brightness filters
+        const bgColor = `rgba(${bgR}, ${bgG}, ${bgB}, ${opacity})`;
+        
+        // Apply styles
+        glassContainer.style.backdropFilter = `blur(${blurAmount}px) saturate(${saturation}%) brightness(${brightness}%)`;
+        glassContainer.style.webkitBackdropFilter = `blur(${blurAmount}px) saturate(${saturation}%) brightness(${brightness}%)`;
+        glassContainer.style.background = bgColor;
+        glassContainer.style.border = `${borderWidth}px solid rgba(255, 255, 255, ${borderOpacity})`;
+        glassContainer.style.boxShadow = `0 4px ${shadowBlur}px ${shadowSpread}px rgba(0, 0, 0, 0.1)`;
+        
+        // Update light preview gradient based on intensity
+        const lightPreview = document.querySelector('.light-preview');
+        if (lightPreview) {
+          lightPreview.style.background = `linear-gradient(135deg, rgba(255, 255, 255, ${lightIntensity / 100 * 0.4}) 0%, rgba(255, 255, 255, ${lightIntensity / 100 * 0.1}) 100%)`;
+        }
+      }
+
+      // Initialize all sliders
+      Object.keys(sliders).forEach(key => {
+        const slider = sliders[key];
+        if (slider.element && slider.value) {
+          slider.element.addEventListener('input', () => {
+            const val = slider.element.value;
+            slider.value.textContent = val + slider.unit;
+            updateGlassEffect();
+          });
+        }
+      });
+
+      // Initial update
+      updateGlassEffect();
+    }
+  </script>
 </body>
 </html>
 

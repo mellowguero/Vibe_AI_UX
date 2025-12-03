@@ -83,6 +83,54 @@ body {
 /* Full width state groups */
 .state-group.full-width {
   grid-column: 1 / -1;
+  background-image: url('https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1200&q=80');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  overflow: hidden;
+}
+
+.state-group.full-width::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.1);
+  z-index: 0;
+}
+
+.state-group.full-width > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Background image for frosted glass demo */
+.chat-container-bg {
+  background-image: url('https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1200&q=80');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  overflow: hidden;
+}
+
+.chat-container-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.1);
+  z-index: 0;
+}
+
+.chat-container-bg > * {
+  position: relative;
+  z-index: 1;
 }
 
 /* Chat Module Styles */
@@ -90,9 +138,14 @@ body {
   width: 320px;
   min-height: 400px;
   max-height: 500px;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  background-color: #ffffff;
+  /* Frosted Glass Effect */
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 24px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -105,7 +158,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  background-color: #fafafa;
+  background: transparent;
+  margin-bottom: 16px;
 }
 
 .chat-empty-state {
@@ -208,36 +262,53 @@ body {
   display: flex;
   gap: 0.5rem;
   padding: 0.75rem;
-  border-top: 1px solid #e0e0e0;
-  background-color: #ffffff;
+  border-top: none;
+  /* Frosted Glass Effect for input area */
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 32px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .chat-input {
   flex: 1;
   padding: 0.5rem 0.75rem;
-  border: 1px solid #d0d0d0;
+  border: none;
   border-radius: 20px;
   font-size: 0.85rem;
   outline: none;
+  background-color: transparent;
+  color: #333;
+}
+
+.chat-input::placeholder {
+  color: #99a6cc;
 }
 
 .chat-input:focus {
-  border-color: #007AFF;
+  border-color: transparent;
 }
 
 .chat-send-button {
   padding: 0.5rem 1rem;
-  background-color: #007AFF;
-  color: white;
-  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #333;
   border-radius: 20px;
   font-size: 0.85rem;
   font-weight: 500;
   cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .chat-send-button:hover {
-  background-color: #0056CC;
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 /* Collapsed Chat */
@@ -538,6 +609,375 @@ body {
   text-align: right;
 }
 
+/* Image Module Styles */
+.image-module {
+  display: flex;
+  flex-direction: column;
+}
+
+.image-preview {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+}
+
+.image-placeholder {
+  width: 100%;
+  min-height: 100px;
+  background-color: #f0f0f0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: #999;
+  font-size: 0.75rem;
+  border-radius: 4px;
+  padding: 1rem;
+}
+
+.image-placeholder > div:first-child {
+  font-size: 2rem;
+}
+
+.image-label {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  color: #666;
+  font-weight: 500;
+}
+
+/* Text Module Styles */
+.text-module {
+  min-height: 40px;
+  word-wrap: break-word;
+  line-height: 1.4;
+}
+
+/* Map Module Styles */
+.map-module {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.map-view {
+  width: 100%;
+  min-height: 120px;
+  border-radius: 4px;
+  border: 1px solid #d0d0d0;
+  background: #e9f3ff;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.map-view-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #37586b;
+}
+
+.map-view-placeholder {
+  flex: 1;
+  border-radius: 3px;
+  background: #d7e7ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  color: #4a6b85;
+}
+
+.map-view-empty {
+  font-size: 0.75rem;
+  color: #777;
+}
+
+.map-view-loading {
+  flex: 1;
+  border-radius: 3px;
+  background: #d7e7ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  color: #4a6b85;
+  padding: 1rem;
+}
+
+.map-view-error {
+  flex: 1;
+  border-radius: 3px;
+  background: #ffe7e7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  color: #c33;
+  padding: 1rem;
+  text-align: center;
+}
+
+/* Search Module Styles */
+.search-module {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.search-results {
+  border-radius: 4px;
+  border: 1px solid #d0d0d0;
+  background: #f5f7ff;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.search-results-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #3a4c70;
+}
+
+.search-results-empty {
+  font-size: 0.75rem;
+  color: #777;
+}
+
+.search-results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  max-height: 140px;
+  overflow-y: auto;
+}
+
+.search-result-item {
+  padding: 0.25rem 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.search-result-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.search-result-snippet {
+  font-size: 0.72rem;
+  color: #666;
+}
+
+/* Full Modal Chat Container - Frosted Glass Effect (CodePen style) */
+.chat-module-full {
+  min-width: 280px;
+  max-width: 506px;
+  border-radius: 24px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* Frosted Glass Effect - CodePen style */
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  height: 100%;
+}
+
+.chat-messages-area {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: transparent;
+  margin-bottom: 16px;
+  min-height: 0;
+}
+
+.chat-module-full .chat-message {
+  max-width: 100%;
+}
+
+.chat-input-area {
+  /* Frosted Glass Effect for input area */
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 32px;
+  max-height: 100px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chat-input-area .chat-input {
+  flex: 1;
+  background-color: transparent;
+  border: none;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: #99a6cc;
+  outline: none;
+  min-height: 40px;
+}
+
+.chat-input-area .chat-input::placeholder {
+  color: #99a6cc;
+}
+
+.chat-input-area .chat-send-button {
+  width: 56px;
+  height: 56px;
+  border-radius: 24px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chat-input-area .chat-send-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Glass Controls - Scoped to chat-container-bg only */
+.chat-container-bg .chat-container-wrapper {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.chat-container-bg .glass-controls-panel {
+  background: rgba(42, 42, 42, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 8px;
+  padding: 16px;
+  min-width: 280px;
+  max-width: 320px;
+  color: #e0e0e0;
+  font-size: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.chat-container-bg .glass-controls-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.chat-container-bg .beta-tag {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.chat-container-bg .glass-control-section {
+  margin-bottom: 20px;
+}
+
+.chat-container-bg .glass-control-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+.chat-container-bg .light-preview {
+  width: 40px;
+  height: 20px;
+  border-radius: 4px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.chat-container-bg .glass-control-item {
+  margin-bottom: 16px;
+}
+
+.chat-container-bg .glass-control-item label {
+  display: block;
+  margin-bottom: 8px;
+  color: #b0b0b0;
+  font-size: 11px;
+}
+
+.chat-container-bg .slider-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.chat-container-bg .glass-slider {
+  flex: 1;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.chat-container-bg .glass-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  background: #ffffff;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.chat-container-bg .glass-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  background: #ffffff;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.chat-container-bg .slider-value {
+  min-width: 40px;
+  text-align: right;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 500;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .playground-container {
@@ -555,6 +995,15 @@ body {
 
   .chat-module-example {
     width: 100%;
+  }
+
+  .chat-container-bg .chat-container-wrapper {
+    flex-direction: column;
+  }
+
+  .chat-container-bg .glass-controls-panel {
+    min-width: 100%;
+    max-width: 100%;
   }
 }
 
