@@ -1,11 +1,16 @@
 # Agentic Modular UI Prototype
 
+## Overview
+
+A modular canvas-based UI system where draggable modules can be composed together. Modules transform and chain data when overlapped, creating dynamic workflows. Built with React/TypeScript and Vite.
+
 ## Core Architecture
 
-- Modular canvas-based environment with draggable modules
-- Sidebar for module creation, Inspector panel for editing
-- Unified module schema: `ModuleType`, `ModuleInstance` (id, type, x, y, z, data)
-- Composition engine with overlap detection and bidirectional data flow
+- **Modular Canvas**: Draggable modules on a canvas with absolute positioning
+- **Sidebar**: Module creation buttons
+- **Inspector Panel**: Property editor for selected modules
+- **Composition Engine**: Overlap detection with bidirectional data flow
+- **Unified Schema**: `ModuleType` and `ModuleInstance` (id, type, x, y, z, data)
 
 ## Modules
 
@@ -20,101 +25,100 @@
 
 ### Chat Module Details
 
-- **UI**: iMessage-style with glassmorphism effect (frosted glass)
-- **Message Bubbles**: 
-  - User: Purple-to-blue gradient (#7d27ff → #278eff), right-aligned, max-width 400px
-  - AI: Dark gradient (#26252A → #352965), left-aligned, max-width 400px
-  - Tail variants (top/bottom) for message grouping
-  - Satoshi Medium font, 14px, #f6f3ff text color
-- **Glass Effect**: Backdrop blur, customizable via interactive controls panel
-- **Features**: Nested modules, drag-out to canvas, auto-scroll, conversation history
+**UI Design:**
+- Glassmorphism effect (frosted glass) with backdrop blur
+- iMessage-style message bubbles
+- Auto-scroll, conversation history
+
+**Message Bubbles:**
+- **User**: Purple-to-blue gradient (`#7d27ff → #278eff`), right-aligned, max-width 400px
+- **AI**: Dark gradient (`#26252A → #352965`), left-aligned, max-width 400px
+- **Tail Variants**: `.tail-top` and `.tail-bottom` for message grouping
+- **Typography**: Satoshi Medium font, 14px, `#f6f3ff` text color
+
+**Features:**
+- Nested modules (preview/expanded views)
+- Drag-out to canvas (button + drag handle)
+- Auto-song recommendations with YouTube integration
+- OpenAI integration with "Alex Oskie" character
 
 ## Composition Rules
 
-**Image**: → Text (append URL), → Map (use label), → Search (use label)  
-**Text**: → Media (song title), → Map (location query), → Search (query)  
-**Music Player**: → Text (track info), → Search (full/artist only), → Image (artist/band)  
-**Map**: → Search (location query), → Text (add location)  
-**Search**: → Map (with description), → Text (query/results), → Media (track title), → Image (from query)  
-**Chat**: ← Media (song recommendation), ← Text (message), → Media (extract), → Text (extract)
+Modules transform data when overlapped:
+
+- **Image** → Text (append URL), → Map (use label), → Search (use label)
+- **Text** → Media (song title), → Map (location query), → Search (query)
+- **Music Player** → Text (track info), → Search (full/artist only), → Image (artist/band)
+- **Map** → Search (location query), → Text (add location)
+- **Search** → Map (with description), → Text (query/results), → Media (track title), → Image (from query)
+- **Chat** ← Media (song recommendation), ← Text (message), → Media (extract), → Text (extract)
 
 ## API Integrations
 
-- **DuckDuckGo**: Search (no key)
+- **DuckDuckGo**: Search (no API key required)
 - **Unsplash**: Image search
 - **Google Custom Search**: Image search (alternative)
 - **YouTube Data API v3**: Music video search
 - **Google Maps**: Geocoding + Interactive maps
 - **OpenAI Chat Completions**: AI conversations
 
-## Recent Updates
-
-### Glassmorphism Chat Container (Latest)
-
-- **Glass Styling Applied**: Both React app (`src/index.css`) and playground (`playground.css`) now feature glassmorphism effects
-  - **React App**: Chat module uses frosted glass with `backdrop-filter: blur(10px)`, semi-transparent backgrounds
-  - **Playground**: Full modal chat container with glass effect (280px-506px width, 24px border-radius, 16px padding)
-  - Container: 24px border-radius, 16px padding, glass border and shadow
-  - Messages area: Transparent background, scrollable
-  - Input area: Glass effect with 32px border-radius, transparent input field
-  - Send button: Glass effect with blur and hover states
-
-- **Background Images**: 
-  - React app: Background image added to `.canvas-container` for glass effect visibility
-  - Playground: Background image on `.state-group.full-width` and `.chat-container-bg`
-
-- **Module Card Wrapper**: Chat module card (`.module-card.chat-module-card`) made transparent with no border/box-shadow to allow glass effect
-
-- **Interactive Glass Controls Panel** (Playground): Real-time customization
-  - Light: Intensity (0-100%)
-  - Glass properties: Refraction, Depth, Dispersion, Frost (0-100 each)
-  - Background: RGB sliders (0-255 each)
-  - Border: Width (0-5px)
-  - Shadow: Blur (0-50px), Spread (0-20px)
-  - Effects: Saturation (0-200%), Brightness (0-200%)
-  - All controls scoped to `chat-container-bg` container only
-
-### Shared Module Styles
-
-- **Unified Styling**: Both `src/index.css` and `playground.css` now share identical module styles
-  - Image Module: `.image-module`, `.image-preview`, `.image-placeholder`, `.image-label`
-  - Media Module: `.media-module`, `.media-placeholder`, `.media-title`
-  - Text Module: `.text-module`
-  - Map Module: `.map-module`, `.map-view`, `.map-view-title`, `.map-view-placeholder`, `.map-view-empty`, `.map-view-loading`, `.map-view-error`
-  - Search Module: `.search-module`, `.search-results`, `.search-results-title`, `.search-results-empty`, `.search-results-list`, `.search-result-item`, `.search-result-title`, `.search-result-snippet`
-  - Chat Module: `.chat-module` (React app), `.chat-module-example` and `.chat-module-full` (playground)
-
-### Message Bubble Styling
-
-- AI bubbles: Dark gradient (#26252A → #352965), tail variants, 400px max-width
-- User bubbles: Purple-blue gradient (#7d27ff → #278eff), tail variants, 400px max-width
-- Comprehensive playground examples in `playground.html` and `playground.css`
-- Matches Figma design specifications
-
-### Chat Module with AI Friend
-
-- OpenAI integration with "Alex Oskie" character
-- Nested module support (preview/expanded views)
-- Drag-out functionality (button + drag handle)
-- Auto-song recommendations with YouTube integration
-
 ## File Structure
 
 ```
 src/
 ├── App.tsx                 # Main app, drag/drop, composition logic
+├── main.tsx                # React entry point
+├── index.css               # App layout, imports modules.css
 ├── components/
 │   ├── ChatModule.tsx      # Chat with AI integration
-│   ├── ModuleCard.tsx      # Draggable module wrapper
-│   ├── Inspector.tsx       # Property editor
-│   └── [Other modules].tsx
+│   ├── ModuleCard.tsx       # Draggable module wrapper
+│   ├── Inspector.tsx        # Property editor
+│   ├── ImageModule.tsx
+│   ├── MediaModule.tsx
+│   ├── TextModule.tsx
+│   ├── MapModule.tsx
+│   ├── SearchModule.tsx
+│   └── CompositionMenu.tsx
 ├── compositionRules.ts     # All composition transformations
-├── types/modules.ts        # Type definitions
-├── api/services.ts         # API integrations
-└── utils/textParsing.ts    # Text extraction utilities
+├── types/
+│   └── modules.ts          # Type definitions
+├── api/
+│   └── services.ts         # API integrations
+├── utils/
+│   └── textParsing.ts      # Text extraction utilities
+└── styles/
+    └── modules.css         # Shared module content styles
 
-playground.html/css         # Design system playground with glass controls
+playground.html/css         # Design system playground
 ```
+
+## CSS Architecture
+
+**Shared Styles System:**
+- `src/styles/modules.css` - All module content styles (chat bubbles, messages, module internals) - **SHARED** between playground and React app
+- `src/index.css` - App layout only, imports `modules.css`
+- `playground.css` - Playground layout only, imports `modules.css`
+
+**Import Chain:**
+- React app: `index.html` → `main.tsx` → `index.css` → `@import './styles/modules.css'`
+- Playground: `playground.html` → `playground.css` → `@import '../src/styles/modules.css'`
+
+**Styling Workflow:**
+1. Style module content in `playground.html` using production class names
+2. Add/edit styles in `src/styles/modules.css`
+3. Styles automatically apply to both playground and React app (no copying needed)
+4. `playground.html` should only contain production components (no experimental/controls panels)
+
+**Style Organization:**
+- **Module Content** (modules.css): 
+  - `.chat-module*`, `.chat-message*`, `.chat-input*`
+  - `.image-module*`, `.media-module*`, `.text-module*`, `.map-module*`, `.search-module*`
+  - `.nested-module*` content
+  - All bubble gradients, tail variants, animations
+
+**Key Module Styles:**
+- Chat: Glassmorphism with backdrop blur, gradient bubbles, tail variants
+- All modules: Consistent spacing, typography, and interaction states
 
 ## Running
 
@@ -124,6 +128,24 @@ npm run dev
 
 Server: `http://localhost:5173`
 
+## Development Notes
+
+### Glassmorphism Implementation
+- Chat module uses frosted glass effect: `backdrop-filter: blur(10px)`, semi-transparent backgrounds
+- Background images on canvas for effect visibility
+- Module card wrapper made transparent for chat module to allow glass effect
+
+### Message Bubble Styling
+- User bubbles: Purple-to-blue gradient (`linear-gradient(to right, #7d27ff 0%, #278eff 100%)`)
+- AI bubbles: Dark gradient (`linear-gradient(to right, #26252A 0%, #352965 100%)`)
+- Tail variants for visual grouping (`.tail-top`, `.tail-bottom`)
+- Matches Figma design specifications
+
+### Shared CSS System
+- Single source of truth: `src/styles/modules.css`
+- Both React app and playground import the same file
+- No duplicate styles - automatic sync
+
 ## Future Work
 
 - Spawn collision avoidance
@@ -132,7 +154,8 @@ Server: `http://localhost:5173`
 - Workspace persistence
 - OS-level chrome
 - Agent-driven automation
+- GUI/chrome styles extraction to `src/styles/gui.css` (future enhancement)
 
 ---
 
-**Last Updated**: Applied glassmorphism styling to chat module in both React app (`src/index.css`) and playground (`playground.css`). Added background image to canvas container in React app. Unified module styles across both files - all 6 module types (Image, Media, Text, Map, Search, Chat) now share identical styling. Chat module card wrapper made transparent to allow glass effect. Previous: Glassmorphism chat container with interactive controls panel in playground.
+**Last Updated**: Created shared `src/styles/modules.css` with all module content styles. Both `src/index.css` and `playground.css` now import this shared file, eliminating duplicate code and ensuring consistent styling across both environments.

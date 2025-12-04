@@ -1,0 +1,29 @@
+## CSS Architecture Rules
+
+**File Structure:**
+- `src/styles/modules.css` - All module content styles (chat bubbles, messages, module internals) - SHARED between playground and React app
+- `src/styles/gui.css` - All GUI/chrome styles (module wrappers, buttons, controls) - SHARED between playground and React app  
+- `src/index.css` - App layout only, imports modules.css + gui.css
+- `playground.css` - Playground layout only, imports modules.css + gui.css
+
+**Import Chain:**
+- React app: `index.html` → `main.tsx` → `index.css` → `modules.css` + `gui.css`
+- Playground: `playground.html` → `playground.css` → `modules.css` + `gui.css`
+
+**Workflow:**
+1. Style module content in `playground.html` using production class names
+2. Add/edit styles in `src/styles/modules.css` or `src/styles/gui.css`
+3. Styles automatically apply to both playground and React app (no copying needed)
+4. `playground.html` should only contain production components (no experimental/controls panels)
+
+**Module Content Styles** (go in modules.css):
+- `.chat-module*`, `.chat-message*`, `.chat-input*`
+- `.image-module*`, `.media-module*`, `.text-module*`, `.map-module*`, `.search-module*`
+- `.nested-module*` content
+
+**GUI Styles** (go in gui.css):
+- `.module-card`, `.module-header`, `.module-close-button`, `.module-content`
+- `.module-input`, `.module-textarea`
+- `.composition-menu*`
+- Any UI chrome/controls
+
