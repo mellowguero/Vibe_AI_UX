@@ -1,3 +1,6 @@
+/* Import design tokens first */
+@import './styles/tokens.css';
+
 /* Import shared module styles */
 @import './styles/modules.css';
 

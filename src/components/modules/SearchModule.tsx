@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
-import type { SearchModuleData } from '../types/modules'
-import { searchDuckDuckGo } from '../api/services'
+import type { SearchModuleData } from '../../types/modules'
+import { searchDuckDuckGo } from '../../api/services'
 
 type SearchModuleProps = {
   data: SearchModuleData
@@ -103,4 +103,3 @@ export function SearchModule({ data, onChange }: SearchModuleProps) {
     </div>
   )
 }
-

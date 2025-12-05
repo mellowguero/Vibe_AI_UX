@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
-import type { ChatModuleData, ChatMessage, ModuleType } from '../types/modules'
-import { chatWithAI } from '../api/services'
+import type { ChatModuleData, ChatMessage, ModuleType } from '../../types/modules'
+import { chatWithAI } from '../../api/services'
 import { MediaModule } from './MediaModule'
 import { ImageModule } from './ImageModule'
 import { TextModule } from './TextModule'
@@ -329,4 +329,3 @@ export function ChatModule({ data, onUpdate, onExtractModule }: ChatModuleProps)
     </div>
   )
 }
-

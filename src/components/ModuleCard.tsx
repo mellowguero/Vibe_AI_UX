@@ -1,11 +1,11 @@
 import { useRef, useEffect } from 'react'
 import type { ModuleInstance, ImageModuleData, MediaModuleData, TextModuleData, MapModuleData, SearchModuleData, ChatModuleData, ModuleType } from '../types/modules'
-import { ImageModule } from './ImageModule'
-import { MediaModule } from './MediaModule'
-import { TextModule } from './TextModule'
-import { MapModule } from './MapModule'
-import { SearchModule } from './SearchModule'
-import { ChatModule } from './ChatModule'
+import { ImageModule } from './modules/ImageModule'
+import { MediaModule } from './modules/MediaModule'
+import { TextModule } from './modules/TextModule'
+import { MapModule } from './modules/MapModule'
+import { SearchModule } from './modules/SearchModule'
+import { ChatModule } from './modules/ChatModule'
 
 interface ModuleCardProps {
   module: ModuleInstance

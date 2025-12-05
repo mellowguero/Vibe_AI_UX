@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
-import type { ImageModuleData } from '../types/modules'
-import { searchImages } from '../api/services'
+import type { ImageModuleData } from '../../types/modules'
+import { searchImages } from '../../api/services'
 
 interface ImageModuleProps {
   data: ImageModuleData

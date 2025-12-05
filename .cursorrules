@@ -27,3 +27,20 @@
 - `.composition-menu*`
 - Any UI chrome/controls
 
+## Component Organization Rules
+
+**File Structure:**
+- `src/components/modules/` - All module components (ChatModule, MediaModule, etc.)
+- `src/components/shared/` - Shared/reusable UI components
+ - Simple components: flat files (e.g., `Button.tsx`)
+ - Complex components: own folder with index.ts (e.g., `MessageBubble/MessageBubble.tsx`)
+- `src/components/` root - Only for simple, non-module components (Inspector, CompositionMenu, etc.)
+
+**Rules:**
+1. All module components MUST be in `modules/` folder
+2. Shared components used by multiple modules MUST be in `shared/` folder
+3. Complex shared components (multiple files, styles, or utilities) MUST have their own folder
+4. Simple shared components can be flat files in `shared/`
+5. When creating a new component, check if it's a module, shared, or simple component and place accordingly
+6. Always verify component organization before committing
+

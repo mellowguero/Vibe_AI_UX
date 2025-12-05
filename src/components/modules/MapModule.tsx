@@ -1,7 +1,7 @@
 /// <reference types="google.maps" />
 import { useEffect, useRef, useState } from 'react'
-import type { MapModuleData } from '../types/modules'
-import { geocodeLocation } from '../api/services'
+import type { MapModuleData } from '../../types/modules'
+import { geocodeLocation } from '../../api/services'
 
 type MapModuleProps = {
   data: MapModuleData

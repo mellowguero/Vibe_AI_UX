@@ -1,4 +1,4 @@
-import type { TextModuleData } from '../types/modules'
+import type { TextModuleData } from '../../types/modules'
 
 interface TextModuleProps {
   data: TextModuleData

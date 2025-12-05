@@ -72,7 +72,7 @@
 }
 
 .chat-message-user .chat-message-bubble {
-  background: linear-gradient(to right, #7d27ff 0%, #278eff 100%);
+  background: var(--gradient-user-message, linear-gradient(to right, #7d27ff 0%, #278eff 100%));
   color: #f6f3ff;
   max-width: 400px;
   padding: 8px;
@@ -99,7 +99,7 @@
 }
 
 .chat-message-ai .chat-message-bubble {
-  background: linear-gradient(to right, #26252A 0%, #352965 100%);
+  background: var(--gradient-ai-message, linear-gradient(to right, #26252A 0%, #352965 100%));
   color: #f6f3ff;
   max-width: 400px;
   padding: 8px;
