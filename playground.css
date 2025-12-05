@@ -1,10 +1,10 @@
 /* Module Playground Styles */
 
 /* Import design tokens first */
-@import '../src/styles/tokens.css';
+@import 'src/styles/tokens.css';
 
 /* Import shared module styles */
-@import '../src/styles/modules.css';
+@import 'src/styles/modules.css';
 
 * {
   margin: 0;

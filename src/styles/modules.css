@@ -492,3 +492,91 @@
   color: #666;
 }
 
+/* Text Input Component Styles */
+.text-input-container {
+  display: flex;
+  align-items: center;
+  background: rgba(219, 225, 243, 0.12);
+  border-radius: var(--radius-text-input, 9999px);
+  padding:1rem 1rem;
+  box-shadow: var(--shadow-text-input, 0 2px 4px rgba(0, 0, 0, 0.1));
+  width: 100%;
+  max-width: 400px;
+  gap:1rem;
+}
+
+.text-input-field {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color:red;
+  border-radius: 4rem;
+  font-size: var(--font-size-text-input, 1.25rem);
+  font-family: 'Satoshi Medium', 'Satoshi', system-ui, -apple-system, sans-serif;
+  font-weight: 500;
+  line-height: 1.5;
+  text-align: left;
+  font-style: normal;
+  text-wrap: wrap;
+  text-overflow: ellipsis;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border: none;
+  background: #DBE1F3;
+  outline: none;
+  padding: 2rem;
+
+}
+
+.text-input-field::placeholder {
+  color: var(--color-text-input-placeholder, #8a7a9c);
+  font-size: var(--font-size-text-input, 1.25rem);
+}
+
+.text-input-field:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  font-size: var(--font-size-text-input, 1.25rem);
+}
+
+.text-input-action-button {
+  width: var(--size-text-input-action, 40px);
+  height: var(--size-text-input-action, 40px);
+  border-radius: var(--radius-text-input-action, 50%);
+  background: var(--color-bg-text-input-action, #a0a0a0);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-text-input-action, 0 2px 4px rgba(0, 0, 0, 0.1));
+  transition: all var(--transition-fast, 0.2s) var(--transition-ease, ease);
+  flex-shrink: 0;
+}
+
+.text-input-action-button:hover:not(:disabled) {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.text-input-action-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.text-input-action-icon {
+  width: 16px;
+  height: 16px;
+  color: var(--color-text-input-action-icon, #ffffff);
+  display: block;
+}
+
+.text-input-action-icon rect {
+  stroke: currentColor;
+  fill: none;
+}
+
