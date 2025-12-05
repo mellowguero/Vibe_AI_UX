@@ -21,27 +21,30 @@
       <h2 class="play-area-title">Chat Module</h2>
       <div class="play-area-content">
         <!-- Full Chat Module -->
-        <div class="state-group full-width">
+        <div class="state-group full-width" style="position: relative;">
           <h3>Full Chat Module</h3>
-          <div class="chat-module-example">
-            <div class="chat-messages">
-              <div class="chat-message chat-message-user">
-                <div class="chat-message-bubble tail-bottom">
-                  <div class="chat-message-text">Hey, check out this song!</div>
+          <div style="display: flex; gap: 20px; align-items: flex-start;">
+            <div class="chat-module-example" style="position: relative;">
+              <div class="chat-messages">
+                <div class="chat-message chat-message-user">
+                  <div class="chat-message-bubble tail-bottom">
+                    <div class="chat-message-text">Hey, check out this song!</div>
+                  </div>
+                  <div class="chat-message-time">07:16 PM</div>
                 </div>
-                <div class="chat-message-time">07:16 PM</div>
-              </div>
-              <div class="chat-message chat-message-ai">
-                <div class="chat-message-bubble tail-bottom">
-                  <div class="chat-message-text">give 'Bob Dylan - Like a Rolling Stone' a spin. It's like a musical time machine back to the 60s.</div>
-                  <div class="music-module-placeholder"></div>
+                <div class="chat-message chat-message-ai">
+                  <div class="chat-message-bubble tail-bottom">
+                    <div class="chat-message-text">give 'Bob Dylan - Like a Rolling Stone' a spin. It's like a musical time machine back to the 60s.</div>
+                    <div class="music-module-placeholder"></div>
+                  </div>
+                  <div class="chat-message-time">07:17 PM</div>
                 </div>
-                <div class="chat-message-time">07:17 PM</div>
               </div>
-            </div>
-            <div class="chat-input-container">
-              <input type="text" class="chat-input" placeholder="Type a message...">
-              <button class="chat-send-button">Send</button>
+              <div class="chat-input-container">
+                <input type="text" class="chat-input" placeholder="Type a message...">
+                <button class="chat-send-button">Send</button>
+              </div>
+              <div class="module-resize-handle"></div>
             </div>
           </div>
         </div>
@@ -641,6 +644,43 @@
       // Initial update
       updateGlassEffect();
     }
+
+    // Drag and Resize functionality for playground
+    (function() {
+      const MIN_WIDTH = 280;
+      const MAX_WIDTH = 600;
+
+      let resizingElement = null;
+      let resizeStartX = 0;
+      let resizeStartWidth = 0;
+
+
+      // Make resize handles work
+      document.querySelectorAll('.module-resize-handle').forEach(handle => {
+        handle.addEventListener('mousedown', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          resizingElement = handle.parentElement;
+          const rect = resizingElement.getBoundingClientRect();
+          resizeStartX = e.clientX;
+          resizeStartWidth = rect.width;
+        });
+      });
+
+      // Mouse move handler
+      document.addEventListener('mousemove', (e) => {
+        if (resizingElement) {
+          const deltaX = e.clientX - resizeStartX;
+          const newWidth = Math.max(MIN_WIDTH, Math.min(MAX_WIDTH, resizeStartWidth + deltaX));
+          resizingElement.style.width = `${newWidth}px`;
+        }
+      });
+
+      // Mouse up handler
+      document.addEventListener('mouseup', () => {
+        resizingElement = null;
+      });
+    })();
   </script>
 </body>
 </html>

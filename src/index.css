@@ -83,15 +83,17 @@ body {
   border: 1px solid #d0d0d0;
   border-radius: 6px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
 }
 
 .module-card.chat-module-card {
   width: 320px;
   min-height: 400px;
+  min-width: 280px;
+  max-width: 600px;
   background-color: transparent;
   border: none;
   box-shadow: none;
+  position: relative;
 }
 
 .module-header {
@@ -102,16 +104,12 @@ body {
   font-weight: 600;
   color: #666;
   border-radius: 6px 6px 0 0;
-  cursor: grab;
+  cursor: pointer;
   user-select: none;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
-
-.module-header:active {
-  cursor: grabbing;
 }
 
 .module-close-button {
@@ -207,4 +205,31 @@ body {
 .composition-menu-cancel:hover {
   background: #333;
 }
+
+/* Resize Handle Styles */
+.module-resize-handle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 6px;
+  height: 100%;
+  cursor: ew-resize;
+  z-index: 10;
+  background-color: transparent;
+  transition: background-color 0.2s;
+}
+
+.module-card.chat-module-card:hover .module-resize-handle,
+.module-card.chat-module-card:has(:focus) .module-resize-handle {
+  background-color: rgba(76, 141, 255, 0.3);
+}
+
+.module-resize-handle:hover {
+  background-color: rgba(76, 141, 255, 0.5) !important;
+}
+
+.module-resize-handle:active {
+  background-color: rgba(76, 141, 255, 0.7) !important;
+}
+
 

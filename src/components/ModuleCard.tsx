@@ -11,15 +11,15 @@ interface ModuleCardProps {
   module: ModuleInstance
   isSelected: boolean
   onSelect: () => void
-  onMouseDown: (e: React.MouseEvent, moduleId: string, moduleX: number, moduleY: number) => void
   onUpdate: (newData: ImageModuleData | MediaModuleData | TextModuleData | MapModuleData | SearchModuleData | ChatModuleData) => void
   moduleRef: (element: HTMLDivElement | null) => void
   onBringToFront: () => void
   onDelete: () => void
   onExtractModule?: (moduleType: ModuleType, moduleData: any, position: { x: number; y: number }) => void
+  onResizeStart?: (e: React.MouseEvent, moduleId: string) => void
 }
 
-export function ModuleCard({ module, isSelected, onSelect, onMouseDown, onUpdate, moduleRef, onBringToFront, onDelete, onExtractModule }: ModuleCardProps) {
+export function ModuleCard({ module, isSelected, onSelect, onUpdate, moduleRef, onBringToFront, onDelete, onExtractModule, onResizeStart }: ModuleCardProps) {
   const cardRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -44,6 +44,8 @@ export function ModuleCard({ module, isSelected, onSelect, onMouseDown, onUpdate
     }
   }
 
+  const chatWidth = module.type === 'chat' ? (module.width ?? 320) : undefined
+
   return (
     <div
       ref={cardRef}
@@ -53,9 +55,10 @@ export function ModuleCard({ module, isSelected, onSelect, onMouseDown, onUpdate
         top: `${module.y}px`,
         zIndex: module.z,
         outline: isSelected ? '2px solid #4c8dff' : 'none',
+        width: chatWidth ? `${chatWidth}px` : undefined,
       }}
-      onMouseDown={(e) => {
-        // Don't start dragging if clicking on an input, textarea, or button
+      onClick={(e) => {
+        // Don't select if clicking on an input, textarea, or button
         const target = e.target as HTMLElement
         if (
           target.tagName === 'INPUT' ||
@@ -65,16 +68,20 @@ export function ModuleCard({ module, isSelected, onSelect, onMouseDown, onUpdate
         ) {
           return
         }
+        // Don't select if clicking on resize handle
+        if (target.classList.contains('module-resize-handle') || target.closest('.module-resize-handle')) {
+          return
+        }
         onSelect()
         onBringToFront()
-        onMouseDown(e, module.id, module.x, module.y)
       }}
     >
       <div
         className="module-header"
-        onMouseDown={(e) => {
+        onClick={(e) => {
+          e.stopPropagation()
+          onSelect()
           onBringToFront()
-          onMouseDown(e, module.id, module.x, module.y)
         }}
       >
         {getModuleLabel(module.type)}
@@ -130,6 +137,15 @@ export function ModuleCard({ module, isSelected, onSelect, onMouseDown, onUpdate
           />
         )}
       </div>
+      {module.type === 'chat' && onResizeStart && (
+        <div
+          className="module-resize-handle"
+          onMouseDown={(e) => {
+            e.stopPropagation()
+            onResizeStart(e, module.id)
+          }}
+        />
+      )}
     </div>
   )
 }

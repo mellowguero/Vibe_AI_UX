@@ -34,8 +34,9 @@ function rectsOverlap(
 function App() {
   const [modules, setModules] = useState<ModuleInstance[]>([])
   const [selectedModuleId, setSelectedModuleId] = useState<string | null>(null)
-  const [draggedModuleId, setDraggedModuleId] = useState<string | null>(null)
-  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
+  const [resizingModuleId, setResizingModuleId] = useState<string | null>(null)
+  const [resizeStartX, setResizeStartX] = useState(0)
+  const [resizeStartWidth, setResizeStartWidth] = useState(0)
   const [pendingComposition, setPendingComposition] = useState<PendingComposition>(null)
   const canvasRef = useRef<HTMLDivElement>(null)
   const moduleRefs = useRef<Map<string, HTMLDivElement>>(new Map())
@@ -113,6 +114,7 @@ function App() {
           x: 180,
           y: 180,
           z: maxZ + 1,
+          width: 320,
           data: {
             messages: [],
           },
@@ -325,30 +327,23 @@ function App() {
       return
     }
     
-    e.preventDefault()
-    if (canvasRef.current) {
-      const canvasRect = canvasRef.current.getBoundingClientRect()
-      const mouseX = e.clientX - canvasRect.left
-      const mouseY = e.clientY - canvasRect.top
-      
-      setDraggedModuleId(moduleId)
-      setDragOffset({
-        x: mouseX - moduleX,
-        y: mouseY - moduleY,
-      })
-    }
+    // Only handle selection, no dragging
+    setSelectedModuleId(moduleId)
+    bringToFront(moduleId)
   }
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (draggedModuleId && canvasRef.current) {
+    if (canvasRef.current && resizingModuleId) {
       const canvasRect = canvasRef.current.getBoundingClientRect()
-      const newX = e.clientX - canvasRect.left - dragOffset.x
-      const newY = e.clientY - canvasRect.top - dragOffset.y
+      const mouseX = e.clientX - canvasRect.left
+
+      const deltaX = mouseX - resizeStartX
+      const newWidth = Math.max(280, Math.min(600, resizeStartWidth + deltaX))
 
       setModules((prevModules) =>
         prevModules.map((module) =>
-          module.id === draggedModuleId
-            ? { ...module, x: Math.max(0, newX), y: Math.max(0, newY) }
+          module.id === resizingModuleId && module.type === 'chat'
+            ? { ...module, width: newWidth }
             : module
         )
       )
@@ -365,56 +360,28 @@ function App() {
   }
 
   const handleMouseUp = () => {
-    if (draggedModuleId) {
-      const draggedElement = moduleRefs.current.get(draggedModuleId)
+    // No-op
+  }
+
+  const handleResizeStart = (e: React.MouseEvent, moduleId: string) => {
+    e.preventDefault()
+    e.stopPropagation()
+    
+    if (canvasRef.current) {
+      const canvasRect = canvasRef.current.getBoundingClientRect()
+      const mouseX = e.clientX - canvasRect.left
+      const module = modules.find(m => m.id === moduleId)
       
-      if (draggedElement) {
-        const draggedRect = draggedElement.getBoundingClientRect()
-        
-        // Find the dragged module (from)
-        const from = modules.find(m => m.id === draggedModuleId)
-        
-        if (from) {
-          // Check against all other modules
-          for (const [moduleId, element] of moduleRefs.current.entries()) {
-            if (moduleId !== draggedModuleId) {
-              const otherRect = element.getBoundingClientRect()
-              
-              if (checkOverlap(draggedRect, otherRect)) {
-                // Find the overlapped module (to)
-                const to = modules.find(m => m.id === moduleId)
-                
-                if (to) {
-                  // Look up composition rule
-                  const rule = compositionRules.find(
-                    (r) => r.from === from.type && r.to === to.type
-                  )
-                  
-                  if (rule && rule.actions.length > 0) {
-                    const menuPosition = {
-                      x: to.x + 20,
-                      y: to.y + 20,
-                    }
-                    
-                    setPendingComposition({
-                      fromId: from.id,
-                      toId: to.id,
-                      actions: rule.actions,
-                      position: menuPosition,
-                    })
-                    
-                    setDraggedModuleId(null)
-                    return // don't mutate modules here anymore
-                  }
-                }
-              }
-            }
-          }
-        }
+      if (module && module.type === 'chat') {
+        setResizingModuleId(moduleId)
+        setResizeStartX(mouseX)
+        setResizeStartWidth(module.width ?? 320)
       }
     }
-    
-    setDraggedModuleId(null)
+  }
+
+  const handleResizeEnd = () => {
+    setResizingModuleId(null)
   }
 
 
@@ -441,8 +408,14 @@ function App() {
           ref={canvasRef}
           className="canvas-container"
           onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseUp}
+          onMouseUp={() => {
+            handleMouseUp()
+            handleResizeEnd()
+          }}
+          onMouseLeave={() => {
+            handleMouseUp()
+            handleResizeEnd()
+          }}
         >
           {modules.map((module) => (
             <ModuleCard
@@ -450,12 +423,12 @@ function App() {
               module={module}
               isSelected={module.id === selectedModuleId}
               onSelect={() => setSelectedModuleId(module.id)}
-              onMouseDown={handleMouseDown}
               onUpdate={(newData) => updateModule(module.id, newData)}
               moduleRef={(el) => registerModuleRef(module.id, el)}
               onBringToFront={() => bringToFront(module.id)}
               onDelete={() => deleteModule(module.id)}
               onExtractModule={handleExtractModule}
+              onResizeStart={handleResizeStart}
             />
           ))}
           {pendingComposition && (

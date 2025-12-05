@@ -189,6 +189,21 @@ export function Inspector({ selectedModule, onChangeModule }: InspectorProps) {
       {/* Chat */}
       {type === 'chat' && (
         <>
+          {/* Width */}
+          <div style={{ marginBottom: '0.5rem' }}>
+            <div style={{ marginBottom: 4 }}>Width</div>
+            <input
+              className="module-input"
+              type="number"
+              min="280"
+              max="600"
+              value={selectedModule.width ?? 320}
+              onChange={(e) => {
+                const width = Math.max(280, Math.min(600, Number(e.target.value)))
+                onChangeModule({ ...selectedModule, width })
+              }}
+            />
+          </div>
           <div style={{ marginTop: '0.5rem' }}>Messages ({data.messages.length})</div>
           <div
             style={{

@@ -68,6 +68,7 @@ body {
   border-radius: 6px;
   padding: 1.5rem;
   background-color: #fafafa;
+  position: relative;
 }
 
 .state-group h3 {
@@ -141,6 +142,8 @@ body {
   width: 320px;
   min-height: 400px;
   max-height: 500px;
+  min-width: 280px;
+  max-width: 600px;
   /* Frosted Glass Effect */
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
@@ -152,6 +155,32 @@ body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  position: relative;
+}
+
+/* Resize Handle for Playground */
+.chat-module-example .module-resize-handle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 6px;
+  height: 100%;
+  cursor: ew-resize;
+  z-index: 10;
+  background-color: transparent;
+  transition: background-color 0.2s;
+}
+
+.chat-module-example:hover .module-resize-handle {
+  background-color: rgba(76, 141, 255, 0.3);
+}
+
+.chat-module-example .module-resize-handle:hover {
+  background-color: rgba(76, 141, 255, 0.5) !important;
+}
+
+.chat-module-example .module-resize-handle:active {
+  background-color: rgba(76, 141, 255, 0.7) !important;
 }
 
 .chat-messages {
@@ -1009,4 +1038,5 @@ body {
     max-width: 100%;
   }
 }
+
 

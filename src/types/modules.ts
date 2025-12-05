@@ -107,6 +107,7 @@ export type ModuleInstance =
       x: number
       y: number
       z: number
+      width?: number
       data: ChatModuleData
     }
 
