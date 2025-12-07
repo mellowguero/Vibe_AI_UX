@@ -495,18 +495,21 @@
 /* Text Input Component Styles */
 .text-input-container {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   background: rgba(219, 225, 243, 0.12);
   border-radius: var(--radius-text-input, 9999px);
   padding:1rem 1rem;
   box-shadow: var(--shadow-text-input, 0 2px 4px rgba(0, 0, 0, 0.1));
   width: 100%;
   max-width: 400px;
+  max-height: 300px;
   gap:1rem;
+  overflow-y: auto;
 }
 
 .text-input-field {
-  flex: 1;
+  padding: 2rem;
+  flex: 1 0 0;
   border: none;
   background: transparent;
   color:red;
@@ -518,17 +521,16 @@
   text-align: left;
   font-style: normal;
   text-wrap: wrap;
-  text-overflow: ellipsis;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  word-break: break-word;
   width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5rem 1rem;
+  min-height: 1.5em;
+  resize: none;
+  overflow: hidden;
   border: none;
   background: #DBE1F3;
   outline: none;
-  padding: 2rem;
 
 }
 

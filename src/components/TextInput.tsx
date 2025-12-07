@@ -17,13 +17,18 @@ export function TextInput({
 }: TextInputProps) {
   return (
     <div className={`text-input-container ${className}`}>
-      <input
-        type="text"
+      <textarea
         className="text-input-field"
         value={value}
         placeholder={placeholder}
         onChange={(e) => onChange?.(e.target.value)}
         disabled={disabled}
+        rows={1}
+        onInput={(e) => {
+          const target = e.target as HTMLTextAreaElement;
+          target.style.height = 'auto';
+          target.style.height = `${target.scrollHeight}px`;
+        }}
       />
       <button
         type="button"

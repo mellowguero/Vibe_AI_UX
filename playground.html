@@ -575,7 +575,7 @@
           <h3>Text Input</h3>
           <div style="display: flex; flex-direction: column; gap: 1rem; padding: 1rem;">
             <div class="text-input-container">
-              <input type="text" class="text-input-field" placeholder="Test">
+              <textarea class="text-input-field" placeholder="Test" rows="1"></textarea>
               <button type="button" class="text-input-action-button" aria-label="Action">
                 <svg class="text-input-action-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <rect x="3" y="3" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
@@ -583,7 +583,7 @@
               </button>
             </div>
             <div class="text-input-container">
-              <input type="text" class="text-input-field" placeholder="With value" value="Sample text">
+              <textarea class="text-input-field" placeholder="With value" rows="1">Sample text</textarea>
               <button type="button" class="text-input-action-button" aria-label="Action">
                 <svg class="text-input-action-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <rect x="3" y="3" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
@@ -591,7 +591,7 @@
               </button>
             </div>
             <div class="text-input-container">
-              <input type="text" class="text-input-field" placeholder="Disabled" disabled>
+              <textarea class="text-input-field" placeholder="Disabled" disabled rows="1"></textarea>
               <button type="button" class="text-input-action-button" disabled aria-label="Action">
                 <svg class="text-input-action-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <rect x="3" y="3" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
@@ -718,6 +718,18 @@
         resizingElement = null;
       });
     })();
+
+    // Auto-resize textareas
+    document.querySelectorAll('.text-input-field').forEach(textarea => {
+      const autoResize = (e) => {
+        const target = e.target || e;
+        target.style.height = 'auto';
+        target.style.height = `${target.scrollHeight}px`;
+      };
+      textarea.addEventListener('input', autoResize);
+      // Initial resize
+      autoResize({ target: textarea });
+    });
   </script>
 </body>
 </html>
