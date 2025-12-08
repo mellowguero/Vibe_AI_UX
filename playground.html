@@ -574,29 +574,48 @@
         <div class="state-group">
           <h3>Text Input</h3>
           <div style="display: flex; flex-direction: column; gap: 1rem; padding: 1rem;">
-            <div class="text-input-container">
-              <textarea class="text-input-field" placeholder="Test" rows="1"></textarea>
-              <button type="button" class="text-input-action-button" aria-label="Action">
-                <svg class="text-input-action-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <div class="Text_Input">
+              <div class="input_field">
+                <div class="Text Container">
+                  <div class="input_text_field">
+                    <textarea class="Text" placeholder="Test" rows="1"></textarea>
+                  </div>
+                </div>
+              </div>
+              <div class="Submit Button">
+                <svg class="submit-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <rect x="3" y="3" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
                 </svg>
-              </button>
+              </div>
             </div>
-            <div class="text-input-container">
-              <textarea class="text-input-field" placeholder="With value" rows="1">Sample text</textarea>
-              <button type="button" class="text-input-action-button" aria-label="Action">
-                <svg class="text-input-action-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            
+            <div class="Text_Input">
+              <div class="input_field">
+                <div class="Text Container">
+                  <div class="input_text_field">
+                    <textarea class="Text" placeholder="With value" rows="1">Sample text</textarea>
+                  </div>
+                </div>
+              </div>
+              <div class="Submit Button">
+                <svg class="submit-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <rect x="3" y="3" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
                 </svg>
-              </button>
+              </div>
             </div>
-            <div class="text-input-container">
-              <textarea class="text-input-field" placeholder="Disabled" disabled rows="1"></textarea>
-              <button type="button" class="text-input-action-button" disabled aria-label="Action">
-                <svg class="text-input-action-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <div class="Text_Input">
+              <div class="input_field">
+                <div class="Text Container">
+                  <div class="input_text_field">
+                    <textarea class="Text" placeholder="Disabled" disabled rows="1"></textarea>
+                  </div>
+                </div>
+              </div>
+              <div class="Submit Button">
+                <svg class="submit-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <rect x="3" y="3" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
                 </svg>
-              </button>
+              </div>
             </div>
           </div>
         </div>
@@ -725,6 +744,57 @@
         const target = e.target || e;
         target.style.height = 'auto';
         target.style.height = `${target.scrollHeight}px`;
+      };
+      textarea.addEventListener('input', autoResize);
+      // Initial resize
+      autoResize({ target: textarea });
+    });
+
+    // Auto-resize for Text_Input component textareas with dynamic border-radius
+    document.querySelectorAll('.input_text_field .Text').forEach(textarea => {
+      const autoResize = (e) => {
+        const target = e.target || e;
+        target.style.height = 'auto';
+        const maxHeight = 104; // Max height in pixels
+        const minHeight = 40; // Min height in pixels
+        const scrollHeight = target.scrollHeight;
+        const newHeight = Math.min(scrollHeight, maxHeight);
+        target.style.height = `${newHeight}px`;
+        
+        // Enable scrolling if content exceeds max height
+        if (scrollHeight > maxHeight) {
+          target.style.overflowY = 'auto';
+        } else {
+          target.style.overflowY = 'hidden';
+        }
+        
+        // Update border-radius based on height
+        // Interpolate from 4rem (at minHeight) to 2rem (at maxHeight)
+        const heightRange = maxHeight - minHeight;
+        const currentHeight = Math.min(newHeight, maxHeight);
+        const heightProgress = Math.max(0, Math.min(1, (currentHeight - minHeight) / heightRange));
+        
+        // Use ease-out curve to reduce border-radius faster in early stages
+        // ease-out cubic: 1 - (1 - progress)^3
+        const easedProgress = 1 - Math.pow(1 - heightProgress, 3);
+        
+        // Interpolate: 4rem at 0% progress, 2rem at 100% progress
+        const borderRadius = 4 - (easedProgress * 2); // 4rem to 2rem
+        
+        // Update Text_Input container border-radius
+        const textInputContainer = target.closest('.Text_Input');
+        if (textInputContainer) {
+          textInputContainer.style.borderRadius = `${borderRadius}rem`;
+        }
+        
+        // Update input_text_field border-radius
+        const inputTextField = target.closest('.input_text_field');
+        if (inputTextField) {
+          inputTextField.style.borderRadius = `${borderRadius}rem`;
+        }
+        
+        // Always scroll to bottom to show latest content
+        target.scrollTop = target.scrollHeight;
       };
       textarea.addEventListener('input', autoResize);
       // Initial resize
