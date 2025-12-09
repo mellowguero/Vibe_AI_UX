@@ -529,7 +529,7 @@
   resize: none;
   overflow: hidden;
   border: none;
-  background: #DBE1F3;
+  background: rgb(222, 228, 246);
   outline: none;
 
 }
@@ -590,7 +590,7 @@
   width: 100%;
   max-width: 400px;
   border-radius: 4rem;
-  background-color: orange;
+  background-color: rgba(219, 225, 243, 0.12);
   padding: 1rem;
   transition: border-radius 0.025s ease-in-out;
 }
@@ -611,10 +611,9 @@
 
 .input_text_field {
   width: 100%;
-  background: var(--color-bg-text-input, #E5E6F0);
+  background: rgb(222, 228, 246);
   border-radius: 4rem;
   padding:1rem;
-  box-shadow: var(--shadow-text-input, 0 2px 4px rgba(0, 0, 0, 0.1));
   display: flex;
   align-items: center;
   align-self: center;
