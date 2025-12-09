@@ -126,6 +126,9 @@
   --glass-bg-medium: rgba(255, 255, 255, 0.15);
   --glass-bg-heavy: rgba(255, 255, 255, 0.2);
   --glass-bg-heavy-hover: rgba(255, 255, 255, 0.3);
+  --glass-bg-round-button: rgba(255, 255, 255, 0.24);
+  --glass-bg-round-button-hover: rgba(255, 255, 255, 0.58);
+  --glass-bg-round-button-disabled: rgba(164, 164, 164, 0.24);
   
   --glass-border-light: rgba(255, 255, 255, 0.18);
   --glass-border-medium: rgba(255, 255, 255, 0.2);
@@ -280,10 +283,13 @@
   --size-icon-sm: 1.5rem;      /* 12px */
   --size-icon-md: 2rem;        /* 16px */
   --size-icon-lg: 2.5rem;      /* 20px */
+  --size-icon-xl: 3rem;        /* 24px */
   --size-audio-play: 36px;
   --size-play-button: 60px;
   --size-chat-send-button: 56px;
   --size-text-input-action: 40px;
+  --size-round-button-wrapper: 56px;
+  --size-round-button-inner: 40px;
   
   /* ============================================
      BREAKPOINTS (for reference in media queries)
