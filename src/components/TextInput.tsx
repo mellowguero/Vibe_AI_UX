@@ -1,4 +1,5 @@
 import { useRef, useEffect } from 'react'
+import { RoundButton } from './shared/RoundButton'
 
 interface TextInputProps {
   value?: string
@@ -94,18 +95,9 @@ export function TextInput({
           </div>
         </div>
       </div>
-      <div
-        className={`Submit Button ${disabled ? 'disabled' : ''}`}
-        onClick={disabled ? undefined : onActionClick}
-        role="button"
-        aria-label="Action"
-        tabIndex={disabled ? -1 : 0}
-        onKeyDown={(e) => {
-          if (!disabled && (e.key === 'Enter' || e.key === ' ')) {
-            e.preventDefault()
-            onActionClick?.()
-          }
-        }}
+      <RoundButton
+        onClick={onActionClick}
+        disabled={disabled}
       >
         <svg
           className="submit-icon"
@@ -126,7 +118,7 @@ export function TextInput({
             fill="none"
           />
         </svg>
-      </div>
+      </RoundButton>
     </div>
   )
 }

@@ -1,10 +1,7 @@
 /* Module Playground Styles */
 
-/* Import design tokens first */
-@import 'src/styles/tokens.css';
-
-/* Import shared module styles */
-@import 'src/styles/modules.css';
+/* Note: tokens.css and modules.css are linked directly in playground.html */
+/* This ensures proper loading order and avoids @import path resolution issues */
 
 * {
   margin: 0;
@@ -62,16 +59,40 @@ body {
 
 .play-area-content {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(1, 1fr);
   gap: 2rem;
 }
 
 .state-group {
+  display: flex;
+  flex-direction: column;
   border: 1px solid #e0e0e0;
   border-radius: 6px;
   padding: 1.5rem;
   background-color: #fafafa;
+  background-image: url('https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1200&q=80');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   position: relative;
+  overflow: hidden;
+}
+
+.state-group::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.1);
+  z-index: 0;
+}
+
+.state-group > * {
+  position: relative;
+  z-index: 1;
 }
 
 .state-group h3 {

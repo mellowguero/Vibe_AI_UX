@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Module Playground</title>
   <link rel="stylesheet" href="src/styles/tokens.css">
+  <link rel="stylesheet" href="src/styles/modules.css">
   <link rel="stylesheet" href="playground.css">
   <style>
     /* Quick inline experiments here */
@@ -41,9 +42,21 @@
                   <div class="chat-message-time">07:17 PM</div>
                 </div>
               </div>
-              <div class="chat-input-container">
-                <input type="text" class="chat-input" placeholder="Type a message...">
-                <button class="chat-send-button">Send</button>
+              <div class="Text_Input">
+                <div class="input_field">
+                  <div class="Text Container">
+                    <div class="input_text_field">
+                      <textarea class="Text" placeholder="Type a message..." rows="1"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="button-round-wrapper">
+                  <button class="button-base button-round" type="button">
+                    <svg class="submit-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <rect x="3" y="3" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                    </svg>
+                  </button>
+                </div>
               </div>
               <div class="module-resize-handle"></div>
             </div>
@@ -412,9 +425,19 @@
                 Start a conversation with your AI friend!
               </div>
             </div>
-            <div class="chat-input-container">
-              <input type="text" class="chat-input" placeholder="Type a message...">
-              <button class="chat-send-button">Send</button>
+            <div class="Text_Input">
+              <div class="input_field">
+                <div class="Text Container">
+                  <div class="input_text_field">
+                    <textarea class="Text" placeholder="Type a message..." rows="1"></textarea>
+                  </div>
+                </div>
+              </div>
+              <div class="Submit Button" role="button" aria-label="Send" tabindex="0">
+                <svg class="submit-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="3" y="3" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                </svg>
+              </div>
             </div>
           </div>
         </div>
@@ -582,10 +605,12 @@
                   </div>
                 </div>
               </div>
-              <div class="Submit Button">
-                <svg class="submit-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="3" y="3" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                </svg>
+              <div class="button-round-wrapper">
+                <button class="button-base button-round" type="button">
+                  <svg class="submit-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="3" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                  </svg>
+                </button>
               </div>
         </div>
 
@@ -597,10 +622,12 @@
                   </div>
                 </div>
               </div>
-              <div class="Submit Button">
-                <svg class="submit-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="3" y="3" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                </svg>
+              <div class="button-round-wrapper">
+                <button class="button-base button-round" type="button">
+                  <svg class="submit-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="3" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                  </svg>
+                </button>
               </div>
             </div>
             <div class="Text_Input">
@@ -611,10 +638,12 @@
                   </div>
                 </div>
               </div>
-              <div class="Submit Button">
-                <svg class="submit-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="3" y="3" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                </svg>
+              <div class="button-round-wrapper">
+                <button class="button-base button-round" type="button" disabled>
+                  <svg class="submit-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="3" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                  </svg>
+                </button>
               </div>
             </div>
           </div>

@@ -586,7 +586,7 @@
 .Text_Input {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0px;
   width: 100%;
   max-width: 400px;
   border-radius: 4rem;
@@ -690,6 +690,20 @@
   cursor: not-allowed;
 }
 
+/* Submit icon styling - works in both old Submit.Button and new button-round */
+.submit-icon {
+  width: 16px;
+  height: 16px;
+  color: var(--color-text-input-action-icon, #ffffff);
+}
+
+.submit-icon rect {
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.5;
+}
+
+/* Legacy support for old Submit.Button class */
 .Submit.Button .submit-icon {
   width: 16px;
   height: 16px;
