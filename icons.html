@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Icon Library</title>
+  <link rel="stylesheet" href="src/styles/tokens.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+      color: #ffffff;
+      line-height: 1.6;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    .icons-container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .icons-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .icons-header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #ffffff;
+    }
+
+    .icons-header p {
+      font-size: 1.1rem;
+      color: #b0b0b0;
+    }
+
+    .icon-section {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .icon-section-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      color: #ffffff;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+      padding-bottom: 0.5rem;
+    }
+
+    .icon-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .icon-item {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 8px;
+      padding: 1.5rem;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .icon-item:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .icon-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: #ffffff;
+      text-transform: capitalize;
+    }
+
+    .icon-sizes {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .icon-size-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .icon-size-label {
+      font-size: 0.75rem;
+      color: #b0b0b0;
+      font-weight: 500;
+    }
+
+    .icon-display {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+    }
+
+    .icon-display svg {
+      display: block;
+    }
+
+    .size-xs { width: 12px; height: 12px; }
+    .size-sm { width: 16px; height: 16px; }
+    .size-md { width: 24px; height: 24px; }
+    .size-lg { width: 32px; height: 32px; }
+
+    .code-snippet {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 4px;
+      padding: 0.5rem;
+      font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+      font-size: 0.75rem;
+      color: #a0e0a0;
+      margin-top: 0.5rem;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+  <div class="icons-container">
+    <header class="icons-header">
+      <h1>Icon Library</h1>
+      <p>View all available icons in all size variants</p>
+    </header>
+
+    <div class="icon-section">
+      <h2 class="icon-section-title">Send Icon</h2>
+      <div class="icon-grid">
+        <div class="icon-item">
+          <div class="icon-name">SendIcon</div>
+          <div class="icon-sizes">
+            <div class="icon-size-group">
+              <span class="icon-size-label">XS (12px)</span>
+              <div class="icon-display">
+                <svg class="size-xs" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path opacity="0.65" d="M4.38391 10.6367C3.93759 10.1897 3.93759 9.46529 4.38391 9.01836L11.3348 2.41768C11.7811 1.97074 12.2188 1.97073 12.6652 2.41766L19.7144 9.01836C20.1608 9.46529 20.1608 10.1897 19.7144 10.6367C19.2681 11.0836 18.5447 11.0836 18.0983 10.6367L13 5.98958L13 20.938C13 21.5701 12.6312 22 12 22C11.5117 22.0825 11 21.5701 11 20.938L11 5.9896L6 10.6367C5.55368 11.0836 4.83023 11.0836 4.38391 10.6367Z" fill="currentColor"/>
+                </svg>
+              </div>
+            </div>
+            <div class="icon-size-group">
+              <span class="icon-size-label">SM (16px)</span>
+              <div class="icon-display">
+                <svg class="size-sm" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path opacity="0.65" d="M4.38391 10.6367C3.93759 10.1897 3.93759 9.46529 4.38391 9.01836L11.3348 2.41768C11.7811 1.97074 12.2188 1.97073 12.6652 2.41766L19.7144 9.01836C20.1608 9.46529 20.1608 10.1897 19.7144 10.6367C19.2681 11.0836 18.5447 11.0836 18.0983 10.6367L13 5.98958L13 20.938C13 21.5701 12.6312 22 12 22C11.5117 22.0825 11 21.5701 11 20.938L11 5.9896L6 10.6367C5.55368 11.0836 4.83023 11.0836 4.38391 10.6367Z" fill="currentColor"/>
+                </svg>
+              </div>
+            </div>
+            <div class="icon-size-group">
+              <span class="icon-size-label">MD (24px)</span>
+              <div class="icon-display">
+                <svg class="size-md" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path opacity="0.65" d="M4.38391 10.6367C3.93759 10.1897 3.93759 9.46529 4.38391 9.01836L11.3348 2.41768C11.7811 1.97074 12.2188 1.97073 12.6652 2.41766L19.7144 9.01836C20.1608 9.46529 20.1608 10.1897 19.7144 10.6367C19.2681 11.0836 18.5447 11.0836 18.0983 10.6367L13 5.98958L13 20.938C13 21.5701 12.6312 22 12 22C11.5117 22.0825 11 21.5701 11 20.938L11 5.9896L6 10.6367C5.55368 11.0836 4.83023 11.0836 4.38391 10.6367Z" fill="currentColor"/>
+                </svg>
+              </div>
+            </div>
+            <div class="icon-size-group">
+              <span class="icon-size-label">LG (32px)</span>
+              <div class="icon-display">
+                <svg class="size-lg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path opacity="0.65" d="M4.38391 10.6367C3.93759 10.1897 3.93759 9.46529 4.38391 9.01836L11.3348 2.41768C11.7811 1.97074 12.2188 1.97073 12.6652 2.41766L19.7144 9.01836C20.1608 9.46529 20.1608 10.1897 19.7144 10.6367C19.2681 11.0836 18.5447 11.0836 18.0983 10.6367L13 5.98958L13 20.938C13 21.5701 12.6312 22 12 22C11.5117 22.0825 11 21.5701 11 20.938L11 5.9896L6 10.6367C5.55368 11.0836 4.83023 11.0836 4.38391 10.6367Z" fill="currentColor"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="code-snippet">import { SendIcon } from '@/components/shared/Icon'</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="icon-section">
+      <h2 class="icon-section-title">Close Icon</h2>
+      <div class="icon-grid">
+        <div class="icon-item">
+          <div class="icon-name">CloseIcon</div>
+          <div class="icon-sizes">
+            <div class="icon-size-group">
+              <span class="icon-size-label">XS (12px)</span>
+              <div class="icon-display">
+                <svg class="size-xs" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="icon-size-group">
+              <span class="icon-size-label">SM (16px)</span>
+              <div class="icon-display">
+                <svg class="size-sm" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="icon-size-group">
+              <span class="icon-size-label">MD (24px)</span>
+              <div class="icon-display">
+                <svg class="size-md" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="icon-size-group">
+              <span class="icon-size-label">LG (32px)</span>
+              <div class="icon-display">
+                <svg class="size-lg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="code-snippet">import { CloseIcon } from '@/components/shared/Icon'</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="icon-section">
+      <h2 class="icon-section-title">Expand Icon</h2>
+      <div class="icon-grid">
+        <div class="icon-item">
+          <div class="icon-name">ExpandIcon</div>
+          <div class="icon-sizes">
+            <div class="icon-size-group">
+              <span class="icon-size-label">XS (12px)</span>
+              <div class="icon-display">
+                <svg class="size-xs" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="icon-size-group">
+              <span class="icon-size-label">SM (16px)</span>
+              <div class="icon-display">
+                <svg class="size-sm" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="icon-size-group">
+              <span class="icon-size-label">MD (24px)</span>
+              <div class="icon-display">
+                <svg class="size-md" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="icon-size-group">
+              <span class="icon-size-label">LG (32px)</span>
+              <div class="icon-display">
+                <svg class="size-lg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="code-snippet">import { ExpandIcon } from '@/components/shared/Icon'</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="icon-section">
+      <h2 class="icon-section-title">Collapse Icon</h2>
+      <div class="icon-grid">
+        <div class="icon-item">
+          <div class="icon-name">CollapseIcon</div>
+          <div class="icon-sizes">
+            <div class="icon-size-group">
+              <span class="icon-size-label">XS (12px)</span>
+              <div class="icon-display">
+                <svg class="size-xs" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="icon-size-group">
+              <span class="icon-size-label">SM (16px)</span>
+              <div class="icon-display">
+                <svg class="size-sm" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="icon-size-group">
+              <span class="icon-size-label">MD (24px)</span>
+              <div class="icon-display">
+                <svg class="size-md" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="icon-size-group">
+              <span class="icon-size-label">LG (32px)</span>
+              <div class="icon-display">
+                <svg class="size-lg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="code-snippet">import { CollapseIcon } from '@/components/shared/Icon'</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="icon-section">
+      <h2 class="icon-section-title">Extract Icon</h2>
+      <div class="icon-grid">
+        <div class="icon-item">
+          <div class="icon-name">ExtractIcon</div>
+          <div class="icon-sizes">
+            <div class="icon-size-group">
+              <span class="icon-size-label">XS (12px)</span>
+              <div class="icon-display">
+                <svg class="size-xs" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M7 17L17 7M7 7h10v10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="icon-size-group">
+              <span class="icon-size-label">SM (16px)</span>
+              <div class="icon-display">
+                <svg class="size-sm" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M7 17L17 7M7 7h10v10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="icon-size-group">
+              <span class="icon-size-label">MD (24px)</span>
+              <div class="icon-display">
+                <svg class="size-md" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M7 17L17 7M7 7h10v10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="icon-size-group">
+              <span class="icon-size-label">LG (32px)</span>
+              <div class="icon-display">
+                <svg class="size-lg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M7 17L17 7M7 7h10v10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="code-snippet">import { ExtractIcon } from '@/components/shared/Icon'</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="icon-section">
+      <h2 class="icon-section-title">Drag Handle Icon</h2>
+      <div class="icon-grid">
+        <div class="icon-item">
+          <div class="icon-name">DragHandleIcon</div>
+          <div class="icon-sizes">
+            <div class="icon-size-group">
+              <span class="icon-size-label">XS (12px)</span>
+              <div class="icon-display">
+                <svg class="size-xs" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="9" cy="12" r="1" fill="currentColor"/>
+                  <circle cx="15" cy="12" r="1" fill="currentColor"/>
+                  <circle cx="9" cy="8" r="1" fill="currentColor"/>
+                  <circle cx="15" cy="8" r="1" fill="currentColor"/>
+                  <circle cx="9" cy="16" r="1" fill="currentColor"/>
+                  <circle cx="15" cy="16" r="1" fill="currentColor"/>
+                </svg>
+              </div>
+            </div>
+            <div class="icon-size-group">
+              <span class="icon-size-label">SM (16px)</span>
+              <div class="icon-display">
+                <svg class="size-sm" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="9" cy="12" r="1" fill="currentColor"/>
+                  <circle cx="15" cy="12" r="1" fill="currentColor"/>
+                  <circle cx="9" cy="8" r="1" fill="currentColor"/>
+                  <circle cx="15" cy="8" r="1" fill="currentColor"/>
+                  <circle cx="9" cy="16" r="1" fill="currentColor"/>
+                  <circle cx="15" cy="16" r="1" fill="currentColor"/>
+                </svg>
+              </div>
+            </div>
+            <div class="icon-size-group">
+              <span class="icon-size-label">MD (24px)</span>
+              <div class="icon-display">
+                <svg class="size-md" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="9" cy="12" r="1" fill="currentColor"/>
+                  <circle cx="15" cy="12" r="1" fill="currentColor"/>
+                  <circle cx="9" cy="8" r="1" fill="currentColor"/>
+                  <circle cx="15" cy="8" r="1" fill="currentColor"/>
+                  <circle cx="9" cy="16" r="1" fill="currentColor"/>
+                  <circle cx="15" cy="16" r="1" fill="currentColor"/>
+                </svg>
+              </div>
+            </div>
+            <div class="icon-size-group">
+              <span class="icon-size-label">LG (32px)</span>
+              <div class="icon-display">
+                <svg class="size-lg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="9" cy="12" r="1" fill="currentColor"/>
+                  <circle cx="15" cy="12" r="1" fill="currentColor"/>
+                  <circle cx="9" cy="8" r="1" fill="currentColor"/>
+                  <circle cx="15" cy="8" r="1" fill="currentColor"/>
+                  <circle cx="9" cy="16" r="1" fill="currentColor"/>
+                  <circle cx="15" cy="16" r="1" fill="currentColor"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="code-snippet">import { DragHandleIcon } from '@/components/shared/Icon'</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="icon-section">
+      <h2 class="icon-section-title">Play Icon</h2>
+      <div class="icon-grid">
+        <div class="icon-item">
+          <div class="icon-name">PlayIcon</div>
+          <div class="icon-sizes">
+            <div class="icon-size-group">
+              <span class="icon-size-label">XS (12px)</span>
+              <div class="icon-display">
+                <svg class="size-xs" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M19.5467 10.62C20.6228 11.2253 20.6228 12.7747 19.5467 13.38L8.35958 19.6727C7.30413 20.2664 6 19.5037 6 18.2927L6 5.70726C6 4.49628 7.30412 3.73357 8.35958 4.32726L19.5467 10.62Z" fill="currentColor"/>
+                </svg>
+              </div>
+            </div>
+            <div class="icon-size-group">
+              <span class="icon-size-label">SM (16px)</span>
+              <div class="icon-display">
+                <svg class="size-sm" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M19.5467 10.62C20.6228 11.2253 20.6228 12.7747 19.5467 13.38L8.35958 19.6727C7.30413 20.2664 6 19.5037 6 18.2927L6 5.70726C6 4.49628 7.30412 3.73357 8.35958 4.32726L19.5467 10.62Z" fill="currentColor"/>
+                </svg>
+              </div>
+            </div>
+            <div class="icon-size-group">
+              <span class="icon-size-label">MD (24px)</span>
+              <div class="icon-display">
+                <svg class="size-md" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M19.5467 10.62C20.6228 11.2253 20.6228 12.7747 19.5467 13.38L8.35958 19.6727C7.30413 20.2664 6 19.5037 6 18.2927L6 5.70726C6 4.49628 7.30412 3.73357 8.35958 4.32726L19.5467 10.62Z" fill="currentColor"/>
+                </svg>
+              </div>
+            </div>
+            <div class="icon-size-group">
+              <span class="icon-size-label">LG (32px)</span>
+              <div class="icon-display">
+                <svg class="size-lg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M19.5467 10.62C20.6228 11.2253 20.6228 12.7747 19.5467 13.38L8.35958 19.6727C7.30413 20.2664 6 19.5037 6 18.2927L6 5.70726C6 4.49628 7.30412 3.73357 8.35958 4.32726L19.5467 10.62Z" fill="currentColor"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="code-snippet">import { PlayIcon } from '@/components/shared/Icon'</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="icon-section">
+      <h2 class="icon-section-title">Next Track Icon</h2>
+      <div class="icon-grid">
+        <div class="icon-item">
+          <div class="icon-name">NextTrackIcon</div>
+          <div class="icon-sizes">
+            <div class="icon-size-group">
+              <span class="icon-size-label">XS (12px)</span>
+              <div class="icon-display">
+                <svg class="size-xs" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M20 6.16636V17.8336C20 18.4777 19.4765 19 18.8324 19H17.2777C16.6336 19 16.1101 18.4777 16.1101 17.8336V6.16636C16.1101 5.52107 16.6336 5 17.2777 5H18.8324C19.4765 5 20 5.52107 20 6.16636ZM4.22131 6.33518C4.22131 5.89613 4.46737 5.49446 4.85817 5.29545C5.24776 5.09643 5.71696 5.13262 6.07159 5.38954L14.0795 11.1829C14.3823 11.4024 14.562 11.7534 14.562 12.1285C14.562 12.5024 14.3823 12.8534 14.0795 13.073L6.07159 18.8663C5.71699 19.1244 5.24776 19.1594 4.85817 18.9604C4.46738 18.7614 4.22131 18.3597 4.22131 17.9219V6.33518Z" fill="currentColor"/>
+                </svg>
+              </div>
+            </div>
+            <div class="icon-size-group">
+              <span class="icon-size-label">SM (16px)</span>
+              <div class="icon-display">
+                <svg class="size-sm" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M20 6.16636V17.8336C20 18.4777 19.4765 19 18.8324 19H17.2777C16.6336 19 16.1101 18.4777 16.1101 17.8336V6.16636C16.1101 5.52107 16.6336 5 17.2777 5H18.8324C19.4765 5 20 5.52107 20 6.16636ZM4.22131 6.33518C4.22131 5.89613 4.46737 5.49446 4.85817 5.29545C5.24776 5.09643 5.71696 5.13262 6.07159 5.38954L14.0795 11.1829C14.3823 11.4024 14.562 11.7534 14.562 12.1285C14.562 12.5024 14.3823 12.8534 14.0795 13.073L6.07159 18.8663C5.71699 19.1244 5.24776 19.1594 4.85817 18.9604C4.46738 18.7614 4.22131 18.3597 4.22131 17.9219V6.33518Z" fill="currentColor"/>
+                </svg>
+              </div>
+            </div>
+            <div class="icon-size-group">
+              <span class="icon-size-label">MD (24px)</span>
+              <div class="icon-display">
+                <svg class="size-md" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M20 6.16636V17.8336C20 18.4777 19.4765 19 18.8324 19H17.2777C16.6336 19 16.1101 18.4777 16.1101 17.8336V6.16636C16.1101 5.52107 16.6336 5 17.2777 5H18.8324C19.4765 5 20 5.52107 20 6.16636ZM4.22131 6.33518C4.22131 5.89613 4.46737 5.49446 4.85817 5.29545C5.24776 5.09643 5.71696 5.13262 6.07159 5.38954L14.0795 11.1829C14.3823 11.4024 14.562 11.7534 14.562 12.1285C14.562 12.5024 14.3823 12.8534 14.0795 13.073L6.07159 18.8663C5.71699 19.1244 5.24776 19.1594 4.85817 18.9604C4.46738 18.7614 4.22131 18.3597 4.22131 17.9219V6.33518Z" fill="currentColor"/>
+                </svg>
+              </div>
+            </div>
+            <div class="icon-size-group">
+              <span class="icon-size-label">LG (32px)</span>
+              <div class="icon-display">
+                <svg class="size-lg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M20 6.16636V17.8336C20 18.4777 19.4765 19 18.8324 19H17.2777C16.6336 19 16.1101 18.4777 16.1101 17.8336V6.16636C16.1101 5.52107 16.6336 5 17.2777 5H18.8324C19.4765 5 20 5.52107 20 6.16636ZM4.22131 6.33518C4.22131 5.89613 4.46737 5.49446 4.85817 5.29545C5.24776 5.09643 5.71696 5.13262 6.07159 5.38954L14.0795 11.1829C14.3823 11.4024 14.562 11.7534 14.562 12.1285C14.562 12.5024 14.3823 12.8534 14.0795 13.073L6.07159 18.8663C5.71699 19.1244 5.24776 19.1594 4.85817 18.9604C4.46738 18.7614 4.22131 18.3597 4.22131 17.9219V6.33518Z" fill="currentColor"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="code-snippet">import { NextTrackIcon } from '@/components/shared/Icon'</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="icon-section">
+      <h2 class="icon-section-title">Last Track Icon</h2>
+      <div class="icon-grid">
+        <div class="icon-item">
+          <div class="icon-name">LastTrackIcon</div>
+          <div class="icon-sizes">
+            <div class="icon-size-group">
+              <span class="icon-size-label">XS (12px)</span>
+              <div class="icon-display">
+                <svg class="size-xs" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M4.22131 6.16636V17.8336C4.22131 18.4777 4.74479 19 5.38888 19H6.94365C7.58774 19 8.11121 18.4777 8.11121 17.8336V6.16636C8.11121 5.52107 7.58774 5 6.94365 5H5.38888C4.74479 5 4.22131 5.52107 4.22131 6.16636ZM20 6.33518C20 5.89613 19.7539 5.49446 19.3631 5.29545C18.9736 5.09643 18.5044 5.13262 18.1497 5.38954L10.1418 11.1829C9.83905 11.4024 9.65933 11.7534 9.65933 12.1285C9.65933 12.5024 9.83905 12.8534 10.1418 13.073L18.1497 18.8663C18.5043 19.1244 18.9736 19.1594 19.3631 18.9604C19.7539 18.7614 20 18.3597 20 17.9219V6.33518Z" fill="currentColor"/>
+                </svg>
+              </div>
+            </div>
+            <div class="icon-size-group">
+              <span class="icon-size-label">SM (16px)</span>
+              <div class="icon-display">
+                <svg class="size-sm" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M4.22131 6.16636V17.8336C4.22131 18.4777 4.74479 19 5.38888 19H6.94365C7.58774 19 8.11121 18.4777 8.11121 17.8336V6.16636C8.11121 5.52107 7.58774 5 6.94365 5H5.38888C4.74479 5 4.22131 5.52107 4.22131 6.16636ZM20 6.33518C20 5.89613 19.7539 5.49446 19.3631 5.29545C18.9736 5.09643 18.5044 5.13262 18.1497 5.38954L10.1418 11.1829C9.83905 11.4024 9.65933 11.7534 9.65933 12.1285C9.65933 12.5024 9.83905 12.8534 10.1418 13.073L18.1497 18.8663C18.5043 19.1244 18.9736 19.1594 19.3631 18.9604C19.7539 18.7614 20 18.3597 20 17.9219V6.33518Z" fill="currentColor"/>
+                </svg>
+              </div>
+            </div>
+            <div class="icon-size-group">
+              <span class="icon-size-label">MD (24px)</span>
+              <div class="icon-display">
+                <svg class="size-md" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M4.22131 6.16636V17.8336C4.22131 18.4777 4.74479 19 5.38888 19H6.94365C7.58774 19 8.11121 18.4777 8.11121 17.8336V6.16636C8.11121 5.52107 7.58774 5 6.94365 5H5.38888C4.74479 5 4.22131 5.52107 4.22131 6.16636ZM20 6.33518C20 5.89613 19.7539 5.49446 19.3631 5.29545C18.9736 5.09643 18.5044 5.13262 18.1497 5.38954L10.1418 11.1829C9.83905 11.4024 9.65933 11.7534 9.65933 12.1285C9.65933 12.5024 9.83905 12.8534 10.1418 13.073L18.1497 18.8663C18.5043 19.1244 18.9736 19.1594 19.3631 18.9604C19.7539 18.7614 20 18.3597 20 17.9219V6.33518Z" fill="currentColor"/>
+                </svg>
+              </div>
+            </div>
+            <div class="icon-size-group">
+              <span class="icon-size-label">LG (32px)</span>
+              <div class="icon-display">
+                <svg class="size-lg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M4.22131 6.16636V17.8336C4.22131 18.4777 4.74479 19 5.38888 19H6.94365C7.58774 19 8.11121 18.4777 8.11121 17.8336V6.16636C8.11121 5.52107 7.58774 5 6.94365 5H5.38888C4.74479 5 4.22131 5.52107 4.22131 6.16636ZM20 6.33518C20 5.89613 19.7539 5.49446 19.3631 5.29545C18.9736 5.09643 18.5044 5.13262 18.1497 5.38954L10.1418 11.1829C9.83905 11.4024 9.65933 11.7534 9.65933 12.1285C9.65933 12.5024 9.83905 12.8534 10.1418 13.073L18.1497 18.8663C18.5043 19.1244 18.9736 19.1594 19.3631 18.9604C19.7539 18.7614 20 18.3597 20 17.9219V6.33518Z" fill="currentColor"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="code-snippet">import { LastTrackIcon } from '@/components/shared/Icon'</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="icon-section">
+      <h2 class="icon-section-title">Repeat Icon</h2>
+      <div class="icon-grid">
+        <div class="icon-item">
+          <div class="icon-name">RepeatIcon</div>
+          <div class="icon-sizes">
+            <div class="icon-size-group">
+              <span class="icon-size-label">XS (12px)</span>
+              <div class="icon-display">
+                <svg class="size-xs" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M16.2338 9.1655C15.921 8.85379 15.921 8.34637 16.2338 8.03464L17.2679 7.00047H8.00041C6.67456 7.00047 5.60063 8.0745 5.60063 9.40046V11C5.60063 11.4418 5.24207 11.8004 4.80031 11.8004C4.35856 11.8004 4 11.4418 4 11V9.40046C4 7.19097 5.79099 5.39969 8.00044 5.39969H17.268L16.2339 4.36552C15.921 4.05381 15.921 3.54639 16.2339 3.23466C16.5456 2.92178 17.0529 2.92178 17.3646 3.23466L19.7598 5.62999C19.7756 5.64523 19.7902 5.66164 19.8049 5.67804C19.8582 5.73956 19.9004 5.80636 19.9308 5.87725C19.9742 5.97569 19.9982 6.0835 19.9988 6.19776V6.20772C19.997 6.30733 19.9783 6.40284 19.9443 6.49072C19.9051 6.5915 19.8453 6.68525 19.7645 6.7661L17.3647 9.16609C17.053 9.47897 16.5455 9.47838 16.2338 9.1655Z" fill="currentColor"/>
+                  <path d="M4.05509 17.5099C4.01994 17.6001 4.0006 17.6974 4.0006 17.7999C4.0006 17.9991 4.07384 18.1819 4.19512 18.322C4.20918 18.3384 4.22441 18.3548 4.24023 18.37L6.63537 20.7653C6.94705 21.0782 7.45443 21.0782 7.76613 20.7653C8.07899 20.4536 8.07899 19.9462 7.76613 19.6345L6.73205 18.6003H15.9996C18.2089 18.6003 20 16.8092 20 14.5995V13C20 12.5582 19.6414 12.1996 19.1997 12.1996C18.7579 12.1996 18.3994 12.5582 18.3994 13V14.5995C18.3994 15.9255 17.3254 16.9995 15.9996 16.9995H6.73208L7.76616 15.9654C8.07902 15.6536 8.07902 15.1462 7.76616 14.8345C7.45447 14.5216 6.9471 14.5216 6.6354 14.8345L4.23561 17.2345C4.15476 17.3153 4.09376 17.4091 4.05509 17.5099Z" fill="currentColor"/>
+                </svg>
+              </div>
+            </div>
+            <div class="icon-size-group">
+              <span class="icon-size-label">SM (16px)</span>
+              <div class="icon-display">
+                <svg class="size-sm" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M16.2338 9.1655C15.921 8.85379 15.921 8.34637 16.2338 8.03464L17.2679 7.00047H8.00041C6.67456 7.00047 5.60063 8.0745 5.60063 9.40046V11C5.60063 11.4418 5.24207 11.8004 4.80031 11.8004C4.35856 11.8004 4 11.4418 4 11V9.40046C4 7.19097 5.79099 5.39969 8.00044 5.39969H17.268L16.2339 4.36552C15.921 4.05381 15.921 3.54639 16.2339 3.23466C16.5456 2.92178 17.0529 2.92178 17.3646 3.23466L19.7598 5.62999C19.7756 5.64523 19.7902 5.66164 19.8049 5.67804C19.8582 5.73956 19.9004 5.80636 19.9308 5.87725C19.9742 5.97569 19.9982 6.0835 19.9988 6.19776V6.20772C19.997 6.30733 19.9783 6.40284 19.9443 6.49072C19.9051 6.5915 19.8453 6.68525 19.7645 6.7661L17.3647 9.16609C17.053 9.47897 16.5455 9.47838 16.2338 9.1655Z" fill="currentColor"/>
+                  <path d="M4.05509 17.5099C4.01994 17.6001 4.0006 17.6974 4.0006 17.7999C4.0006 17.9991 4.07384 18.1819 4.19512 18.322C4.20918 18.3384 4.22441 18.3548 4.24023 18.37L6.63537 20.7653C6.94705 21.0782 7.45443 21.0782 7.76613 20.7653C8.07899 20.4536 8.07899 19.9462 7.76613 19.6345L6.73205 18.6003H15.9996C18.2089 18.6003 20 16.8092 20 14.5995V13C20 12.5582 19.6414 12.1996 19.1997 12.1996C18.7579 12.1996 18.3994 12.5582 18.3994 13V14.5995C18.3994 15.9255 17.3254 16.9995 15.9996 16.9995H6.73208L7.76616 15.9654C8.07902 15.6536 8.07902 15.1462 7.76616 14.8345C7.45447 14.5216 6.9471 14.5216 6.6354 14.8345L4.23561 17.2345C4.15476 17.3153 4.09376 17.4091 4.05509 17.5099Z" fill="currentColor"/>
+                </svg>
+              </div>
+            </div>
+            <div class="icon-size-group">
+              <span class="icon-size-label">MD (24px)</span>
+              <div class="icon-display">
+                <svg class="size-md" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M16.2338 9.1655C15.921 8.85379 15.921 8.34637 16.2338 8.03464L17.2679 7.00047H8.00041C6.67456 7.00047 5.60063 8.0745 5.60063 9.40046V11C5.60063 11.4418 5.24207 11.8004 4.80031 11.8004C4.35856 11.8004 4 11.4418 4 11V9.40046C4 7.19097 5.79099 5.39969 8.00044 5.39969H17.268L16.2339 4.36552C15.921 4.05381 15.921 3.54639 16.2339 3.23466C16.5456 2.92178 17.0529 2.92178 17.3646 3.23466L19.7598 5.62999C19.7756 5.64523 19.7902 5.66164 19.8049 5.67804C19.8582 5.73956 19.9004 5.80636 19.9308 5.87725C19.9742 5.97569 19.9982 6.0835 19.9988 6.19776V6.20772C19.997 6.30733 19.9783 6.40284 19.9443 6.49072C19.9051 6.5915 19.8453 6.68525 19.7645 6.7661L17.3647 9.16609C17.053 9.47897 16.5455 9.47838 16.2338 9.1655Z" fill="currentColor"/>
+                  <path d="M4.05509 17.5099C4.01994 17.6001 4.0006 17.6974 4.0006 17.7999C4.0006 17.9991 4.07384 18.1819 4.19512 18.322C4.20918 18.3384 4.22441 18.3548 4.24023 18.37L6.63537 20.7653C6.94705 21.0782 7.45443 21.0782 7.76613 20.7653C8.07899 20.4536 8.07899 19.9462 7.76613 19.6345L6.73205 18.6003H15.9996C18.2089 18.6003 20 16.8092 20 14.5995V13C20 12.5582 19.6414 12.1996 19.1997 12.1996C18.7579 12.1996 18.3994 12.5582 18.3994 13V14.5995C18.3994 15.9255 17.3254 16.9995 15.9996 16.9995H6.73208L7.76616 15.9654C8.07902 15.6536 8.07902 15.1462 7.76616 14.8345C7.45447 14.5216 6.9471 14.5216 6.6354 14.8345L4.23561 17.2345C4.15476 17.3153 4.09376 17.4091 4.05509 17.5099Z" fill="currentColor"/>
+                </svg>
+              </div>
+            </div>
+            <div class="icon-size-group">
+              <span class="icon-size-label">LG (32px)</span>
+              <div class="icon-display">
+                <svg class="size-lg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M16.2338 9.1655C15.921 8.85379 15.921 8.34637 16.2338 8.03464L17.2679 7.00047H8.00041C6.67456 7.00047 5.60063 8.0745 5.60063 9.40046V11C5.60063 11.4418 5.24207 11.8004 4.80031 11.8004C4.35856 11.8004 4 11.4418 4 11V9.40046C4 7.19097 5.79099 5.39969 8.00044 5.39969H17.268L16.2339 4.36552C15.921 4.05381 15.921 3.54639 16.2339 3.23466C16.5456 2.92178 17.0529 2.92178 17.3646 3.23466L19.7598 5.62999C19.7756 5.64523 19.7902 5.66164 19.8049 5.67804C19.8582 5.73956 19.9004 5.80636 19.9308 5.87725C19.9742 5.97569 19.9982 6.0835 19.9988 6.19776V6.20772C19.997 6.30733 19.9783 6.40284 19.9443 6.49072C19.9051 6.5915 19.8453 6.68525 19.7645 6.7661L17.3647 9.16609C17.053 9.47897 16.5455 9.47838 16.2338 9.1655Z" fill="currentColor"/>
+                  <path d="M4.05509 17.5099C4.01994 17.6001 4.0006 17.6974 4.0006 17.7999C4.0006 17.9991 4.07384 18.1819 4.19512 18.322C4.20918 18.3384 4.22441 18.3548 4.24023 18.37L6.63537 20.7653C6.94705 21.0782 7.45443 21.0782 7.76613 20.7653C8.07899 20.4536 8.07899 19.9462 7.76613 19.6345L6.73205 18.6003H15.9996C18.2089 18.6003 20 16.8092 20 14.5995V13C20 12.5582 19.6414 12.1996 19.1997 12.1996C18.7579 12.1996 18.3994 12.5582 18.3994 13V14.5995C18.3994 15.9255 17.3254 16.9995 15.9996 16.9995H6.73208L7.76616 15.9654C8.07902 15.6536 8.07902 15.1462 7.76616 14.8345C7.45447 14.5216 6.9471 14.5216 6.6354 14.8345L4.23561 17.2345C4.15476 17.3153 4.09376 17.4091 4.05509 17.5099Z" fill="currentColor"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="code-snippet">import { RepeatIcon } from '@/components/shared/Icon'</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="icon-section">
+      <h2 class="icon-section-title">Shuffle Icon</h2>
+      <div class="icon-grid">
+        <div class="icon-item">
+          <div class="icon-name">ShuffleIcon</div>
+          <div class="icon-sizes">
+            <div class="icon-size-group">
+              <span class="icon-size-label">XS (12px)</span>
+              <div class="icon-display">
+                <svg class="size-xs" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M2.75977 8.50764C1.74674 8.50764 1.74674 6.96808 2.75977 6.96808H6.76165C8.69268 6.96808 10.4222 8.0001 11.379 9.58783C12.3357 8.0001 14.0652 6.96808 15.9963 6.96808H19.372L18.7267 6.32282C18.0102 5.6063 19.0985 4.51789 19.815 5.23448C20.136 5.55542 21.7509 7.09967 21.8974 7.35484C22.0744 7.66288 22.0154 8.03743 21.7739 8.28169L19.815 10.2405C19.0985 10.957 18.0101 9.86868 18.7267 9.15217L19.372 8.50691H15.9963C12.6199 8.50691 10.8368 12.6295 13.2794 15.0716C13.9769 15.7691 14.9391 16.2027 15.9963 16.2027H19.372L18.7267 15.5574C18.0102 14.8409 19.0985 13.7525 19.815 14.4691C20.136 14.79 21.7509 16.3342 21.8974 16.5894C22.0745 16.8975 22.0154 17.272 21.7739 17.5163L19.8151 19.4751C19.0985 20.1916 18.0101 19.1033 18.7267 18.3867L19.372 17.7415H15.9963C14.0653 17.7415 12.3357 16.7095 11.379 15.1217C10.4216 16.7095 8.6927 17.7415 6.76167 17.7415H2.75979C1.74677 17.7415 1.74677 16.2019 2.75979 16.2019H6.76167C10.1381 16.2019 11.9211 12.0793 9.47852 9.63726C8.78101 8.93975 7.81886 8.50618 6.76167 8.50618L2.75979 8.50686L2.75977 8.50764Z" fill="currentColor"/>
+                </svg>
+              </div>
+            </div>
+            <div class="icon-size-group">
+              <span class="icon-size-label">SM (16px)</span>
+              <div class="icon-display">
+                <svg class="size-sm" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M2.75977 8.50764C1.74674 8.50764 1.74674 6.96808 2.75977 6.96808H6.76165C8.69268 6.96808 10.4222 8.0001 11.379 9.58783C12.3357 8.0001 14.0652 6.96808 15.9963 6.96808H19.372L18.7267 6.32282C18.0102 5.6063 19.0985 4.51789 19.815 5.23448C20.136 5.55542 21.7509 7.09967 21.8974 7.35484C22.0744 7.66288 22.0154 8.03743 21.7739 8.28169L19.815 10.2405C19.0985 10.957 18.0101 9.86868 18.7267 9.15217L19.372 8.50691H15.9963C12.6199 8.50691 10.8368 12.6295 13.2794 15.0716C13.9769 15.7691 14.9391 16.2027 15.9963 16.2027H19.372L18.7267 15.5574C18.0102 14.8409 19.0985 13.7525 19.815 14.4691C20.136 14.79 21.7509 16.3342 21.8974 16.5894C22.0745 16.8975 22.0154 17.272 21.7739 17.5163L19.8151 19.4751C19.0985 20.1916 18.0101 19.1033 18.7267 18.3867L19.372 17.7415H15.9963C14.0653 17.7415 12.3357 16.7095 11.379 15.1217C10.4216 16.7095 8.6927 17.7415 6.76167 17.7415H2.75979C1.74677 17.7415 1.74677 16.2019 2.75979 16.2019H6.76167C10.1381 16.2019 11.9211 12.0793 9.47852 9.63726C8.78101 8.93975 7.81886 8.50618 6.76167 8.50618L2.75979 8.50686L2.75977 8.50764Z" fill="currentColor"/>
+                </svg>
+              </div>
+            </div>
+            <div class="icon-size-group">
+              <span class="icon-size-label">MD (24px)</span>
+              <div class="icon-display">
+                <svg class="size-md" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M2.75977 8.50764C1.74674 8.50764 1.74674 6.96808 2.75977 6.96808H6.76165C8.69268 6.96808 10.4222 8.0001 11.379 9.58783C12.3357 8.0001 14.0652 6.96808 15.9963 6.96808H19.372L18.7267 6.32282C18.0102 5.6063 19.0985 4.51789 19.815 5.23448C20.136 5.55542 21.7509 7.09967 21.8974 7.35484C22.0744 7.66288 22.0154 8.03743 21.7739 8.28169L19.815 10.2405C19.0985 10.957 18.0101 9.86868 18.7267 9.15217L19.372 8.50691H15.9963C12.6199 8.50691 10.8368 12.6295 13.2794 15.0716C13.9769 15.7691 14.9391 16.2027 15.9963 16.2027H19.372L18.7267 15.5574C18.0102 14.8409 19.0985 13.7525 19.815 14.4691C20.136 14.79 21.7509 16.3342 21.8974 16.5894C22.0745 16.8975 22.0154 17.272 21.7739 17.5163L19.8151 19.4751C19.0985 20.1916 18.0101 19.1033 18.7267 18.3867L19.372 17.7415H15.9963C14.0653 17.7415 12.3357 16.7095 11.379 15.1217C10.4216 16.7095 8.6927 17.7415 6.76167 17.7415H2.75979C1.74677 17.7415 1.74677 16.2019 2.75979 16.2019H6.76167C10.1381 16.2019 11.9211 12.0793 9.47852 9.63726C8.78101 8.93975 7.81886 8.50618 6.76167 8.50618L2.75979 8.50686L2.75977 8.50764Z" fill="currentColor"/>
+                </svg>
+              </div>
+            </div>
+            <div class="icon-size-group">
+              <span class="icon-size-label">LG (32px)</span>
+              <div class="icon-display">
+                <svg class="size-lg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M2.75977 8.50764C1.74674 8.50764 1.74674 6.96808 2.75977 6.96808H6.76165C8.69268 6.96808 10.4222 8.0001 11.379 9.58783C12.3357 8.0001 14.0652 6.96808 15.9963 6.96808H19.372L18.7267 6.32282C18.0102 5.6063 19.0985 4.51789 19.815 5.23448C20.136 5.55542 21.7509 7.09967 21.8974 7.35484C22.0744 7.66288 22.0154 8.03743 21.7739 8.28169L19.815 10.2405C19.0985 10.957 18.0101 9.86868 18.7267 9.15217L19.372 8.50691H15.9963C12.6199 8.50691 10.8368 12.6295 13.2794 15.0716C13.9769 15.7691 14.9391 16.2027 15.9963 16.2027H19.372L18.7267 15.5574C18.0102 14.8409 19.0985 13.7525 19.815 14.4691C20.136 14.79 21.7509 16.3342 21.8974 16.5894C22.0745 16.8975 22.0154 17.272 21.7739 17.5163L19.8151 19.4751C19.0985 20.1916 18.0101 19.1033 18.7267 18.3867L19.372 17.7415H15.9963C14.0653 17.7415 12.3357 16.7095 11.379 15.1217C10.4216 16.7095 8.6927 17.7415 6.76167 17.7415H2.75979C1.74677 17.7415 1.74677 16.2019 2.75979 16.2019H6.76167C10.1381 16.2019 11.9211 12.0793 9.47852 9.63726C8.78101 8.93975 7.81886 8.50618 6.76167 8.50618L2.75979 8.50686L2.75977 8.50764Z" fill="currentColor"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="code-snippet">import { ShuffleIcon } from '@/components/shared/Icon'</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="icon-section">
+      <h2 class="icon-section-title">Placeholder Icon</h2>
+      <div class="icon-grid">
+        <div class="icon-item">
+          <div class="icon-name">PlaceholderIcon</div>
+          <div class="icon-sizes">
+            <div class="icon-size-group">
+              <span class="icon-size-label">XS (12px)</span>
+              <div class="icon-display">
+                <svg class="size-xs" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="5" y="5" width="14" height="14" rx="3" stroke="currentColor" stroke-width="2" fill="none"/>
+                </svg>
+              </div>
+            </div>
+            <div class="icon-size-group">
+              <span class="icon-size-label">SM (16px)</span>
+              <div class="icon-display">
+                <svg class="size-sm" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="5" y="5" width="14" height="14" rx="3" stroke="currentColor" stroke-width="2" fill="none"/>
+                </svg>
+              </div>
+            </div>
+            <div class="icon-size-group">
+              <span class="icon-size-label">MD (24px)</span>
+              <div class="icon-display">
+                <svg class="size-md" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="5" y="5" width="14" height="14" rx="3" stroke="currentColor" stroke-width="2" fill="none"/>
+                </svg>
+              </div>
+            </div>
+            <div class="icon-size-group">
+              <span class="icon-size-label">LG (32px)</span>
+              <div class="icon-display">
+                <svg class="size-lg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="5" y="5" width="14" height="14" rx="3" stroke="currentColor" stroke-width="2" fill="none"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="code-snippet">import { PlaceholderIcon } from '@/components/shared/Icon'</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+

@@ -6,6 +6,7 @@ import { ImageModule } from './ImageModule'
 import { TextModule } from './TextModule'
 import { MapModule } from './MapModule'
 import { SearchModule } from './SearchModule'
+import { ExpandIcon, CollapseIcon, ExtractIcon, DragHandleIcon } from '../shared/Icon'
 
 interface ChatModuleProps {
   data: ChatModuleData
@@ -267,7 +268,11 @@ export function ChatModule({ data, onUpdate, onExtractModule }: ChatModuleProps)
                       )}
                       title={expandedModuleId === message.id ? 'Collapse' : 'Expand'}
                     >
-                      {expandedModuleId === message.id ? '−' : '+'}
+                      {expandedModuleId === message.id ? (
+                        <CollapseIcon size="xs" />
+                      ) : (
+                        <ExpandIcon size="xs" />
+                      )}
                     </button>
                     {onExtractModule && (
                       <>
@@ -276,14 +281,14 @@ export function ChatModule({ data, onUpdate, onExtractModule }: ChatModuleProps)
                           onClick={() => handleExtractButton(message.id)}
                           title="Extract to desktop"
                         >
-                          ↗
+                          <ExtractIcon size="xs" />
                         </button>
                         <div
                           className="nested-module-drag-handle"
                           onMouseDown={(e) => handleDragStart(e, message.id)}
                           title="Drag to desktop"
                         >
-                          ⋮⋮
+                          <DragHandleIcon size="xs" />
                         </div>
                       </>
                     )}

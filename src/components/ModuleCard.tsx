@@ -6,6 +6,7 @@ import { TextModule } from './modules/TextModule'
 import { MapModule } from './modules/MapModule'
 import { SearchModule } from './modules/SearchModule'
 import { ChatModule } from './modules/ChatModule'
+import { CloseIcon } from './shared/Icon'
 
 interface ModuleCardProps {
   module: ModuleInstance
@@ -94,7 +95,7 @@ export function ModuleCard({ module, isSelected, onSelect, onUpdate, moduleRef, 
           onMouseDown={(e) => e.stopPropagation()}
           title="Close module"
         >
-          ×
+          <CloseIcon size="xs" />
         </button>
       </div>
       <div className="module-content">

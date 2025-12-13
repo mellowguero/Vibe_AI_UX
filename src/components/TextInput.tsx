@@ -1,5 +1,6 @@
 import { useRef, useEffect } from 'react'
 import { RoundButton } from './shared/RoundButton'
+import { SendIcon } from './shared/Icon'
 
 interface TextInputProps {
   value?: string
@@ -99,25 +100,7 @@ export function TextInput({
         onClick={onActionClick}
         disabled={disabled}
       >
-        <svg
-          className="submit-icon"
-          width="16"
-          height="16"
-          viewBox="0 0 16 16"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <rect
-            x="3"
-            y="3"
-            width="10"
-            height="10"
-            rx="2"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            fill="none"
-          />
-        </svg>
+        <SendIcon size="sm" className="submit-icon" />
       </RoundButton>
     </div>
   )

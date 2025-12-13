@@ -280,10 +280,10 @@
   
   --size-resize-handle: 6px;
   --size-close-button: 20px;
-  --size-icon-sm: 1.5rem;      /* 12px */
-  --size-icon-md: 2rem;        /* 16px */
-  --size-icon-lg: 2.5rem;      /* 20px */
-  --size-icon-xl: 3rem;        /* 24px */
+  --size-icon-xs: 1.5rem;      /* 12px */
+  --size-icon-sm: 2rem;        /* 16px */
+  --size-icon-md: 3rem;        /* 24px */
+  --size-icon-lg: 4rem;        /* 32px */
   --size-audio-play: 36px;
   --size-play-button: 60px;
   --size-chat-send-button: 56px;

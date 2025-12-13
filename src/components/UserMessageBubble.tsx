@@ -1,4 +1,5 @@
 import type { ChatMessage, ModuleType } from '../types/modules'
+import { ExpandIcon, CollapseIcon, ExtractIcon, DragHandleIcon } from './shared/Icon'
 
 interface UserMessageBubbleProps {
   message: ChatMessage
@@ -37,7 +38,7 @@ export function UserMessageBubble({
                 onClick={onToggleExpand}
                 title={isExpanded ? 'Collapse' : 'Expand'}
               >
-                {isExpanded ? '−' : '+'}
+                {isExpanded ? <CollapseIcon size="xs" /> : <ExpandIcon size="xs" />}
               </button>
               {onExtractModule && (
                 <>
@@ -46,14 +47,14 @@ export function UserMessageBubble({
                     onClick={onExtract}
                     title="Extract to desktop"
                   >
-                    ↗
+                    <ExtractIcon size="xs" />
                   </button>
                   <div
                     className="nested-module-drag-handle"
                     onMouseDown={onDragStart}
                     title="Drag to desktop"
                   >
-                    ⋮⋮
+                    <DragHandleIcon size="xs" />
                   </div>
                 </>
               )}
