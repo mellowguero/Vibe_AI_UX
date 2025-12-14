@@ -111,3 +111,32 @@ export type ModuleInstance =
       data: ChatModuleData
     }
 
+// Icon configuration for components
+// Centralized icon mapping - change icons here instead of in individual components
+export type IconName = 
+  | 'SendIcon' 
+  | 'LastTrackIcon' 
+  | 'NextTrackIcon' 
+  | 'PlayIcon' 
+  | 'RepeatIcon' 
+  | 'ShuffleIcon' 
+  | 'PlaceholderIcon'
+  | 'CloseIcon'
+  | 'ExpandIcon'
+  | 'CollapseIcon'
+  | 'ExtractIcon'
+  | 'DragHandleIcon'
+
+export interface ComponentIconConfig {
+  TextInput: IconName
+  RoundButton: IconName
+  // Add more component icon mappings here as needed
+  // Example: ChatInput: IconName
+}
+
+// Default icon configuration
+export const componentIcons: ComponentIconConfig = {
+  TextInput: 'SendIcon', // Change this to update TextInput icon globally
+  RoundButton: 'PlaceholderIcon', // Change this to update RoundButton icon globally
+}
+

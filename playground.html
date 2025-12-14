@@ -52,9 +52,7 @@
                 </div>
                 <div class="button-round-wrapper">
                   <button class="button-base button-round" type="button">
-                    <svg class="submit-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <rect x="3" y="3" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                    </svg>
+                    <img class="submit-icon" data-component-icon="TextInput" width="16" height="16" alt="Send" />
                   </button>
                 </div>
               </div>
@@ -607,9 +605,7 @@
               </div>
               <div class="button-round-wrapper">
                 <button class="button-base button-round" type="button">
-                  <svg class="submit-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="3" y="3" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                  </svg>
+                  <img class="submit-icon" data-component-icon="TextInput" width="16" height="16" alt="Send" />
                 </button>
               </div>
         </div>
@@ -624,9 +620,7 @@
               </div>
               <div class="button-round-wrapper">
                 <button class="button-base button-round" type="button">
-                  <svg class="submit-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="3" y="3" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                  </svg>
+                  <img class="submit-icon" data-component-icon="TextInput" width="16" height="16" alt="Send" />
                 </button>
               </div>
             </div>
@@ -640,9 +634,7 @@
               </div>
               <div class="button-round-wrapper">
                 <button class="button-base button-round" type="button" disabled>
-                  <svg class="submit-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="3" y="3" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                  </svg>
+                  <img class="submit-icon" data-component-icon="TextInput" width="16" height="16" alt="Send" />
                 </button>
               </div>
             </div>
@@ -690,14 +682,21 @@
                 <div class="button-round-wrapper">
                   <button class="button-base button-round">
                     <div class="button-round-icon">
-                      <div class="button-round-icon-placeholder"></div>
+                      <img data-component-icon="RoundButton" width="16" height="16" alt="Placeholder" />
+                    </div>
+                  </button>
+                </div>
+                <div class="button-round-wrapper demo-active">
+                  <button class="button-base button-round">
+                    <div class="button-round-icon">
+                      <img data-component-icon="RoundButton" width="16" height="16" alt="Placeholder" />
                     </div>
                   </button>
                 </div>
                 <div class="button-round-wrapper">
                   <button class="button-base button-round" disabled>
                     <div class="button-round-icon">
-                      <div class="button-round-icon-placeholder"></div>
+                      <img data-component-icon="RoundButton" width="16" height="16" alt="Placeholder" />
                     </div>
                   </button>
                 </div>
@@ -898,6 +897,17 @@
       // Initial resize
       autoResize({ target: textarea });
     });
+  </script>
+  <script type="module">
+    // Initialize icon paths for elements with data attributes
+    import { initializeIcons } from './src/utils/iconConfig.html.js';
+    
+    // Initialize icons when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initializeIcons);
+    } else {
+      initializeIcons();
+    }
   </script>
 </body>
 </html>

@@ -1,14 +1,14 @@
 import React from 'react'
 import { Icon, IconProps } from '../Icon'
+import { getSvgContent } from '../useSvgIcon'
+import sendSvg from '../svgs/24px/24px_Send24.svg?raw'
 
 export function SendIcon(props: Omit<IconProps, 'children' | 'viewBox'>) {
+  const svgContent = getSvgContent(sendSvg)
+  
   return (
     <Icon {...props} viewBox="0 0 24 24">
-      <path
-        opacity="0.65"
-        d="M4.38391 10.6367C3.93759 10.1897 3.93759 9.46529 4.38391 9.01836L11.3348 2.41768C11.7811 1.97074 12.2188 1.97073 12.6652 2.41766L19.7144 9.01836C20.1608 9.46529 20.1608 10.1897 19.7144 10.6367C19.2681 11.0836 18.5447 11.0836 18.0983 10.6367L13 5.98958L13 20.938C13 21.5701 12.6312 22 12 22C11.5117 22.0825 11 21.5701 11 20.938L11 5.9896L6 10.6367C5.55368 11.0836 4.83023 11.0836 4.38391 10.6367Z"
-        fill="currentColor"
-      />
+      <g dangerouslySetInnerHTML={{ __html: svgContent }} />
     </Icon>
   )
 }

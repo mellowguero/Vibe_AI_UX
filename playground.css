@@ -59,8 +59,7 @@ body {
 
 .play-area-content {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(1, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
 }
 
@@ -1061,6 +1060,22 @@ body {
     min-width: 100%;
     max-width: 100%;
   }
+}
+
+/* Demo class for Round Button active state - for visual tweaking in playground */
+.button-round-wrapper.demo-active .button-round:not(:disabled) {
+  display: flex;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  padding: 2px 0px;
+  justify-content: center;
+  align-items: center;
+  gap: 0px;
+  flex-shrink: 0;
+  border-radius: 104px;
+  background: rgba(55, 54, 54, 0.8);
 }
 
 

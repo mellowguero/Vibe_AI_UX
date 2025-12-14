@@ -1,7 +1,9 @@
 import React from 'react';
+import { componentIcons } from '../../types/modules';
+import { renderIcon } from '../../utils/iconConfig';
 
 interface RoundButtonProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   onClick?: () => void;
   disabled?: boolean;
   className?: string;
@@ -40,7 +42,9 @@ export function RoundButton({
         disabled={disabled}
         type="button"
       >
-        {children}
+        <div className="button-round-icon">
+          {children || renderIcon(componentIcons.RoundButton, { size: 'sm' })}
+        </div>
       </button>
     </div>
   );

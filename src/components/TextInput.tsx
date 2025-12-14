@@ -1,6 +1,7 @@
 import { useRef, useEffect } from 'react'
 import { RoundButton } from './shared/RoundButton'
-import { SendIcon } from './shared/Icon'
+import { componentIcons } from '../types/modules'
+import { renderIcon } from '../utils/iconConfig'
 
 interface TextInputProps {
   value?: string
@@ -100,7 +101,7 @@ export function TextInput({
         onClick={onActionClick}
         disabled={disabled}
       >
-        <SendIcon size="sm" className="submit-icon" />
+        {renderIcon(componentIcons.TextInput, { size: 'sm', className: 'submit-icon' })}
       </RoundButton>
     </div>
   )

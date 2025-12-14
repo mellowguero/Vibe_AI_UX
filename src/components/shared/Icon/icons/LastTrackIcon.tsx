@@ -1,15 +1,14 @@
 import React from 'react'
 import { Icon, IconProps } from '../Icon'
+import { getSvgContent } from '../useSvgIcon'
+import lastTrackSvg from '../svgs/24px/24px_Last_Track24.svg?raw'
 
 export function LastTrackIcon(props: Omit<IconProps, 'children' | 'viewBox'>) {
+  const svgContent = getSvgContent(lastTrackSvg)
+  
   return (
     <Icon {...props} viewBox="0 0 24 24">
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M4.22131 6.16636V17.8336C4.22131 18.4777 4.74479 19 5.38888 19H6.94365C7.58774 19 8.11121 18.4777 8.11121 17.8336V6.16636C8.11121 5.52107 7.58774 5 6.94365 5H5.38888C4.74479 5 4.22131 5.52107 4.22131 6.16636ZM20 6.33518C20 5.89613 19.7539 5.49446 19.3631 5.29545C18.9736 5.09643 18.5044 5.13262 18.1497 5.38954L10.1418 11.1829C9.83905 11.4024 9.65933 11.7534 9.65933 12.1285C9.65933 12.5024 9.83905 12.8534 10.1418 13.073L18.1497 18.8663C18.5043 19.1244 18.9736 19.1594 19.3631 18.9604C19.7539 18.7614 20 18.3597 20 17.9219V6.33518Z"
-        fill="currentColor"
-      />
+      <g dangerouslySetInnerHTML={{ __html: svgContent }} />
     </Icon>
   )
 }

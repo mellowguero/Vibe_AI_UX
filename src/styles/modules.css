@@ -590,7 +590,7 @@
   width: 100%;
   border-radius: 4rem;
   background-color: rgba(219, 225, 243, 0.12);
-  padding: 1rem;
+  padding: 4px 0px 4px 8px;
   transition: border-radius 0.025s ease-in-out;
 }
 
@@ -606,19 +606,6 @@
   display: flex;
   align-items: center;
   position: relative;
-}
-
-.Text.Container::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 20px;
-  background: linear-gradient(to bottom, rgb(222, 228, 246) 0%, rgba(222, 228, 246, 0) 100%);
-  pointer-events: none;
-  z-index: 1;
-  border-radius: 4rem 4rem 0 0;
 }
 
 .input_text_field {
@@ -827,7 +814,7 @@
   justify-content: center;
   box-shadow: var(--shadow-button, 0 2px 4px rgba(0, 0, 0, 0.1));
   flex-shrink: 0;
-  transition: var(--transition-all, all 0.3s ease);
+  transition: width 0.3s ease, height 0.3s ease, padding 0.3s ease, gap 0.3s ease, background 0.3s ease, border-radius 0.3s ease, min-width 0.3s ease, min-height 0.3s ease;
 }
 
 .button-round-wrapper:hover .button-round:not(:disabled) {
@@ -845,8 +832,18 @@
 }
 
 .button-round-wrapper:active .button-round:not(:disabled) {
-  background: var(--glass-bg-round-button-hover, rgba(255, 255, 255, 0.58));
-  transform: translateY(1px);
+  display: flex;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
+  padding: 2px 0px;
+  justify-content: center;
+  align-items: center;
+  gap: 0px;
+  flex-shrink: 0;
+  border-radius: 104px;
+  background: rgba(55, 54, 54, 0.8);
 }
 
 .button-round:disabled {
