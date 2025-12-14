@@ -1,5 +1,5 @@
 import React from 'react'
-import { Icon, IconProps } from '../Icon'
+import { Icon, type IconProps } from '../Icon'
 import { getSvgContent } from '../useSvgIcon'
 import sendSvg from '../svgs/24px/24px_Send24.svg?raw'
 

@@ -590,7 +590,7 @@
   width: 100%;
   border-radius: 4rem;
   background-color: rgba(219, 225, 243, 0.12);
-  padding: 4px 0px 4px 8px;
+  padding: 8px 0px 8px 8px;
   transition: border-radius 0.025s ease-in-out;
 }
 
@@ -628,16 +628,24 @@
   border: none;
   background: transparent;
   color: var(--color-text-input, #6b5b7d);
-  font-size: var(--font-size-text-input, 1.25rem);
-  font-family: var(--font-family-base, system-ui, -apple-system, sans-serif);
-  line-height: 1.5;
+  font-size: 12px;
+  font-family: "Satoshi Medium", system-ui, -apple-system, sans-serif;
+  line-height: 16px;
   outline: none;
-  padding: 1rem 1rem;
+  padding: 0px 1rem;
   resize: none;
   overflow-y: auto;
+  height: fit-content;
   min-height: 1.5em;
   max-height: 104px;
-  display: block;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  text-align: left;
+  margin-top: 0px;
+  margin-bottom: 0px;
   font-weight: 500;
 }
 

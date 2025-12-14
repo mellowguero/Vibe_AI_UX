@@ -1,5 +1,5 @@
 import React from 'react'
-import { Icon, IconProps } from '../Icon'
+import { Icon, type IconProps } from '../Icon'
 
 export function ExpandIcon(props: Omit<IconProps, 'children' | 'viewBox'>) {
   return (

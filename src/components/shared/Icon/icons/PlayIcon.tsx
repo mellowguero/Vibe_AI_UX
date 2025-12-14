@@ -1,5 +1,5 @@
 import React from 'react'
-import { Icon, IconProps } from '../Icon'
+import { Icon, type IconProps } from '../Icon'
 import { getSvgContent } from '../useSvgIcon'
 import playSvg from '../svgs/24px/24px_Play24.svg?raw'
 
