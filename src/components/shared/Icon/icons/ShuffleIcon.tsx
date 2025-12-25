@@ -1,7 +1,7 @@
 import React from 'react'
 import { Icon, type IconProps } from '../Icon'
 import { getSvgContent } from '../useSvgIcon'
-import shuffleSvg from '../svgs/24px/24px_Shuffle24.svg?raw'
+import shuffleSvg from '../svgs/SVG_Icons/Shuffle.svg?raw'
 
 export function ShuffleIcon(props: Omit<IconProps, 'children' | 'viewBox'>) {
   const svgContent = getSvgContent(shuffleSvg)

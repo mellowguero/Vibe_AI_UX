@@ -1,7 +1,7 @@
 import React from 'react'
 import { Icon, type IconProps } from '../Icon'
 import { getSvgContent } from '../useSvgIcon'
-import sendSvg from '../svgs/24px/24px_Send24.svg?raw'
+import sendSvg from '../svgs/SVG_Icons/Send.svg?raw'
 
 export function SendIcon(props: Omit<IconProps, 'children' | 'viewBox'>) {
   const svgContent = getSvgContent(sendSvg)

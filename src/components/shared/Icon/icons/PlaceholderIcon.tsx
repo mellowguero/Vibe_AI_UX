@@ -1,7 +1,7 @@
 import React from 'react'
 import { Icon, type IconProps } from '../Icon'
 import { getSvgContent } from '../useSvgIcon'
-import placeholderSvg from '../svgs/24px/24px_Placeholder24.svg?raw'
+import placeholderSvg from '../svgs/SVG_Icons/Placeholder.svg?raw'
 
 export function PlaceholderIcon(props: Omit<IconProps, 'children' | 'viewBox'>) {
   const svgContent = getSvgContent(placeholderSvg)
