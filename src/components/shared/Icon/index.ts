@@ -11,4 +11,6 @@ export { LastTrackIcon } from './icons/LastTrackIcon'
 export { RepeatIcon } from './icons/RepeatIcon'
 export { ShuffleIcon } from './icons/ShuffleIcon'
 export { PlaceholderIcon } from './icons/PlaceholderIcon'
+export { PlaylistIcon } from './icons/PlaylistIcon'
+export { SoundIcon } from './icons/SoundIcon'
 

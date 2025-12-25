@@ -13,6 +13,8 @@ import {
   RepeatIcon,
   ShuffleIcon,
   PlaceholderIcon,
+  PlaylistIcon,
+  SoundIcon,
 } from './index';
 
 const meta: Meta = {
@@ -77,6 +79,8 @@ const allIcons = [
   { name: 'RepeatIcon', component: RepeatIcon },
   { name: 'ShuffleIcon', component: ShuffleIcon },
   { name: 'PlaceholderIcon', component: PlaceholderIcon },
+  { name: 'PlaylistIcon', component: PlaylistIcon },
+  { name: 'SoundIcon', component: SoundIcon },
 ];
 
 export const AllIcons: Story = {
