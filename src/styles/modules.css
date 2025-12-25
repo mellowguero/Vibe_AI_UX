@@ -154,14 +154,7 @@
   display: flex;
   gap: 0.5rem;
   padding: 0.75rem;
-  border-top: none;
-  /* Frosted Glass Effect for input area */
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 32px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  /* No visual styling - TextInput handles its own appearance */
 }
 
 .chat-input {
@@ -656,6 +649,31 @@
 .input_text_field .Text:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+/* Custom scrollbar styling for textarea */
+.input_text_field .Text::-webkit-scrollbar {
+  width: 6px;
+  
+}
+
+.input_text_field .Text::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.input_text_field .Text::-webkit-scrollbar-thumb {
+  background: rgba(107, 91, 125, 0.3);
+  border-radius: 3px;
+}
+
+.input_text_field .Text::-webkit-scrollbar-thumb:hover {
+  background: rgba(107, 91, 125, 0.5);
+}
+
+/* Firefox scrollbar styling */
+.input_text_field .Text {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(107, 91, 125, 0.3) transparent;
 }
 
 /* "Submit Button" in Figma = both "Submit" and "Button" classes on same element */

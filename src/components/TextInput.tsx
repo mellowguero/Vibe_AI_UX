@@ -80,6 +80,23 @@ export function TextInput({
     updateSizeAndBorderRadius()
   }
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    // Cmd+A / Ctrl+A: Select all text
+    if ((e.metaKey || e.ctrlKey) && e.key === 'a') {
+      e.preventDefault()
+      textareaRef.current?.select()
+      return
+    }
+
+    // Cmd+K / Ctrl+K: Clear all text
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault()
+      onChange?.('')
+      textareaRef.current?.focus()
+      return
+    }
+  }
+
   return (
     <div className={`Text_Input ${className}`} ref={textInputContainerRef}>
       <div className="input_field">
@@ -91,6 +108,7 @@ export function TextInput({
               value={value}
               placeholder={placeholder}
               onChange={handleInput}
+              onKeyDown={handleKeyDown}
               disabled={disabled}
               rows={1}
             />

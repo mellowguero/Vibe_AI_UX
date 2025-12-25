@@ -7,6 +7,7 @@ import { TextModule } from './TextModule'
 import { MapModule } from './MapModule'
 import { SearchModule } from './SearchModule'
 import { ExpandIcon, CollapseIcon, ExtractIcon, DragHandleIcon } from '../shared/Icon'
+import { TextInput } from '../TextInput'
 
 interface ChatModuleProps {
   data: ChatModuleData
@@ -70,13 +71,6 @@ export function ChatModule({ data, onUpdate, onExtractModule }: ChatModuleProps)
         isLoading: false,
         error: error instanceof Error ? error.message : 'Unknown error',
       })
-    }
-  }
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      handleSend()
     }
   }
 
@@ -314,22 +308,13 @@ export function ChatModule({ data, onUpdate, onExtractModule }: ChatModuleProps)
         <div className="chat-error">{data.error}</div>
       )}
       <div className="chat-input-container">
-        <input
-          type="text"
-          className="chat-input"
-          placeholder="Type a message..."
+        <TextInput
           value={inputText}
-          onChange={(e) => setInputText(e.target.value)}
-          onKeyPress={handleKeyPress}
+          placeholder="Type a message..."
+          onChange={setInputText}
+          onActionClick={handleSend}
           disabled={data.isLoading}
         />
-        <button
-          className="chat-send-button"
-          onClick={handleSend}
-          disabled={data.isLoading || !inputText.trim()}
-        >
-          Send
-        </button>
       </div>
     </div>
   )
