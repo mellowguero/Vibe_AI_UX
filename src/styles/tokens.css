@@ -87,6 +87,15 @@
   --color-text-dark-secondary: #b0b0b0;
   --color-text-dark-tertiary: #eee;
   
+  /* Song Title text colors (white with opacity) */
+  --color-song-title-white: rgba(255, 255, 255, 1);
+  --color-song-title-white-62: rgba(255, 255, 255, 0.62);
+  --color-song-title-white-50: rgba(255, 255, 255, 0.5);
+  --color-song-title-white-25: rgba(255, 255, 255, 0.25);
+  
+  /* Song Title background */
+  --color-song-title-bg: rgba(0, 0, 0, 0.2);
+  
   /* ============================================
      COLORS - BORDERS
      ============================================ */
@@ -194,6 +203,7 @@
   --line-height-normal: 1.4;
   --line-height-relaxed: 1.6;
   --line-height-base: normal;
+  --line-height-song-title: 16px; /* Specific line height for song title */
   
   /* ============================================
      BORDERS - WIDTHS
@@ -228,6 +238,7 @@
   --radius-chat-input-container: 32px;
   --radius-text-input: 9999px;
   --radius-text-input-action: 50%;
+  --radius-song-title-master: 67px; /* Very rounded pill shape for master variant */
   
   /* ============================================
      SHADOWS
@@ -290,6 +301,10 @@
   --size-text-input-action: 40px;
   --size-round-button-wrapper: 56px;
   --size-round-button-inner: 40px;
+  
+  /* Song Title specific sizes */
+  --size-song-title-master-max-width: 217px;
+  --size-song-title-chat-width: 264px;
   
   /* ============================================
      BREAKPOINTS (for reference in media queries)
