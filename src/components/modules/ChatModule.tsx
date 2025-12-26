@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import type { ChatModuleData, ChatMessage, ModuleType } from '../../types/modules'
 import { chatWithAI } from '../../api/services'
-import { MediaModule } from './MediaModule'
+import { MediaModule } from './MediaModule/MediaModule'
 import { ImageModule } from './ImageModule'
 import { TextModule } from './TextModule'
 import { MapModule } from './MapModule'

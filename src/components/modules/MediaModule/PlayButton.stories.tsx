@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { PlayButton } from './PlayButton';
 
 const meta: Meta<typeof PlayButton> = {
-  title: 'Components/Buttons/PlayButton',
+  title: 'Components/Modules/MediaModule/PlayButton',
   component: PlayButton,
   parameters: {
     layout: 'padded',

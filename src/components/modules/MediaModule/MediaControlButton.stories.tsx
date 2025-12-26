@@ -6,10 +6,10 @@ import {
   NextTrackIcon,
   RepeatIcon,
   ShuffleIcon,
-} from './Icon';
+} from '../../shared/Icon';
 
 const meta: Meta<typeof MediaControlButton> = {
-  title: 'Components/Buttons/MediaControlButton',
+  title: 'Components/Modules/MediaModule/MediaControlButton',
   component: MediaControlButton,
   parameters: {
     layout: 'padded',

@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react'
 import type { ModuleInstance, ImageModuleData, MediaModuleData, TextModuleData, MapModuleData, SearchModuleData, ChatModuleData, ModuleType } from '../types/modules'
 import { ImageModule } from './modules/ImageModule'
-import { MediaModule } from './modules/MediaModule'
+import { MediaModule } from './modules/MediaModule/MediaModule'
 import { TextModule } from './modules/TextModule'
 import { MapModule } from './modules/MapModule'
 import { SearchModule } from './modules/SearchModule'

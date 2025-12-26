@@ -6,7 +6,7 @@ import {
   NextTrackIcon,
   RepeatIcon,
   ShuffleIcon,
-} from './Icon';
+} from '../../shared/Icon';
 
 interface MediaControlsProps {
   variant?: 'Full' | 'Partial' | 'Chat';

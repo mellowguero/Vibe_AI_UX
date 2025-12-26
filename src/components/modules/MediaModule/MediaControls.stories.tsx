@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { MediaControls } from './MediaControls';
 
 const meta: Meta<typeof MediaControls> = {
-  title: 'Components/Buttons/MediaControls',
+  title: 'Components/Modules/MediaModule/MediaControls',
   component: MediaControls,
   parameters: {
     layout: 'padded',

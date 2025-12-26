@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { AIMessageBubble } from './AIMessageBubble';
-import { MediaModule } from './modules/MediaModule';
+import { MediaModule } from './modules/MediaModule/MediaModule';
 import { ImageModule } from './modules/ImageModule';
 import { TextModule } from './modules/TextModule';
 import { MapModule } from './modules/MapModule';

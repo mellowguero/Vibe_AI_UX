@@ -1,6 +1,6 @@
 import React from 'react';
-import { RoundButton } from './RoundButton';
-import { PlayIcon, PauseIcon } from './Icon';
+import { RoundButton } from '../../shared/RoundButton';
+import { PlayIcon, PauseIcon } from '../../shared/Icon';
 
 interface PlayButtonProps {
   isPlaying: boolean;

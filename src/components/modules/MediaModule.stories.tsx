@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { MediaModule } from './MediaModule';
+import { MediaModule } from './MediaModule/MediaModule';
 import { mediaWithVideo, mediaLoading, mediaAudioOnly } from '../../stories/mocks';
 
 const meta: Meta<typeof MediaModule> = {

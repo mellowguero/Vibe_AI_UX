@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
-import type { MediaModuleData } from '../../types/modules'
-import { searchYouTubeMusic } from '../../api/services'
+import type { MediaModuleData } from '../../../types/modules'
+import { searchYouTubeMusic } from '../../../api/services'
 
 interface MediaModuleProps {
   data: MediaModuleData
@@ -241,3 +241,4 @@ export function MediaModule({ data, onUpdate }: MediaModuleProps) {
     </div>
   )
 }
+
