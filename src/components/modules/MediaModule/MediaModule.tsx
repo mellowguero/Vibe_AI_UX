@@ -1,7 +1,8 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { MediaModuleData } from '../../../types/modules'
 import { searchYouTubeMusic, searchAlbumArtwork } from '../../../api/services'
 import { MediaPreviewWindow } from './MediaPreviewWindow'
+import { extractDominantColor, rgbToRgba } from '../../../utils/colorExtraction'
 
 interface MediaModuleProps {
   data: MediaModuleData
@@ -11,6 +12,11 @@ interface MediaModuleProps {
 export function MediaModule({ data, onUpdate }: MediaModuleProps) {
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const albumArtworkTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const colorExtractionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  // Store extracted color for future use (e.g., timebar)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [extractedColor, setExtractedColor] = useState<string | null>(null)
+  const moduleRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     // Clear previous timer
@@ -142,8 +148,61 @@ export function MediaModule({ data, onUpdate }: MediaModuleProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data.title, data.videoId, data.thumbnailUrl, data.albumArtworkUrl, data.isLoading])
 
+  // Extract color from album artwork
+  useEffect(() => {
+    // Clear previous timer
+    if (colorExtractionTimerRef.current) {
+      clearTimeout(colorExtractionTimerRef.current)
+    }
+
+    const artworkUrl = data.albumArtworkUrl
+
+    // Don't extract if no artwork URL
+    if (!artworkUrl) {
+      setExtractedColor(null)
+      // Reset to default color
+      if (moduleRef.current) {
+        moduleRef.current.style.setProperty('--color-media-preview-scrim', '')
+      }
+      return
+    }
+
+    // Debounce color extraction
+    colorExtractionTimerRef.current = setTimeout(async () => {
+      try {
+        const color = await extractDominantColor(artworkUrl)
+        if (color) {
+          const rgbaColor = rgbToRgba(color, 0.61)
+          setExtractedColor(rgbaColor)
+          // Apply CSS variable on the module root element
+          if (moduleRef.current) {
+            moduleRef.current.style.setProperty('--color-media-preview-scrim', rgbaColor)
+          }
+        } else {
+          // Extraction failed, use default
+          setExtractedColor(null)
+          if (moduleRef.current) {
+            moduleRef.current.style.setProperty('--color-media-preview-scrim', '')
+          }
+        }
+      } catch (error) {
+        console.error('Error extracting color:', error)
+        setExtractedColor(null)
+        if (moduleRef.current) {
+          moduleRef.current.style.setProperty('--color-media-preview-scrim', '')
+        }
+      }
+    }, 500) // 500ms debounce for color extraction
+
+    return () => {
+      if (colorExtractionTimerRef.current) {
+        clearTimeout(colorExtractionTimerRef.current)
+      }
+    }
+  }, [data.albumArtworkUrl])
+
   return (
-    <div className="media-module">
+    <div className="media-module" ref={moduleRef}>
       {/* Preview Window - show if we have a title or any media data */}
       {(data.title || data.videoId || data.albumArtworkUrl || data.thumbnailUrl) && (
         <MediaPreviewWindow

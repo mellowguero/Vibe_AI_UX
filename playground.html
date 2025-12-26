@@ -565,7 +565,147 @@
             <div class="media-preview-album-artwork media-preview-album-artwork--placeholder"></div>
           </div>
         </div>
+      </div>
+    </section>
 
+    <!-- Color Extraction Playground -->
+    <section class="play-area" id="color-extraction-playground">
+      <h2 class="play-area-title">Color Extraction Playground</h2>
+      <div class="play-area-content">
+        <div class="state-group full-width">
+          <h3>Color Extraction from Album Artwork</h3>
+          <div id="color-extraction-container" style="padding: 2rem; max-width: 800px;">
+            <!-- Image Selection -->
+            <div style="margin-bottom: 2rem;">
+              <h4 style="margin-bottom: 0.5rem; font-size: 1rem;">Image Selection</h4>
+              
+              <div style="margin-bottom: 1rem;">
+                <label style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem;">
+                  Select from Assets:
+                </label>
+                <select id="asset-selector" style="width: 100%; padding: 0.5rem; font-size: 0.875rem;">
+                  <option value="">-- Select Asset --</option>
+                  <option value="/assets/media-preview/graceland_cover.jpg">Graceland Cover</option>
+                </select>
+              </div>
+
+              <div style="margin-bottom: 1rem;">
+                <label style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem;">
+                  Upload Image:
+                </label>
+                <input
+                  type="file"
+                  id="file-upload"
+                  accept="image/*"
+                  style="font-size: 0.875rem;"
+                />
+                <button
+                  id="clear-upload"
+                  style="margin-left: 0.5rem; padding: 0.25rem 0.5rem; font-size: 0.75rem; display: none;"
+                >
+                  Clear Upload
+                </button>
+              </div>
+
+              <div>
+                <label style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem;">
+                  Manual URL:
+                </label>
+                <input
+                  type="text"
+                  id="manual-url"
+                  placeholder="Enter image URL"
+                  style="width: 100%; padding: 0.5rem; font-size: 0.875rem;"
+                />
+              </div>
+            </div>
+
+            <!-- Image Preview -->
+            <div id="image-preview-container" style="margin-bottom: 2rem; display: none;">
+              <h4 style="margin-bottom: 0.5rem; font-size: 1rem;">Image Preview</h4>
+              <img
+                id="preview-image"
+                alt="Preview"
+                style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 1px solid #ddd;"
+              />
+            </div>
+
+            <!-- Dominant Color Display -->
+            <div id="dominant-color-container" style="margin-bottom: 2rem; display: none;">
+              <h4 style="margin-bottom: 0.5rem; font-size: 1rem;">Dominant Color</h4>
+              <div style="display: flex; align-items: center; gap: 1rem;">
+                <div
+                  id="dominant-color-swatch"
+                  style="width: 100px; height: 100px; border-radius: 8px; border: 1px solid #ddd;"
+                ></div>
+                <div id="dominant-color-info" style="font-size: 0.875rem;"></div>
+              </div>
+            </div>
+
+            <!-- Color Palette Display -->
+            <div id="palette-container" style="margin-bottom: 2rem; display: none;">
+              <h4 style="margin-bottom: 0.5rem; font-size: 1rem;">Color Palette</h4>
+              <div id="palette-colors" style="display: flex; gap: 0.5rem; flex-wrap: wrap;"></div>
+              <div style="font-size: 0.75rem; color: #666; margin-top: 0.5rem;">
+                Click a color to use it as the dominant color
+              </div>
+            </div>
+
+            <!-- Controls -->
+            <div style="margin-bottom: 2rem;">
+              <h4 style="margin-bottom: 0.5rem; font-size: 1rem;">Controls</h4>
+              <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem;">
+                  <input type="checkbox" id="show-palette" checked />
+                  Show Palette
+                </label>
+                <div id="palette-count-container">
+                  <label style="display: block; margin-bottom: 0.25rem; font-size: 0.875rem;">
+                    Palette Color Count: <span id="palette-count-value">5</span>
+                  </label>
+                  <input
+                    type="range"
+                    id="palette-count"
+                    min="1"
+                    max="10"
+                    value="5"
+                    style="width: 200px;"
+                  />
+                </div>
+                <button
+                  id="reset-color"
+                  style="padding: 0.5rem 1rem; font-size: 0.875rem; width: fit-content;"
+                >
+                  Reset to Default Color
+                </button>
+              </div>
+            </div>
+
+            <!-- Live Preview -->
+            <div style="margin-bottom: 2rem;">
+              <h4 style="margin-bottom: 0.5rem; font-size: 1rem;">Live Preview</h4>
+              <div style="border: 1px solid #ddd; border-radius: 8px; padding: 1rem; background-color: #f5f5f5;">
+                <div id="preview-wrapper">
+                  <div class="media-preview-window media-preview-window--expanded">
+                    <div class="media-preview-overlays" aria-hidden="true">
+                      <div class="media-preview-dark-overlay"></div>
+                      <div id="preview-scrim" class="media-preview-scrim"></div>
+                    </div>
+                    <div id="preview-artwork" class="media-preview-album-artwork media-preview-album-artwork--placeholder"></div>
+                  </div>
+                </div>
+              </div>
+              <div id="scrim-color-info" style="font-size: 0.75rem; color: #666; margin-top: 0.5rem;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Media Module Play Area (continued) -->
+    <section class="play-area" id="media-module-area">
+      <h2 class="play-area-title">Media Module</h2>
+      <div class="play-area-content">
         <!-- Audio Only -->
         <div class="state-group">
           <h3>Audio Only</h3>
@@ -1148,6 +1288,259 @@
     } else {
       initializeIcons();
     }
+  </script>
+  
+  <!-- ColorThief from CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
+  
+  <script>
+    // Color Extraction Playground
+    (function() {
+      const colorThief = new ColorThief();
+      let currentImageUrl = '';
+      let uploadedObjectUrl = null;
+      let dominantColor = null;
+      let palette = [];
+
+      // Helper functions
+      function rgbToHex(r, g, b) {
+        const toHex = (n) => {
+          const hex = n.toString(16);
+          return hex.length === 1 ? '0' + hex : hex;
+        };
+        return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+      }
+
+      function rgbToRgb(r, g, b) {
+        return `rgb(${r}, ${g}, ${b})`;
+      }
+
+      function rgbToRgba(r, g, b, a = 1) {
+        return `rgba(${r}, ${g}, ${b}, ${a})`;
+      }
+
+      function loadImage(url) {
+        return new Promise((resolve, reject) => {
+          const img = new Image();
+          img.crossOrigin = 'anonymous';
+          img.onload = () => resolve(img);
+          img.onerror = () => reject(new Error('Failed to load image'));
+          img.src = url;
+        });
+      }
+
+      async function extractColors(imageUrl) {
+        if (!imageUrl) {
+          hideAllDisplays();
+          return;
+        }
+
+        try {
+          const img = await loadImage(imageUrl);
+          
+          // Wait for image to be fully loaded
+          if (!img.complete) {
+            await new Promise((resolve) => {
+              img.onload = resolve;
+            });
+          }
+
+          // Extract dominant color
+          const dominant = colorThief.getColor(img);
+          dominantColor = { r: dominant[0], g: dominant[1], b: dominant[2] };
+          displayDominantColor(dominantColor);
+
+          // Extract palette if enabled
+          const showPalette = document.getElementById('show-palette').checked;
+          if (showPalette) {
+            const paletteCount = parseInt(document.getElementById('palette-count').value);
+            const paletteArray = colorThief.getPalette(img, paletteCount);
+            palette = paletteArray.map(c => ({ r: c[0], g: c[1], b: c[2] }));
+            displayPalette(palette);
+          } else {
+            palette = [];
+            hidePalette();
+          }
+
+          // Update preview
+          updatePreview(imageUrl, dominantColor);
+        } catch (error) {
+          console.error('Error extracting colors:', error);
+          hideAllDisplays();
+        }
+      }
+
+      function displayDominantColor(color) {
+        const container = document.getElementById('dominant-color-container');
+        const swatch = document.getElementById('dominant-color-swatch');
+        const info = document.getElementById('dominant-color-info');
+        
+        swatch.style.backgroundColor = rgbToRgb(color.r, color.g, color.b);
+        info.innerHTML = `
+          <div style="margin-bottom: 0.25rem;">RGB: ${rgbToRgb(color.r, color.g, color.b)}</div>
+          <div style="margin-bottom: 0.25rem;">Hex: ${rgbToHex(color.r, color.g, color.b)}</div>
+          <div>RGBA (0.61): ${rgbToRgba(color.r, color.g, color.b, 0.61)}</div>
+        `;
+        container.style.display = 'block';
+      }
+
+      function displayPalette(colors) {
+        const container = document.getElementById('palette-container');
+        const colorsDiv = document.getElementById('palette-colors');
+        
+        colorsDiv.innerHTML = '';
+        colors.forEach((color, idx) => {
+          const colorDiv = document.createElement('div');
+          colorDiv.style.cssText = `
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            transition: border-color 0.2s;
+          `;
+          colorDiv.onmouseenter = () => {
+            colorDiv.style.borderColor = '#007AFF';
+          };
+          colorDiv.onmouseleave = () => {
+            colorDiv.style.borderColor = 'transparent';
+          };
+          colorDiv.onclick = () => {
+            dominantColor = color;
+            displayDominantColor(color);
+            updatePreview(currentImageUrl, color);
+          };
+          
+          colorDiv.innerHTML = `
+            <div style="width: 60px; height: 60px; background-color: ${rgbToRgb(color.r, color.g, color.b)}; border-radius: 4px; margin-bottom: 0.25rem; border: 1px solid #ddd;"></div>
+            <div style="font-size: 0.75rem; text-align: center;">${rgbToRgb(color.r, color.g, color.b)}</div>
+            <div style="font-size: 0.75rem; text-align: center; color: #666;">${rgbToHex(color.r, color.g, color.b)}</div>
+          `;
+          colorsDiv.appendChild(colorDiv);
+        });
+        container.style.display = 'block';
+      }
+
+      function hidePalette() {
+        document.getElementById('palette-container').style.display = 'none';
+      }
+
+      function hideAllDisplays() {
+        document.getElementById('image-preview-container').style.display = 'none';
+        document.getElementById('dominant-color-container').style.display = 'none';
+        document.getElementById('palette-container').style.display = 'none';
+        document.getElementById('scrim-color-info').textContent = '';
+        updatePreview('', null);
+      }
+
+      function updatePreview(imageUrl, color) {
+        const previewArtwork = document.getElementById('preview-artwork');
+        const previewScrim = document.getElementById('preview-scrim');
+        const scrimColorInfo = document.getElementById('scrim-color-info');
+        const previewWrapper = document.getElementById('preview-wrapper');
+
+        if (imageUrl) {
+          previewArtwork.className = 'media-preview-album-artwork';
+          previewArtwork.src = imageUrl;
+          previewArtwork.alt = 'Album artwork';
+        } else {
+          previewArtwork.className = 'media-preview-album-artwork media-preview-album-artwork--placeholder';
+          previewArtwork.src = '';
+        }
+
+        if (color) {
+          const scrimColor = rgbToRgba(color.r, color.g, color.b, 0.61);
+          previewWrapper.style.setProperty('--color-media-preview-scrim', scrimColor);
+          scrimColorInfo.textContent = `Scrim Color: ${scrimColor}`;
+        } else {
+          previewWrapper.style.setProperty('--color-media-preview-scrim', '');
+          scrimColorInfo.textContent = 'Scrim Color: rgba(128, 128, 128, 0.61) (default)';
+        }
+      }
+
+      // Event listeners
+      document.getElementById('asset-selector').addEventListener('change', (e) => {
+        if (uploadedObjectUrl) {
+          URL.revokeObjectURL(uploadedObjectUrl);
+          uploadedObjectUrl = null;
+          document.getElementById('clear-upload').style.display = 'none';
+        }
+        currentImageUrl = e.target.value;
+        if (currentImageUrl) {
+          document.getElementById('preview-image').src = currentImageUrl;
+          document.getElementById('image-preview-container').style.display = 'block';
+          extractColors(currentImageUrl);
+        } else {
+          hideAllDisplays();
+        }
+      });
+
+      document.getElementById('file-upload').addEventListener('change', (e) => {
+        const file = e.target.files?.[0];
+        if (file) {
+          if (uploadedObjectUrl) {
+            URL.revokeObjectURL(uploadedObjectUrl);
+          }
+          uploadedObjectUrl = URL.createObjectURL(file);
+          currentImageUrl = uploadedObjectUrl;
+          document.getElementById('asset-selector').value = '';
+          document.getElementById('manual-url').value = '';
+          document.getElementById('preview-image').src = currentImageUrl;
+          document.getElementById('image-preview-container').style.display = 'block';
+          document.getElementById('clear-upload').style.display = 'inline-block';
+          extractColors(currentImageUrl);
+        }
+      });
+
+      document.getElementById('clear-upload').addEventListener('click', () => {
+        if (uploadedObjectUrl) {
+          URL.revokeObjectURL(uploadedObjectUrl);
+          uploadedObjectUrl = null;
+        }
+        document.getElementById('file-upload').value = '';
+        document.getElementById('clear-upload').style.display = 'none';
+        currentImageUrl = '';
+        hideAllDisplays();
+      });
+
+      document.getElementById('manual-url').addEventListener('input', (e) => {
+        if (uploadedObjectUrl) {
+          URL.revokeObjectURL(uploadedObjectUrl);
+          uploadedObjectUrl = null;
+          document.getElementById('clear-upload').style.display = 'none';
+        }
+        currentImageUrl = e.target.value;
+        if (currentImageUrl) {
+          document.getElementById('asset-selector').value = '';
+          document.getElementById('preview-image').src = currentImageUrl;
+          document.getElementById('image-preview-container').style.display = 'block';
+          extractColors(currentImageUrl);
+        } else {
+          hideAllDisplays();
+        }
+      });
+
+      document.getElementById('show-palette').addEventListener('change', (e) => {
+        document.getElementById('palette-count-container').style.display = e.target.checked ? 'block' : 'none';
+        if (e.target.checked && currentImageUrl) {
+          extractColors(currentImageUrl);
+        } else {
+          hidePalette();
+        }
+      });
+
+      document.getElementById('palette-count').addEventListener('input', (e) => {
+        document.getElementById('palette-count-value').textContent = e.target.value;
+        if (currentImageUrl && document.getElementById('show-palette').checked) {
+          extractColors(currentImageUrl);
+        }
+      });
+
+      document.getElementById('reset-color').addEventListener('click', () => {
+        dominantColor = null;
+        updatePreview(currentImageUrl, null);
+        document.getElementById('scrim-color-info').textContent = 'Scrim Color: rgba(128, 128, 128, 0.61) (default)';
+      });
+    })();
   </script>
 </body>
 </html>

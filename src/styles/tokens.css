@@ -98,7 +98,7 @@
   
   /* Media Preview Window colors */
   --color-media-preview-dark-overlay: rgba(0, 0, 0, 0.52);
-  --color-media-preview-scrim: rgba(217, 196, 150, 0.61);
+  --color-media-preview-scrim: rgba(128, 128, 128, 0.61);
   --color-media-preview-hologram-back: #d9d9d9;
   --color-media-preview-bg-opacity: 0.2;
   --color-media-preview-shadow: rgba(0, 0, 0, 0.25);

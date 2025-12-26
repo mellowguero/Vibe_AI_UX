@@ -1238,7 +1238,7 @@
 .media-preview-scrim {
   position: absolute;
   inset: var(--media-preview-scrim-inset, 0 -5.5px 0 -1.5px);
-  background: var(--color-media-preview-scrim, rgba(217, 196, 150, 0.61));
+  background: var(--color-media-preview-scrim, rgba(128, 128, 128, 0.61));
   backdrop-filter: var(--glass-blur-preview-scrim, blur(2px));
   -webkit-backdrop-filter: var(--glass-blur-preview-scrim-webkit, blur(2px));
   z-index: 3;
