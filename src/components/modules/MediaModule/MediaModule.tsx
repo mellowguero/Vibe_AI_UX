@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import type { MediaModuleData } from '../../../types/modules'
-import { searchYouTubeMusic } from '../../../api/services'
+import { searchYouTubeMusic, searchAlbumArtwork } from '../../../api/services'
+import { MediaPreviewWindow } from './MediaPreviewWindow'
 
 interface MediaModuleProps {
   data: MediaModuleData
@@ -9,6 +10,7 @@ interface MediaModuleProps {
 
 export function MediaModule({ data, onUpdate }: MediaModuleProps) {
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const albumArtworkTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     // Clear previous timer
@@ -94,8 +96,64 @@ export function MediaModule({ data, onUpdate }: MediaModuleProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data.title, data.audioUrl, data.videoId])
 
+  // Fetch album artwork when video is found or title changes
+  useEffect(() => {
+    // Clear previous timer
+    if (albumArtworkTimerRef.current) {
+      clearTimeout(albumArtworkTimerRef.current)
+    }
+
+    const title = data.title || ''
+    
+    // Don't search for album artwork if:
+    // - Title is empty
+    // - We already have album artwork URL
+    // - We're loading (wait for YouTube search to complete first)
+    if (!title.trim() || data.albumArtworkUrl || data.isLoading) {
+      return
+    }
+
+    // Debounce album artwork search
+    albumArtworkTimerRef.current = setTimeout(async () => {
+      const latestData = { ...data }
+      
+      // Skip if we got album artwork while waiting
+      if (latestData.albumArtworkUrl) {
+        return
+      }
+
+      // Search for album artwork using iTunes API
+      // Use YouTube thumbnail as fallback
+      const artworkUrl = await searchAlbumArtwork(title, latestData.thumbnailUrl)
+      
+      if (artworkUrl && artworkUrl !== latestData.albumArtworkUrl) {
+        onUpdate({
+          ...latestData,
+          albumArtworkUrl: artworkUrl,
+        })
+      }
+    }, 1000) // 1s debounce for album artwork search
+
+    return () => {
+      if (albumArtworkTimerRef.current) {
+        clearTimeout(albumArtworkTimerRef.current)
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data.title, data.videoId, data.thumbnailUrl, data.albumArtworkUrl, data.isLoading])
+
   return (
     <div className="media-module">
+      {/* Preview Window - show if we have a title or any media data */}
+      {(data.title || data.videoId || data.albumArtworkUrl || data.thumbnailUrl) && (
+        <MediaPreviewWindow
+          isExpanded={true}
+          albumArtworkUrl={data.albumArtworkUrl}
+          videoThumbnailUrl={data.thumbnailUrl}
+          title={data.title}
+        />
+      )}
+      
       <input
         type="text"
         placeholder="Song title (auto-searches YouTube if no URL below)"

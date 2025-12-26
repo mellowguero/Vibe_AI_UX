@@ -270,6 +270,48 @@ export async function searchImages(
   return searchUnsplashImages(query)
 }
 
+// Album Artwork API - iTunes Search API (free, no API key required)
+export async function searchAlbumArtwork(query: string, fallbackThumbnailUrl?: string): Promise<string | null> {
+  if (!query.trim()) {
+    return fallbackThumbnailUrl || null
+  }
+
+  try {
+    // Extract artist and song from query if in "Artist - Song" format
+    let searchQuery = query.trim()
+    
+    // iTunes Search API - search for songs
+    const apiUrl = `https://itunes.apple.com/search?term=${encodeURIComponent(searchQuery)}&entity=song&limit=1`
+    
+    console.log('Searching iTunes for album artwork:', searchQuery)
+    const response = await fetch(apiUrl)
+
+    if (!response.ok) {
+      console.warn('iTunes search response not OK:', response.status, response.statusText)
+      return fallbackThumbnailUrl || null
+    }
+
+    const data = await response.json()
+
+    if (data.results && data.results.length > 0) {
+      const song = data.results[0]
+      // iTunes returns artworkUrl100, artworkUrl60, etc. Use the larger one
+      const artworkUrl = song.artworkUrl100 || song.artworkUrl60 || song.artworkUrl30
+      
+      if (artworkUrl) {
+        console.log('Found album artwork:', artworkUrl)
+        return artworkUrl
+      }
+    }
+
+    console.warn('No album artwork found in iTunes results for:', searchQuery)
+    return fallbackThumbnailUrl || null
+  } catch (error) {
+    console.error('iTunes search error:', error)
+    return fallbackThumbnailUrl || null
+  }
+}
+
 // YouTube Search API - YouTube Data API v3 (requires API key)
 export async function searchYouTubeMusic(query: string): Promise<{
   videoId: string

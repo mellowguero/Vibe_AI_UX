@@ -15,6 +15,7 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 24px;
   padding: 16px;
+  overflow: hidden;
 }
 
 .chat-messages {
@@ -1136,5 +1137,139 @@
 /* Collapsed variant doesn't show time */
 .song-title--collapsed .song-title-time {
   display: none;
+}
+
+/* Media Preview Window Styles */
+.media-preview-window {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Expanded state */
+.media-preview-window--expanded {
+  width: var(--size-media-preview-expanded-width, 280px);
+  height: var(--size-media-preview-expanded-height, 192px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-base, 8px);
+  padding: var(--spacing-xl, 16px);
+  border-radius: var(--radius-xl, 8px);
+  border-top-left-radius: var(--radius-xl, 8px);
+  border-top-right-radius: var(--radius-xl, 8px);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* Collapsed state */
+.media-preview-window--collapsed {
+  width: var(--size-media-preview-collapsed, 56px);
+  height: var(--size-media-preview-collapsed, 56px);
+  border-radius: var(--radius-xl, 8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Layer 1: Video Back - extends beyond bounds */
+.media-preview-video-back {
+  position: absolute;
+  inset: var(--media-preview-video-back-inset, 0 -13px -14px 0);
+  z-index: var(--z-index-raised, 1);
+  pointer-events: none;
+}
+
+.media-preview-video-back-image,
+.media-preview-video-back-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;
+  max-width: none;
+  pointer-events: none;
+}
+
+/* Overlays container */
+.media-preview-overlays {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: calc(var(--z-index-raised, 1) + 1);
+}
+
+/* Layer 2: Dark overlay */
+.media-preview-dark-overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--color-media-preview-dark-overlay, rgba(0, 0, 0, 0.52));
+  border-radius: var(--radius-xl, 8px);
+  border-top-left-radius: var(--radius-xl, 8px);
+  border-top-right-radius: var(--radius-xl, 8px);
+  z-index: 1;
+}
+
+/* Layer 3: Background image - album artwork at 20% opacity */
+.media-preview-bg-image {
+  position: absolute;
+  inset: 0;
+  opacity: var(--color-media-preview-bg-opacity, 0.2);
+  overflow: hidden;
+  border-radius: var(--radius-xl, 8px);
+  border-top-left-radius: var(--radius-xl, 8px);
+  border-top-right-radius: var(--radius-xl, 8px);
+  z-index: 2;
+}
+
+.media-preview-bg-image-content {
+  position: absolute;
+  height: var(--media-preview-bg-height, 146.35%);
+  left: 0;
+  top: var(--media-preview-bg-top, -23.18%);
+  width: var(--media-preview-bg-width, 100.36%);
+  max-width: none;
+  object-fit: cover;
+  object-position: 50% 50%;
+  pointer-events: none;
+}
+
+/* Layer 4: Scrim overlay */
+.media-preview-scrim {
+  position: absolute;
+  inset: var(--media-preview-scrim-inset, 0 -5.5px 0 -1.5px);
+  background: var(--color-media-preview-scrim, rgba(217, 196, 150, 0.61));
+  backdrop-filter: var(--glass-blur-preview-scrim, blur(2px));
+  -webkit-backdrop-filter: var(--glass-blur-preview-scrim-webkit, blur(2px));
+  z-index: 3;
+}
+
+/* Layer 5: Album artwork - main visible element */
+.media-preview-album-artwork {
+  position: relative;
+  width: var(--size-media-preview-album-artwork, 160px);
+  height: var(--size-media-preview-album-artwork, 160px);
+  border-radius: var(--radius-xl, 8px);
+  box-shadow: var(--shadow-media-preview-album, 0px 4px 4px rgba(0, 0, 0, 0.25));
+  object-fit: cover;
+  object-position: 50% 50%;
+  flex-shrink: 0;
+  z-index: 4;
+}
+
+/* Collapsed state album artwork */
+.media-preview-window--collapsed .media-preview-album-artwork {
+  width: var(--size-media-preview-album-artwork-collapsed, 56px);
+  height: var(--size-media-preview-album-artwork-collapsed, 56px);
+  border-radius: var(--radius-xl, 8px);
+  box-shadow: var(--shadow-media-preview-album, 0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+/* Placeholder for missing artwork */
+.media-preview-album-artwork--placeholder {
+  background: var(--gradient-media-placeholder, linear-gradient(135deg, #667eea 0%, #764ba2 100%));
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 

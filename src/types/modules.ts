@@ -15,6 +15,7 @@ export type MediaModuleData = {
   videoId?: string // YouTube video ID
   channelTitle?: string
   thumbnailUrl?: string
+  albumArtworkUrl?: string // Album artwork from iTunes or other source
   isLoading?: boolean
 }
 

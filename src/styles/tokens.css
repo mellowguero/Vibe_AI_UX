@@ -96,6 +96,13 @@
   /* Song Title background */
   --color-song-title-bg: rgba(0, 0, 0, 0.2);
   
+  /* Media Preview Window colors */
+  --color-media-preview-dark-overlay: rgba(0, 0, 0, 0.52);
+  --color-media-preview-scrim: rgba(217, 196, 150, 0.61);
+  --color-media-preview-hologram-back: #d9d9d9;
+  --color-media-preview-bg-opacity: 0.2;
+  --color-media-preview-shadow: rgba(0, 0, 0, 0.25);
+  
   /* ============================================
      COLORS - BORDERS
      ============================================ */
@@ -148,6 +155,8 @@
   
   --glass-blur: blur(10px);
   --glass-blur-webkit: blur(10px);
+  --glass-blur-preview-scrim: blur(2px);
+  --glass-blur-preview-scrim-webkit: blur(2px);
   
   /* ============================================
      TYPOGRAPHY - FONT FAMILIES
@@ -255,6 +264,7 @@
   --shadow-play-button: 0 2px 8px rgba(0, 0, 0, 0.2);
   --shadow-text-input: 0 2px 4px rgba(0, 0, 0, 0.1);
   --shadow-text-input-action: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-media-preview-album: 0px 4px 4px rgba(0, 0, 0, 0.25);
   
   /* ============================================
      TRANSITIONS
@@ -305,6 +315,21 @@
   /* Song Title specific sizes */
   --size-song-title-master-max-width: 217px;
   --size-song-title-chat-width: 264px;
+  
+  /* Media Preview Window specific sizes */
+  --size-media-preview-expanded-width: 280px;
+  --size-media-preview-expanded-height: 192px;
+  --size-media-preview-collapsed: 56px;
+  --size-media-preview-album-artwork: 160px;
+  --size-media-preview-album-artwork-collapsed: 56px;
+  
+  /* Media Preview Window positioning */
+  --media-preview-video-back-inset: 0 -13px -14px 0;
+  --media-preview-scrim-inset: 0 -5.5px 0 -1.5px;
+  --media-preview-hologram-back-inset: 0 0.5px;
+  --media-preview-bg-height: 146.35%;
+  --media-preview-bg-top: -23.18%;
+  --media-preview-bg-width: 100.36%;
   
   /* ============================================
      BREAKPOINTS (for reference in media queries)
