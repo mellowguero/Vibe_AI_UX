@@ -960,3 +960,50 @@
   }
 }
 
+/* Icon Button 40px - Based on Figma design */
+.button-icon-40px {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  padding: 0;
+  border-radius: var(--radius-md, 4px);
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity var(--transition-fast, 0.2s) var(--transition-ease, ease);
+  box-shadow: none;
+}
+
+.button-icon-40px:not(:disabled):hover {
+  opacity: 1;
+  box-shadow: none;
+}
+
+.button-icon-40px:not(:disabled):active {
+  opacity: 1;
+  transform: scale(0.95);
+}
+
+.button-icon-40px:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.button-icon-40px-icon {
+  width: 24px;
+  height: 24px;
+  color: var(--color-text-white, #ffffff);
+  transition: width var(--transition-fast, 0.2s) var(--transition-ease, ease),
+              height var(--transition-fast, 0.2s) var(--transition-ease, ease);
+}
+
+.button-icon-40px:not(:disabled):hover .button-icon-40px-icon {
+  width: 32.667px;
+  height: 32.667px;
+}
+
