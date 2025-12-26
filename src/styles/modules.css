@@ -917,6 +917,7 @@
   justify-content: center;
   overflow: hidden;
   flex-shrink: 0;
+  color: var(--color-text-white, #ffffff);
 }
 
 .button-round-icon-placeholder {
@@ -962,10 +963,10 @@
 
 /* Icon Button 40px - Based on Figma design */
 .button-icon-40px {
-  width: 40px;
-  height: 40px;
-  min-width: 40px;
-  min-height: 40px;
+  width: var(--size-text-input-action, 40px);
+  height: var(--size-text-input-action, 40px);
+  min-width: var(--size-text-input-action, 40px);
+  min-height: var(--size-text-input-action, 40px);
   padding: 0;
   border-radius: var(--radius-md, 4px);
   background: transparent;
@@ -995,15 +996,15 @@
 }
 
 .button-icon-40px-icon {
-  width: 24px;
-  height: 24px;
+  width: var(--size-icon-md, 3rem);
+  height: var(--size-icon-md, 3rem);
   color: var(--color-text-white, #ffffff);
   transition: width var(--transition-fast, 0.2s) var(--transition-ease, ease),
               height var(--transition-fast, 0.2s) var(--transition-ease, ease);
 }
 
 .button-icon-40px:not(:disabled):hover .button-icon-40px-icon {
-  width: 32.667px;
-  height: 32.667px;
+  width: calc(var(--size-icon-md, 3rem) * 1.361);
+  height: calc(var(--size-icon-md, 3rem) * 1.361);
 }
 

@@ -2,7 +2,8 @@ import type { Preview } from '@storybook/react-vite';
 import React from 'react';
 import '../src/styles/tokens.css';
 import '../src/styles/modules.css';
-// Note: GUI styles are in index.css, but we mainly need tokens and modules.css for Storybook
+import '../src/styles/gui.css';
+// Note: All styles imported for Storybook (tokens, modules, and GUI)
 
 const preview: Preview = {
   parameters: {

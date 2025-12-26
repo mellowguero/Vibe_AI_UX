@@ -1,3 +1,4 @@
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { MediaModule } from './MediaModule';
 import { mediaWithVideo, mediaLoading, mediaAudioOnly } from '../../stories/mocks';
@@ -101,3 +102,6 @@ export const NestedExpanded: Story = {
     ),
   ],
 };
+
+// Note: Sub-components (MediaControls, PlayButton, MediaControlButton) 
+// have their own stories under Components/Buttons/ for individual inspection

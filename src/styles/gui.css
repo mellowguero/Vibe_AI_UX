@@ -158,3 +158,13 @@
   background-color: rgba(76, 141, 255, 0.7) !important;
 }
 
+/* Media Controls Styles */
+.media-controls {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-base, 1rem);
+  flex-wrap: nowrap;
+}
+
