@@ -139,6 +139,7 @@ export function ChatModule({ data, onUpdate, onExtractModule }: ChatModuleProps)
             <MediaModule
               data={moduleData}
               onUpdate={() => {}} // Read-only in chat
+              variant="chat"
             />
           )}
           {type === 'image' && (
