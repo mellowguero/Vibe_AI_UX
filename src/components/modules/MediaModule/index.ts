@@ -3,4 +3,5 @@ export { MediaControls } from './MediaControls';
 export { MediaControlButton } from './MediaControlButton';
 export { PlayButton } from './PlayButton';
 export { MediaPreviewWindow } from './MediaPreviewWindow';
+export { AudioProgressBar } from './AudioProgressBar';
 
