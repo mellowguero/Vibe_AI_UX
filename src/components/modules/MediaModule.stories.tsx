@@ -31,7 +31,7 @@ export const DesktopStandalone: Story = {
   },
   decorators: [
     (Story) => (
-      <div style={{ maxWidth: '300px' }}>
+      <div style={{ width: 'fit-content' }}>
         <Story />
       </div>
     ),
