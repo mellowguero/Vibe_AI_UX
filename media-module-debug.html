@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MediaModule Debug</title>
+  <link rel="stylesheet" href="src/styles/tokens.css">
+  <link rel="stylesheet" href="src/styles/modules.css">
+  <link rel="stylesheet" href="src/styles/gui.css">
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: rgba(66, 66, 66, 1);
+      color: #333;
+      padding: 2rem;
+    }
+
+    .debug-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .debug-header {
+      margin-bottom: 2rem;
+    }
+
+    .debug-header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #1a1a1a;
+    }
+
+    .debug-header p {
+      font-size: 1rem;
+      color: #666;
+    }
+
+    #test-input-container {
+      background-color: #ffffff;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    #test-input-container label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #333;
+    }
+
+    #url-input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #d0d0d0;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      outline: none;
+      font-family: inherit;
+    }
+
+    #url-input:focus {
+      border-color: #007AFF;
+      box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+    }
+
+    #url-input::placeholder {
+      color: #999;
+    }
+
+    #media-module-root {
+      padding: 1rem;
+      font-family: system-ui, -apple-system, sans-serif;
+      display: flex;
+      justify-content: center;
+    }
+
+    .debug-info {
+      margin-top: 1rem;
+      padding: 1rem;
+      background-color: #f8f9fa;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      color: #666;
+    }
+
+    .debug-info strong {
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="debug-container">
+    <div class="debug-header">
+      <h1>MediaModule Debug Page</h1>
+      <p>Test YouTube playback, audio playback, and artwork fetching with external URL input</p>
+    </div>
+
+    <div id="test-input-container">
+      <label for="url-input">Test Input (YouTube URL, Audio URL, or Song Title):</label>
+      <input 
+        type="text" 
+        id="url-input" 
+        placeholder="Paste YouTube URL (e.g., https://www.youtube.com/watch?v=...), audio URL, or song title (e.g., 'Artist - Song')"
+        autocomplete="off"
+      />
+      <div class="debug-info">
+        <strong>Supported formats:</strong>
+        <ul style="margin: 0.5rem 0 0 1.5rem; padding: 0;">
+          <li>YouTube URLs: <code>https://www.youtube.com/watch?v=VIDEO_ID</code> or <code>https://youtu.be/VIDEO_ID</code></li>
+          <li>Audio URLs: Any direct audio file URL (e.g., <code>https://example.com/audio.mp3</code>)</li>
+          <li>Song titles: Plain text like <code>Artist - Song</code> (will search YouTube)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="media-module-root"></div>
+  </div>
+
+  <script type="module" src="/src/media-module-debug.tsx"></script>
+</body>
+</html>

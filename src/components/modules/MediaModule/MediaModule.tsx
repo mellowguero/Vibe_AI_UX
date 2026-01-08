@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import type { MediaModuleData } from '../../../types/modules'
-import { searchYouTubeMusic, searchAlbumArtwork } from '../../../api/services'
+import { searchYouTubeMusic, searchAlbumArtwork, searchOtherSongsByArtist } from '../../../api/services'
 import { MediaPreviewWindow } from './MediaPreviewWindow'
 import { extractDominantColor, rgbToRgba } from '../../../utils/colorExtraction'
 import { AudioProgressBar } from './AudioProgressBar'
@@ -62,6 +62,7 @@ export function MediaModule({ data, onUpdate, variant = 'standalone' }: MediaMod
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
+  const [isPlayerReady, setIsPlayerReady] = useState(false)
   
   // Refs
   const moduleRef = useRef<HTMLDivElement | null>(null)
@@ -315,69 +316,103 @@ export function MediaModule({ data, onUpdate, variant = 'standalone' }: MediaMod
         clearInterval(youtubeTimeIntervalRef.current)
         youtubeTimeIntervalRef.current = null
       }
+      setIsPlayerReady(false)
       return
     }
 
-    if (!window.YT || !window.YT.Player) {
-      // Wait for API to load
-      return
-    }
-
-    if (!youtubePlayerContainerRef.current) {
-      return
-    }
-
-    // Clean up existing player
-    if (youtubePlayerRef.current) {
-      try {
-        youtubePlayerRef.current.destroy()
-      } catch (error) {
-        console.warn('Error destroying existing YouTube player:', error)
+    // Wait for both YouTube API and container to be ready
+    let retryCount = 0
+    const initializePlayer = () => {
+      retryCount++
+      
+      if (!window.YT || !window.YT.Player) {
+        // API not ready yet, retry (max 100 attempts = 10 seconds)
+        if (retryCount < 100) {
+          setTimeout(initializePlayer, 100)
+        } else {
+          console.error('YouTube API never loaded after 100 attempts')
+        }
+        return
       }
-      youtubePlayerRef.current = null
-    }
 
-    // Create unique container ID
-    const containerId = `youtube-player-${Date.now()}`
-    youtubePlayerContainerRef.current.id = containerId
+      if (!youtubePlayerContainerRef.current) {
+        // Container not ready yet, retry (max 100 attempts = 10 seconds)
+        // Use requestAnimationFrame for first few attempts to wait for React render
+        if (retryCount < 10) {
+          requestAnimationFrame(() => {
+            setTimeout(initializePlayer, 50)
+          })
+        } else if (retryCount < 100) {
+          setTimeout(initializePlayer, 100)
+        } else {
+          console.error('Container never became available after 100 attempts')
+        }
+        return
+      }
 
-    try {
-      const player = new window.YT.Player(containerId, {
-        videoId: data.videoId,
-        events: {
-          onReady: (event: { target: any }) => {
-            youtubePlayerRef.current = event.target
-            try {
-              const videoDuration = event.target.getDuration()
-              if (videoDuration && videoDuration > 0) {
-                setDuration(videoDuration)
+      // Clean up existing player
+      if (youtubePlayerRef.current) {
+        try {
+          youtubePlayerRef.current.destroy()
+        } catch (error) {
+          console.warn('Error destroying existing YouTube player:', error)
+        }
+        youtubePlayerRef.current = null
+      }
+
+      // Use a stable container ID based on videoId to avoid React conflicts
+      const containerId = `youtube-player-${data.videoId}`
+      const container = youtubePlayerContainerRef.current
+      
+      // Only set ID if it's not already set (to avoid React conflicts)
+      if (!container.id || container.id !== containerId) {
+        container.id = containerId
+      }
+
+      try {
+        const player = new window.YT.Player(containerId, {
+          videoId: data.videoId,
+          events: {
+            onReady: (event: { target: any }) => {
+              youtubePlayerRef.current = event.target
+              setIsPlayerReady(true)
+              try {
+                const videoDuration = event.target.getDuration()
+                if (videoDuration && videoDuration > 0) {
+                  setDuration(videoDuration)
+                }
+              } catch (error) {
+                console.warn('Error getting YouTube duration:', error)
               }
-            } catch (error) {
-              console.warn('Error getting YouTube duration:', error)
-            }
+            },
+            onStateChange: (event: { data: number; target: any }) => {
+              const state = event.data
+              if (state === window.YT!.PlayerState.PLAYING) {
+                setIsPlaying(true)
+              } else if (state === window.YT!.PlayerState.PAUSED) {
+                setIsPlaying(false)
+              } else if (state === window.YT!.PlayerState.ENDED) {
+                setIsPlaying(false)
+                setCurrentTime(0)
+              }
+            },
           },
-          onStateChange: (event: { data: number; target: any }) => {
-            const state = event.data
-            if (state === window.YT!.PlayerState.PLAYING) {
-              setIsPlaying(true)
-            } else if (state === window.YT!.PlayerState.PAUSED) {
-              setIsPlaying(false)
-            } else if (state === window.YT!.PlayerState.ENDED) {
-              setIsPlaying(false)
-              setCurrentTime(0)
-            }
+          playerVars: {
+            enablejsapi: 1,
+            origin: window.location.origin,
           },
-        },
-        playerVars: {
-          enablejsapi: 1,
-          origin: window.location.origin,
-        },
-      })
+        })
 
-      youtubePlayerRef.current = player
-    } catch (error) {
-      console.error('Error creating YouTube player:', error)
+        // Don't set the ref here - wait for onReady callback
+        // The player will be set in the onReady callback when it's actually ready
+      } catch (error) {
+        console.error('Error creating YouTube player:', error)
+        setIsPlayerReady(false)
+      }
     }
+
+    // Start initialization
+    initializePlayer()
 
     return () => {
       if (youtubePlayerRef.current) {
@@ -392,6 +427,7 @@ export function MediaModule({ data, onUpdate, variant = 'standalone' }: MediaMod
         clearInterval(youtubeTimeIntervalRef.current)
         youtubeTimeIntervalRef.current = null
       }
+      setIsPlayerReady(false)
     }
   }, [data.videoId, variant])
 
@@ -428,13 +464,69 @@ export function MediaModule({ data, onUpdate, variant = 'standalone' }: MediaMod
 
   // YouTube control methods
   const playYouTube = () => {
-    if (youtubePlayerRef.current) {
+    if (!youtubePlayerRef.current) {
+      console.warn('YouTube player not initialized')
+      return
+    }
+
+    const attemptPlay = () => {
+      if (!youtubePlayerRef.current) return
+      
       try {
+        // Check player state before playing
+        const playerState = youtubePlayerRef.current.getPlayerState()
+        // PlayerState values: -1 (unstarted), 0 (ended), 1 (playing), 2 (paused), 3 (buffering), 5 (cued)
+        if (playerState === -1) {
+          // Player is unstarted, wait a bit more and try again
+          setTimeout(() => {
+            if (youtubePlayerRef.current) {
+              try {
+                const newState = youtubePlayerRef.current.getPlayerState()
+                if (newState !== -1) {
+                  youtubePlayerRef.current.playVideo()
+                } else {
+                  // Still not ready, try one more time
+                  setTimeout(() => {
+                    if (youtubePlayerRef.current) {
+                      try {
+                        youtubePlayerRef.current.playVideo()
+                      } catch (error) {
+                        console.error('Error playing YouTube video after retry:', error)
+                      }
+                    }
+                  }, 500)
+                }
+              } catch (error) {
+                console.error('Error checking player state:', error)
+              }
+            }
+          }, 300)
+          return
+        }
         youtubePlayerRef.current.playVideo()
       } catch (error) {
         console.error('Error playing YouTube video:', error)
+        // If error occurs, try again after a short delay
+        setTimeout(() => {
+          if (youtubePlayerRef.current) {
+            try {
+              youtubePlayerRef.current.playVideo()
+            } catch (retryError) {
+              console.error('Error playing YouTube video on retry:', retryError)
+            }
+          }
+        }, 500)
       }
     }
+
+    if (!isPlayerReady) {
+      console.warn('YouTube player not ready yet, waiting...')
+      // Wait a bit and try again
+      setTimeout(attemptPlay, 500)
+      return
+    }
+
+    attemptPlay()
   }
 
   const pauseYouTube = () => {
@@ -463,6 +555,7 @@ export function MediaModule({ data, onUpdate, variant = 'standalone' }: MediaMod
     setIsPlaying(false)
     setCurrentTime(0)
     setDuration(0)
+    setIsPlayerReady(false)
   }, [data.videoId, data.audioUrl])
 
   // Audio element control methods
@@ -513,14 +606,72 @@ export function MediaModule({ data, onUpdate, variant = 'standalone' }: MediaMod
     }
   }
 
-  const handlePrevious = () => {
-    // Stub for now - no playlist support yet
-    console.log('Previous track (not implemented)')
+  const handlePrevious = async () => {
+    if (!data.videoId) return
+    
+    // Extract artist name from title (format: "Artist - Song")
+    const artistMatch = data.title?.match(/^([^-]+) - (.+)$/)
+    const artistName = artistMatch ? artistMatch[1].trim() : data.channelTitle || ''
+    
+    if (!artistName) {
+      console.warn('Cannot find artist name for previous track')
+      return
+    }
+    
+    // Search for another song by the same artist
+    const result = await searchOtherSongsByArtist(
+      artistName,
+      data.channelTitle,
+      data.videoId
+    )
+    
+    if (result) {
+      onUpdate({
+        ...data,
+        title: result.title,
+        videoId: result.videoId,
+        channelTitle: result.channelTitle,
+        thumbnailUrl: result.thumbnailUrl,
+        albumArtworkUrl: undefined, // Clear to trigger new artwork search
+        isLoading: false,
+      })
+    } else {
+      console.warn('No other songs found for this artist')
+    }
   }
 
-  const handleNext = () => {
-    // Stub for now - no playlist support yet
-    console.log('Next track (not implemented)')
+  const handleNext = async () => {
+    if (!data.videoId) return
+    
+    // Extract artist name from title (format: "Artist - Song")
+    const artistMatch = data.title?.match(/^([^-]+) - (.+)$/)
+    const artistName = artistMatch ? artistMatch[1].trim() : data.channelTitle || ''
+    
+    if (!artistName) {
+      console.warn('Cannot find artist name for next track')
+      return
+    }
+    
+    // Search for another song by the same artist
+    const result = await searchOtherSongsByArtist(
+      artistName,
+      data.channelTitle,
+      data.videoId
+    )
+    
+    if (result) {
+      onUpdate({
+        ...data,
+        title: result.title,
+        videoId: result.videoId,
+        channelTitle: result.channelTitle,
+        thumbnailUrl: result.thumbnailUrl,
+        albumArtworkUrl: undefined, // Clear to trigger new artwork search
+        isLoading: false,
+      })
+    } else {
+      console.warn('No other songs found for this artist')
+    }
   }
 
   const handleShuffle = () => {
@@ -636,6 +787,7 @@ export function MediaModule({ data, onUpdate, variant = 'standalone' }: MediaMod
             isExpanded={true}
             albumArtworkUrl={data.albumArtworkUrl}
             videoThumbnailUrl={data.thumbnailUrl}
+            videoId={data.videoId}
             title={data.title}
           />
           
@@ -669,8 +821,8 @@ export function MediaModule({ data, onUpdate, variant = 'standalone' }: MediaMod
                 variant="Full"
                 isPlaying={isPlaying}
                 onPlayPause={handlePlayPause}
-                onPrevious={handlePrevious}
-                onNext={handleNext}
+                onPrevious={undefined}
+                onNext={undefined}
                 onShuffle={handleShuffle}
                 onRepeat={handleRepeat}
                 disabled={!hasMedia}

@@ -3,6 +3,7 @@ interface MediaPreviewWindowProps {
   albumArtworkUrl?: string
   videoThumbnailUrl?: string
   videoUrl?: string // Video file URL (e.g., .mp4)
+  videoId?: string // YouTube video ID for embedded video
   title?: string
   className?: string
 }
@@ -12,6 +13,7 @@ export function MediaPreviewWindow({
   albumArtworkUrl,
   videoThumbnailUrl,
   videoUrl,
+  videoId,
   title,
   className = '',
 }: MediaPreviewWindowProps) {
@@ -35,8 +37,8 @@ export function MediaPreviewWindow({
   // Expanded state: full layered design
   return (
     <div className={`media-preview-window media-preview-window--expanded ${className}`.trim()}>
-      {/* Layer 1: Video Back - Video file or thumbnail image, extends beyond bounds */}
-      {(videoUrl || videoThumbnailUrl) && (
+      {/* Layer 1: Video Back - Video file, YouTube embed, or thumbnail image, extends beyond bounds */}
+      {(videoUrl || videoThumbnailUrl || videoId) && (
         <div className="media-preview-video-back">
           {videoUrl ? (
             <video
@@ -48,14 +50,22 @@ export function MediaPreviewWindow({
               playsInline
               aria-hidden="true"
             />
-          ) : (
+          ) : videoId ? (
+            <iframe
+              src={`https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&playlist=${videoId}&mute=1&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&playsinline=1`}
+              className="media-preview-video-back-iframe"
+              allow="autoplay; encrypted-media"
+              allowFullScreen={false}
+              aria-hidden="true"
+            />
+          ) : videoThumbnailUrl ? (
             <img
               src={videoThumbnailUrl}
               alt=""
               className="media-preview-video-back-image"
               aria-hidden="true"
             />
-          )}
+          ) : null}
         </div>
       )}
 
@@ -65,7 +75,8 @@ export function MediaPreviewWindow({
         <div className="media-preview-dark-overlay" />
 
         {/* Layer 3: Background image - album artwork at 20% opacity */}
-        {albumArtworkUrl && (
+        {/* Only show blurred album artwork if no video (YouTube or thumbnail) is available */}
+        {albumArtworkUrl && !videoThumbnailUrl && !videoId && (
           <div className="media-preview-bg-image">
             <img
               src={albumArtworkUrl}

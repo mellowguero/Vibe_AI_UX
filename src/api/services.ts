@@ -270,7 +270,72 @@ export async function searchImages(
   return searchUnsplashImages(query)
 }
 
+// Album Artwork API - ChatGPT + Google Images (fallback to iTunes)
+// Uses ChatGPT to generate better search terms, then searches Google Images
+export async function searchArtworkWithChatGPT(title: string): Promise<string | null> {
+  if (!title.trim()) return null
+
+  const apiKey = import.meta.env.VITE_OPENAI_API_KEY
+  if (!apiKey) {
+    console.warn('OpenAI API key not found. Cannot use ChatGPT for artwork search.')
+    return null
+  }
+
+  try {
+    // Use ChatGPT to generate a better search query for album artwork
+    const systemMessage = {
+      role: 'system' as const,
+      content: 'You are a helpful assistant that generates search queries for finding album artwork. Given a song title (which may be in "Artist - Song" format), generate a concise search query optimized for finding the album cover art. Return ONLY the search query, nothing else. Examples: "The Beatles - Hey Jude" -> "Beatles Hey Jude album cover", "Graceland Paul Simon" -> "Paul Simon Graceland album cover".',
+    }
+
+    const userMessage = {
+      role: 'user' as const,
+      content: `Generate a search query for finding album artwork for: ${title}`,
+    }
+
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: 'gpt-3.5-turbo',
+        messages: [systemMessage, userMessage],
+        temperature: 0.3, // Lower temperature for more consistent results
+        max_tokens: 50, // Short response
+      }),
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}))
+      const errorMsg = errorData.error?.message || `HTTP ${response.status}: ${response.statusText}`
+      console.warn('ChatGPT API error for artwork search:', errorMsg)
+      return null
+    }
+
+    const data = await response.json()
+    const searchQuery = data.choices[0]?.message?.content?.trim() || title
+
+    console.log('ChatGPT generated search query for artwork:', searchQuery)
+
+    // Now search Google Images with the generated query
+    const imageResult = await searchGoogleImages(searchQuery)
+    
+    if (imageResult && imageResult.imageUrl) {
+      console.log('Found artwork via ChatGPT + Google Images:', imageResult.imageUrl)
+      return imageResult.imageUrl
+    }
+
+    return null
+  } catch (error) {
+    console.error('ChatGPT artwork search error:', error)
+    return null
+  }
+}
+
 // Album Artwork API - iTunes Search API (free, no API key required)
+// Primary search method, falls back to ChatGPT + Google Images if iTunes fails
 export async function searchAlbumArtwork(query: string, fallbackThumbnailUrl?: string): Promise<string | null> {
   if (!query.trim()) {
     return fallbackThumbnailUrl || null
@@ -288,7 +353,9 @@ export async function searchAlbumArtwork(query: string, fallbackThumbnailUrl?: s
 
     if (!response.ok) {
       console.warn('iTunes search response not OK:', response.status, response.statusText)
-      return fallbackThumbnailUrl || null
+      // Fallback to ChatGPT + Google Images
+      const chatGPTResult = await searchArtworkWithChatGPT(searchQuery)
+      return chatGPTResult || fallbackThumbnailUrl || null
     }
 
     const data = await response.json()
@@ -305,15 +372,19 @@ export async function searchAlbumArtwork(query: string, fallbackThumbnailUrl?: s
     }
 
     console.warn('No album artwork found in iTunes results for:', searchQuery)
-    return fallbackThumbnailUrl || null
+    // Fallback to ChatGPT + Google Images
+    const chatGPTResult = await searchArtworkWithChatGPT(searchQuery)
+    return chatGPTResult || fallbackThumbnailUrl || null
   } catch (error) {
     console.error('iTunes search error:', error)
-    return fallbackThumbnailUrl || null
+    // Fallback to ChatGPT + Google Images
+    const chatGPTResult = await searchArtworkWithChatGPT(query.trim())
+    return chatGPTResult || fallbackThumbnailUrl || null
   }
 }
 
 // YouTube Search API - YouTube Data API v3 (requires API key)
-export async function searchYouTubeMusic(query: string): Promise<{
+export async function searchYouTubeMusic(query: string, excludeVideoId?: string, maxResults: number = 1): Promise<{
   videoId: string
   title: string
   channelTitle?: string
@@ -343,7 +414,7 @@ export async function searchYouTubeMusic(query: string): Promise<{
     
     // YouTube Data API v3 supports CORS, so we can call it directly
     // Use videoCategoryId=10 for Music category to get better music results
-    const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(searchQuery)}&type=video&videoCategoryId=10&maxResults=1&key=${apiKey}`
+    const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(searchQuery)}&type=video&videoCategoryId=10&maxResults=${maxResults}&key=${apiKey}`
     
     console.log('Searching YouTube for:', query, '(search query:', searchQuery, ')')
     const response = await fetch(apiUrl)
@@ -356,7 +427,17 @@ export async function searchYouTubeMusic(query: string): Promise<{
     const data = await response.json()
 
     if (data.items && data.items.length > 0) {
-      const video = data.items[0]
+      // Filter out the excluded video ID if provided
+      const videos = excludeVideoId 
+        ? data.items.filter((item: any) => item.id.videoId !== excludeVideoId)
+        : data.items
+      
+      if (videos.length === 0) {
+        return null
+      }
+      
+      // If we need multiple results, return the first one (caller can handle multiple)
+      const video = videos[0]
       return {
         videoId: video.id.videoId,
         title: video.snippet.title,
@@ -368,6 +449,269 @@ export async function searchYouTubeMusic(query: string): Promise<{
     return null
   } catch (error) {
     console.error('YouTube search error:', error)
+    return null
+  }
+}
+
+// Search iTunes for songs by artist (free, no API key needed)
+async function searchSongsByArtistOniTunes(artistName: string, excludeTitle?: string): Promise<{
+  title: string
+  artistName: string
+  artworkUrl?: string
+} | null> {
+  if (!artistName) return null
+
+  try {
+    // Clean up artist name
+    const cleanArtist = artistName.replace(/\s*(VEVO|Official|Music|Channel)$/i, '').trim()
+    
+    // iTunes Search API - search for songs by artist
+    const apiUrl = `https://itunes.apple.com/search?term=${encodeURIComponent(cleanArtist)}&entity=song&limit=20`
+    
+    console.log('Searching iTunes for songs by:', cleanArtist)
+    const response = await fetch(apiUrl)
+
+    if (!response.ok) {
+      console.warn('iTunes search response not OK:', response.status, response.statusText)
+      return null
+    }
+
+    const data = await response.json()
+
+    if (data.results && data.results.length > 0) {
+      // Filter out the current song if title provided
+      const songs = excludeTitle
+        ? data.results.filter((song: any) => 
+            !song.trackName?.toLowerCase().includes(excludeTitle.toLowerCase()) &&
+            !excludeTitle.toLowerCase().includes(song.trackName?.toLowerCase() || '')
+          )
+        : data.results
+      
+      if (songs.length === 0) {
+        return null
+      }
+      
+      // Pick a random song from the results
+      const randomIndex = Math.floor(Math.random() * songs.length)
+      const song = songs[randomIndex]
+      
+      return {
+        title: `${song.artistName} - ${song.trackName}`,
+        artistName: song.artistName,
+        artworkUrl: song.artworkUrl100 || song.artworkUrl60,
+      }
+    }
+
+    return null
+  } catch (error) {
+    console.error('iTunes search error:', error)
+    return null
+  }
+}
+
+// Search for other songs by the same artist/channel
+export async function searchOtherSongsByArtist(
+  artistName: string,
+  channelTitle: string | undefined,
+  excludeVideoId: string
+): Promise<{
+  videoId: string
+  title: string
+  channelTitle?: string
+  thumbnailUrl?: string
+} | null> {
+  if (!artistName && !channelTitle) {
+    return null
+  }
+
+  // Extract just the artist name (remove "VEVO" or channel suffixes)
+  let searchQuery = artistName || channelTitle || ''
+  
+  if (!searchQuery) {
+    console.warn('No artist name or channel title provided for search')
+    return null
+  }
+  
+  // Clean up the search query - remove common channel suffixes
+  searchQuery = searchQuery.replace(/\s*(VEVO|Official|Music|Channel)$/i, '').trim()
+  
+  console.log('searchOtherSongsByArtist called with:', { artistName, channelTitle, searchQuery, excludeVideoId })
+  
+  // First, try iTunes API (free, no quota issues)
+  // Extract current song title if we have it in the artistName (format: "Artist - Song")
+  let currentTitle: string | undefined = undefined
+  if (artistName && artistName.includes(' - ')) {
+    const parts = artistName.split(' - ')
+    if (parts.length >= 2) {
+      currentTitle = parts[1].trim()
+    }
+  }
+  
+  console.log('Trying iTunes search first for artist:', searchQuery)
+  const iTunesResult = await searchSongsByArtistOniTunes(searchQuery, currentTitle)
+  
+  if (iTunesResult) {
+    console.log('iTunes found song:', iTunesResult.title)
+    // Now search YouTube for the song we found on iTunes
+    try {
+      const youtubeResult = await searchYouTubeMusic(iTunesResult.title, excludeVideoId, 1)
+      
+      if (youtubeResult) {
+        console.log('Found song via iTunes + YouTube:', youtubeResult.title)
+        return {
+          ...youtubeResult,
+          thumbnailUrl: youtubeResult.thumbnailUrl || iTunesResult.artworkUrl,
+        }
+      } else {
+        console.warn('iTunes found song but YouTube search failed (may be quota issue). Song:', iTunesResult.title)
+        // Even if YouTube search fails, we can return the iTunes result
+        // The MediaModule will try to search YouTube when it receives the title
+        return {
+          videoId: undefined, // Will be filled by MediaModule's YouTube search
+          title: iTunesResult.title,
+          channelTitle: iTunesResult.artistName,
+          thumbnailUrl: iTunesResult.artworkUrl,
+        }
+      }
+    } catch (error) {
+      console.warn('YouTube search error after iTunes success:', error)
+      // Return iTunes result anyway - MediaModule will handle YouTube search
+      return {
+        videoId: undefined, // Will be filled by MediaModule's YouTube search
+        title: iTunesResult.title,
+        channelTitle: iTunesResult.artistName,
+        thumbnailUrl: iTunesResult.artworkUrl,
+      }
+    }
+  } else {
+    console.log('iTunes search returned no results, trying YouTube fallback')
+  }
+  
+  // Fallback: Try YouTube API directly (may hit quota)
+  const searchQueries = [
+    `${searchQuery} music`, // Artist + music
+    `${searchQuery} songs`, // Artist + songs
+    searchQuery, // Just artist name
+  ]
+  
+  // Try each search query until we find results
+  for (const query of searchQueries) {
+    try {
+      const result = await searchYouTubeMusicByArtist(query, excludeVideoId)
+      
+      if (result) {
+        return result
+      }
+    } catch (error) {
+      console.warn(`Search query "${query}" failed:`, error)
+      // Continue to next query
+    }
+  }
+  
+  return null
+}
+
+// Helper function to search YouTube with multiple results
+async function searchYouTubeMusicByArtist(
+  query: string,
+  excludeVideoId: string
+): Promise<{
+  videoId: string
+  title: string
+  channelTitle?: string
+  thumbnailUrl?: string
+} | null> {
+  const apiKey = import.meta.env.VITE_YOUTUBE_API_KEY
+
+  if (!apiKey) {
+    return null
+  }
+
+  try {
+    const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&videoCategoryId=10&maxResults=10&key=${apiKey}`
+    
+    const response = await fetch(apiUrl)
+
+    if (!response.ok) {
+      // If 403, log but don't throw - let caller try other queries
+      if (response.status === 403) {
+        console.warn('YouTube API 403 for query:', query, '- may be quota/restriction issue')
+      }
+      return null
+    }
+
+    const data = await response.json()
+
+    if (data.items && data.items.length > 0) {
+      // Filter out the excluded video ID
+      const videos = data.items.filter((item: any) => item.id.videoId !== excludeVideoId)
+      
+      if (videos.length === 0) {
+        return null
+      }
+      
+      // Pick a random video from the results
+      const randomIndex = Math.floor(Math.random() * videos.length)
+      const video = videos[randomIndex]
+      
+      return {
+        videoId: video.id.videoId,
+        title: video.snippet.title,
+        channelTitle: video.snippet.channelTitle,
+        thumbnailUrl: video.snippet.thumbnails?.high?.url || video.snippet.thumbnails?.default?.url,
+      }
+    }
+
+    return null
+  } catch (error) {
+    console.error('Error in searchYouTubeMusicByArtist:', error)
+    return null
+  }
+}
+
+// YouTube Video Metadata API - Fetch video details by video ID
+export async function getYouTubeVideoMetadata(videoId: string): Promise<{
+  videoId: string
+  title: string
+  channelTitle?: string
+  thumbnailUrl?: string
+} | null> {
+  if (!videoId.trim()) return null
+
+  const apiKey = import.meta.env.VITE_YOUTUBE_API_KEY
+
+  if (!apiKey) {
+    console.warn('YouTube API key not found. Set VITE_YOUTUBE_API_KEY in .env')
+    return null
+  }
+
+  try {
+    // YouTube Data API v3 - videos endpoint to get metadata by ID
+    const apiUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${encodeURIComponent(videoId)}&key=${apiKey}`
+    
+    console.log('Fetching YouTube video metadata for:', videoId)
+    const response = await fetch(apiUrl)
+
+    if (!response.ok) {
+      console.error('YouTube video metadata response not OK:', response.status, response.statusText)
+      return null
+    }
+
+    const data = await response.json()
+
+    if (data.items && data.items.length > 0) {
+      const video = data.items[0]
+      return {
+        videoId: video.id,
+        title: video.snippet.title,
+        channelTitle: video.snippet.channelTitle,
+        thumbnailUrl: video.snippet.thumbnails?.high?.url || video.snippet.thumbnails?.default?.url,
+      }
+    }
+
+    return null
+  } catch (error) {
+    console.error('YouTube video metadata error:', error)
     return null
   }
 }
@@ -576,4 +920,3 @@ export async function chatWithAI(messages: ChatMessage[]): Promise<ChatMessage> 
     throw new Error('Failed to chat with AI. Check console for details.')
   }
 }
-
