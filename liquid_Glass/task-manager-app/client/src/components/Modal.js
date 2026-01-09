@@ -10,12 +10,15 @@ export default function Modal({ task, mode, setIsModalOpen, fetchTasks }) {
 
     const [isEdit, setIsEdit] = useState(mode === "edit" ? true : false);
     const [isLoading, setIsLoading] = useState(false);
+    // #region agent log
+    fetch('http://127.0.0.1:7242/ingest/1e5aa359-db93-455b-8285-ac7b5edaefa5',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Modal.js:13',message:'Modal state initialization',data:{isEdit:isEdit,hasUser:!!user,userUsername:user?.username,hasTask:!!task,taskUrgency:task?.urgency},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
+    // #endregion
     const [data, setData] = useState({
-        username: isEdit ? task.username : user.username,
-        title: isEdit ? task.title : "",
-        description: isEdit ? task.description : "",
-        urgency: isEdit ? task.urgency.toUpperCase() : "CASUAL",
-        date: isEdit ? task.date : new Date().toISOString().slice(0, 10),
+        username: isEdit ? (task?.username || "") : (user?.username || ""),
+        title: isEdit ? (task?.title || "") : "",
+        description: isEdit ? (task?.description || "") : "",
+        urgency: isEdit ? (task?.urgency?.toUpperCase() || "CASUAL") : "CASUAL",
+        date: isEdit ? (task?.date || new Date().toISOString().slice(0, 10)) : new Date().toISOString().slice(0, 10),
     });
 
     useEffect(() => {
@@ -64,6 +67,10 @@ export default function Modal({ task, mode, setIsModalOpen, fetchTasks }) {
         if(!isEdit) {
             submitCreate(data);
         } else {
+            if (!task || !task.id) {
+                console.error('Task not available for update');
+                return;
+            }
             submitUpdate(task.id, data);
         }
     }

@@ -10,7 +10,7 @@ export const userLogin = async (username, password) => {
         return response.data;
     } catch(err) {
         console.error(err.message);
-        return [];
+        return { err: err.response?.data?.message || err.message || "Login failed" };
     }
 }
 
@@ -24,7 +24,7 @@ export const userRegister = async (username, password) => {
         return response.data;
     } catch(err) {
         console.error(err.message);
-        return [];
+        return { err: err.response?.data?.message || err.message || "Registration failed" };
     }
 }
 

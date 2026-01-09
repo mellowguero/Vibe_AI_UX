@@ -28,6 +28,9 @@ export default function Auth() {
         try {
             if(isLogin) {
                 userLogin(username, password).then((res) => {
+					// #region agent log
+					fetch('http://127.0.0.1:7242/ingest/1e5aa359-db93-455b-8285-ac7b5edaefa5',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Auth.js:30',message:'userLogin response',data:{res:res,resType:Array.isArray(res)?'array':typeof res,hasErr:res?.err,hasUsername:!!res?.username,hasToken:!!res?.token},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'D'})}).catch(()=>{});
+					// #endregion
                     if(res.err) {
                         setError(res.err)
                     } else {
@@ -38,6 +41,9 @@ export default function Auth() {
             } else {
                 if(password === passwordConfirm) {
                     userRegister(username, password).then((res) => {
+						// #region agent log
+						fetch('http://127.0.0.1:7242/ingest/1e5aa359-db93-455b-8285-ac7b5edaefa5',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Auth.js:40',message:'userRegister response',data:{res:res,resType:Array.isArray(res)?'array':typeof res,hasErr:res?.err,hasUsername:!!res?.username,hasToken:!!res?.token},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'D'})}).catch(()=>{});
+						// #endregion
                         if(res.err) {
                             setError(res.err);
                         } else {

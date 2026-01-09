@@ -4,6 +4,9 @@ import { deleteData, updateTaskStatus } from '../services/taskApi';
 import Loading from './Loading';
 
 export default function ListItem({ task, fetchTasks, openModal }) {
+    if (!task) {
+        return null;
+    }
     const { id, title, description, urgency, completed } = task;
     const [isLoading, setIsLoading] = useState(false);
 
@@ -14,9 +17,12 @@ export default function ListItem({ task, fetchTasks, openModal }) {
     };
 
     useEffect(() => {
+		// #region agent log
+		fetch('http://127.0.0.1:7242/ingest/1e5aa359-db93-455b-8285-ac7b5edaefa5',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'ListItem.js:16',message:'useEffect resize listener added',data:{hasDeps:true},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'E'})}).catch(()=>{});
+		// #endregion
         window.addEventListener("resize", updateMedia);
         return () => window.removeEventListener("resize", updateMedia);
-    });
+    }, []);
 
     const deleteTask = async (id) => {
         const confirmDelete = window.confirm("Are you sure you want to delete this task?");

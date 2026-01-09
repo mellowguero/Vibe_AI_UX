@@ -32,14 +32,34 @@ function App() {
 	};
 
 	const fetchTasks = async () => {
+		// #region agent log
+		fetch('http://127.0.0.1:7242/ingest/1e5aa359-db93-455b-8285-ac7b5edaefa5',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.js:34',message:'fetchTasks called',data:{user:user,userUsername:user?.username,hasUser:!!user},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
+		// #endregion
+		if (!user || !user.username) {
+			console.error('User not available');
+			return;
+		}
 		await getUserTasks(user.username).then((res) => {
+			// #region agent log
+			fetch('http://127.0.0.1:7242/ingest/1e5aa359-db93-455b-8285-ac7b5edaefa5',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.js:35',message:'getUserTasks response',data:{res:res,resType:Array.isArray(res)?'array':typeof res,resLength:Array.isArray(res)?res.length:null},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'D'})}).catch(()=>{});
+			// #endregion
 			setTasks(res);
 			setIsLoading(false);
 		});
 	};
 
 	const fetchUserDetails = async () => {
+		// #region agent log
+		fetch('http://127.0.0.1:7242/ingest/1e5aa359-db93-455b-8285-ac7b5edaefa5',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.js:41',message:'fetchUserDetails called',data:{user:user,userUsername:user?.username,hasUser:!!user},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
+		// #endregion
+		if (!user || !user.username) {
+			console.error('User not available');
+			return;
+		}
         await getUserDetails(user.username).then((res) => {
+			// #region agent log
+			fetch('http://127.0.0.1:7242/ingest/1e5aa359-db93-455b-8285-ac7b5edaefa5',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.js:42',message:'getUserDetails response',data:{res:res,resType:Array.isArray(res)?'array':typeof res,hasErr:res?.err},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'D'})}).catch(()=>{});
+			// #endregion
             setUserDetails(res);
             setIsLoading(false);
         });
@@ -50,6 +70,7 @@ function App() {
 			fetchTasks();
 			fetchUserDetails();
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [user]);
 
 	const filterBySearch = (tasks, searchWord) => {
@@ -58,7 +79,7 @@ function App() {
 		}
 
 		return tasks.filter((task) => {
-			return task.title.toLowerCase().includes(searchWord.toLowerCase());
+			return task?.title?.toLowerCase().includes(searchWord.toLowerCase());
 		});
 	};
 
@@ -67,7 +88,7 @@ function App() {
 			return tasks;
 		} else {
 			return tasks.filter((task) => {
-				return task.urgency.toLowerCase() === filter.toLowerCase();
+				return task?.urgency?.toLowerCase() === filter.toLowerCase();
 			});
 		}
 	};
@@ -75,20 +96,23 @@ function App() {
 	const resetFilter = () => {
 		setSearch("");
 		setFilter("all");
-		document.getElementById("defaultTaskOption").selected = true;
-		document.getElementById("searchTaskInput").value = "";
+		const defaultOption = document.getElementById("defaultTaskOption");
+		const searchInput = document.getElementById("searchTaskInput");
+		if (defaultOption) defaultOption.selected = true;
+		if (searchInput) searchInput.value = "";
 	};
 
 	const pendingTasks = tasks.filter((task, index) => {
-		return !task.completed;
+		return task && !task.completed;
 	});
 
 	const completedTasks = tasks.filter((task, index) => {
-		return task.completed;
+		return task && task.completed;
 	});
 
 	const sortedTasks = pendingTasks.sort((a, b) => {
-		return a.id - b.id;
+		if (!a || !b) return 0;
+		return (a.id || 0) - (b.id || 0);
 	});
 		
 	return (
@@ -121,7 +145,8 @@ function App() {
 											<input 
 												onChange={(e) => {
 													setFilter("all");
-													document.getElementById("defaultTaskOption").selected = true;
+													const defaultOption = document.getElementById("defaultTaskOption");
+													if (defaultOption) defaultOption.selected = true;
 													setSearch(e.target.value);
 												}}
 												id="searchTaskInput"

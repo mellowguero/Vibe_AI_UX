@@ -14,7 +14,7 @@ const meta: Meta<typeof MediaControlButton> = {
   parameters: {
     layout: 'padded',
   },
-  tags: ['autodocs'],
+  tags: ['autodocs', '!dev'],
   argTypes: {
     disabled: {
       control: 'boolean',

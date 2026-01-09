@@ -34,7 +34,13 @@ export default function Profile() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
+        // #region agent log
+        fetch('http://127.0.0.1:7242/ingest/1e5aa359-db93-455b-8285-ac7b5edaefa5',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Profile.js:35',message:'handleSubmit called',data:{user:user,userUsername:user?.username,hasUser:!!user},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
+        // #endregion
+        if (!user || !user.username) {
+            console.error('User not available');
+            return;
+        }
         try {
             updateUserDetails(
                 user.username, 
@@ -59,7 +65,17 @@ export default function Profile() {
     }, [user]);
 
     const fetchUserDetails = async () => {
+        // #region agent log
+        fetch('http://127.0.0.1:7242/ingest/1e5aa359-db93-455b-8285-ac7b5edaefa5',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Profile.js:61',message:'fetchUserDetails called',data:{user:user,userUsername:user?.username,hasUser:!!user},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
+        // #endregion
+        if (!user || !user.username) {
+            console.error('User not available');
+            return;
+        }
         await getUserDetails(user.username).then((res) => {
+            // #region agent log
+            fetch('http://127.0.0.1:7242/ingest/1e5aa359-db93-455b-8285-ac7b5edaefa5',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Profile.js:62',message:'getUserDetails response',data:{res:res,resType:Array.isArray(res)?'array':typeof res,hasErr:res?.err},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'D'})}).catch(()=>{});
+            // #endregion
             setUserDetails(res);
             setData({
                 email: res.email,
@@ -85,20 +101,25 @@ export default function Profile() {
                             <h2 className="text-xl md:text-3xl font-bold pb-5 border-dotted border-gray-700 border-b-2 text-center">Hello, {data.first_name} 👋</h2>
 
                             {isProfileUpdated && (
-                                <div class="sm:mx-auto sm:w-full sm:max-w-sm mt-5 bg-green-100 border-t-4 border-green-500 rounded-b text-green-900 px-4 py-3 shadow-md" role="alert">
-                                    <div class="flex">
-                                        <div class="py-1"><svg class="fill-current h-6 w-6 text-green-500 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z"/></svg></div>
-                                        <div>
-                                            <p class="text-sm">Your account is updated successfully</p>
+                                <>
+                                    {/* #region agent log */}
+                                    {(() => { fetch('http://127.0.0.1:7242/ingest/1e5aa359-db93-455b-8285-ac7b5edaefa5',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Profile.js:95',message:'Rendering success message with class attribute',data:{hasClass:true,shouldBeClassName:true},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{}); return null; })()}
+                                    {/* #endregion */}
+                                    <div className="sm:mx-auto sm:w-full sm:max-w-sm mt-5 bg-green-100 border-t-4 border-green-500 rounded-b text-green-900 px-4 py-3 shadow-md" role="alert">
+                                        <div className="flex">
+                                            <div className="py-1"><svg className="fill-current h-6 w-6 text-green-500 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z"/></svg></div>
+                                            <div>
+                                                <p className="text-sm">Your account is updated successfully</p>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                </>
                             )}
                             
                             <form onSubmit={(e) => {handleSubmit(e)}} className="flex flex-col gap-5">
                                 <div className="flex flex-col gap-2">
                                     <label htmlFor="username" className="text-gray-500">Username</label>
-                                    <input type="text" name="username" id="username" className="border border-gray-500 rounded-md p-2" value={user.username} disabled/>
+                                    <input type="text" name="username" id="username" className="border border-gray-500 rounded-md p-2" value={user?.username || ""} disabled/>
                                 </div>
 
                                 <div className="flex flex-col gap-2">
