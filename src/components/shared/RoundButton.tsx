@@ -7,6 +7,7 @@ interface RoundButtonProps {
   onClick?: () => void;
   disabled?: boolean;
   className?: string;
+  variant?: 'light' | 'dark';
   // Placeholder props for future features
   iconLeft?: React.ReactNode;
   iconRight?: React.ReactNode;
@@ -20,6 +21,7 @@ export function RoundButton({
   onClick,
   disabled = false,
   className = '',
+  variant = 'light',
   // Placeholder props (not yet implemented)
   // iconLeft,
   // iconRight,
@@ -27,7 +29,7 @@ export function RoundButton({
   // loading,
   // fullWidth,
 }: RoundButtonProps) {
-  const wrapperClasses = `button-round-wrapper ${className}`.trim();
+  const wrapperClasses = `button-round-wrapper ${variant === 'dark' ? 'button-round-dark' : ''} ${className}`.trim();
   const buttonClasses = 'button-base button-round';
 
   return (

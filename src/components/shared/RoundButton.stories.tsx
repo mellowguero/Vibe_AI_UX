@@ -9,11 +9,21 @@ const meta: Meta<typeof RoundButton> = {
   },
   tags: ['autodocs'],
   argTypes: {
+    children: {
+      control: 'text',
+    },
     disabled: {
       control: 'boolean',
     },
     onClick: {
       action: 'clicked',
+    },
+    className: {
+      control: 'text',
+    },
+    variant: {
+      control: 'select',
+      options: ['light', 'dark'],
     },
   },
 };
@@ -33,14 +43,6 @@ export const Disabled: Story = {
   },
 };
 
-export const Active: Story = {
-  render: () => (
-    <div className="button-round-wrapper demo-active">
-      <RoundButton onClick={() => console.log('Round button clicked')} />
-    </div>
-  ),
-};
-
 export const WithClick: Story = {
   args: {
     onClick: () => {
@@ -49,3 +51,28 @@ export const WithClick: Story = {
   },
 };
 
+export const Dark: Story = {
+  args: {
+    variant: 'dark',
+    disabled: false,
+  },
+};
+
+export const DarkHover: Story = {
+  args: {
+    variant: 'dark',
+    disabled: false,
+  },
+  parameters: {
+    pseudo: {
+      hover: true,
+    },
+  },
+};
+
+export const DarkDisabled: Story = {
+  args: {
+    variant: 'dark',
+    disabled: true,
+  },
+};

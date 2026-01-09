@@ -146,6 +146,12 @@
   --glass-bg-round-button-hover: rgba(255, 255, 255, 0.58);
   --glass-bg-round-button-disabled: rgba(164, 164, 164, 0.24);
   
+  /* Dark mode round button backgrounds */
+  --glass-bg-round-button-dark: rgba(59, 59, 59, 0.41);
+  --glass-bg-round-button-dark-hover: rgba(36, 34, 34, 0.58);
+  --glass-bg-round-button-dark-active: rgba(55, 54, 54, 0.24);
+  --glass-bg-round-button-dark-disabled: rgba(164, 164, 164, 0.24);
+  
   --glass-border-light: rgba(255, 255, 255, 0.18);
   --glass-border-medium: rgba(255, 255, 255, 0.2);
   --glass-border-heavy: rgba(255, 255, 255, 0.25);

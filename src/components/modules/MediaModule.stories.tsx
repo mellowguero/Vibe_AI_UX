@@ -1,4 +1,3 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { MediaModule } from './MediaModule/MediaModule';
 import { mediaWithVideo, mediaLoading, mediaAudioOnly } from '../../stories/mocks';
@@ -14,6 +13,10 @@ const meta: Meta<typeof MediaModule> = {
     data: {
       control: 'object',
     },
+    variant: {
+      control: 'select',
+      options: ['standalone', 'chat'],
+    },
   },
 };
 
@@ -24,86 +27,46 @@ const mockOnUpdate = (data: any) => {
   console.log('MediaModule onUpdate:', data);
 };
 
-export const DesktopStandalone: Story = {
+export const WithVideo: Story = {
   args: {
     data: mediaWithVideo,
     onUpdate: mockOnUpdate,
+    variant: 'standalone',
   },
-  decorators: [
-    (Story) => (
-      <div style={{ width: 'fit-content' }}>
-        <Story />
-      </div>
-    ),
-  ],
 };
 
 export const Loading: Story = {
   args: {
     data: mediaLoading,
     onUpdate: mockOnUpdate,
+    variant: 'standalone',
   },
-  decorators: [
-    (Story) => (
-      <div style={{ maxWidth: '300px' }}>
-        <Story />
-      </div>
-    ),
-  ],
 };
 
 export const AudioOnly: Story = {
   args: {
     data: mediaAudioOnly,
     onUpdate: mockOnUpdate,
+    variant: 'standalone',
   },
-  decorators: [
-    (Story) => (
-      <div style={{ maxWidth: '300px' }}>
-        <Story />
-      </div>
-    ),
-  ],
 };
 
-// Nested preview (chat)
-export const NestedPreview: Story = {
-  render: () => (
-    <div className="nested-module-preview">
-      <div className="nested-module-preview-content">
-        <div className="nested-module-preview-icon">🎵</div>
-        <div className="nested-module-preview-text">
-          <div className="nested-module-preview-title">Music Player</div>
-          <div className="nested-module-preview-subtitle">Bob Dylan - Like a Rolling Stone</div>
-        </div>
-      </div>
-    </div>
-  ),
-};
-
-// Nested expanded (chat)
-export const NestedExpanded: Story = {
+export const ChatVariant: Story = {
   args: {
     data: mediaWithVideo,
     onUpdate: mockOnUpdate,
+    variant: 'chat',
   },
-  decorators: [
-    (Story) => (
-      <div className="media-module-nested" style={{ maxWidth: '400px' }}>
-        <div className="media-title-nested">Bob Dylan - Like a Rolling Stone</div>
-        <div className="media-channel-nested">BobDylanVEVO</div>
-        <div className="media-embed-nested">
-          <div className="youtube-thumbnail-placeholder">
-            <div className="play-button">▶</div>
-            <div className="youtube-logo">YouTube</div>
-          </div>
-        </div>
-      </div>
-    ),
-  ],
 };
 
-// Note: Sub-components (MediaControls, PlayButton, MediaControlButton) 
-// have their own stories under Components/Buttons/ for individual inspection
-// SongTitle component has its own stories under Components/SongTitle
-
+export const Empty: Story = {
+  args: {
+    data: {
+      title: '',
+      audioUrl: '',
+      isLoading: false,
+    },
+    onUpdate: mockOnUpdate,
+    variant: 'standalone',
+  },
+};
