@@ -1,3 +1,6 @@
+import React from 'react'
+import type { MediaPreviewWindowLayout } from '../../../types/layout'
+
 interface MediaPreviewWindowProps {
   isExpanded: boolean
   albumArtworkUrl?: string
@@ -6,6 +9,7 @@ interface MediaPreviewWindowProps {
   videoId?: string // YouTube video ID for embedded video
   title?: string
   className?: string
+  layout?: MediaPreviewWindowLayout
 }
 
 export function MediaPreviewWindow({
@@ -16,11 +20,64 @@ export function MediaPreviewWindow({
   videoId,
   title,
   className = '',
+  layout,
 }: MediaPreviewWindowProps) {
+  // Build dynamic styles from layout config
+  const buildStyle = (): React.CSSProperties => {
+    const style: React.CSSProperties = {}
+    
+    if (layout?.spacing) {
+      if (layout.spacing.margin) style.margin = layout.spacing.margin
+      if (layout.spacing.marginTop) style.marginTop = layout.spacing.marginTop
+      if (layout.spacing.marginRight) style.marginRight = layout.spacing.marginRight
+      if (layout.spacing.marginBottom) style.marginBottom = layout.spacing.marginBottom
+      if (layout.spacing.marginLeft) style.marginLeft = layout.spacing.marginLeft
+      if (layout.spacing.padding) style.padding = layout.spacing.padding
+      if (layout.spacing.paddingTop) style.paddingTop = layout.spacing.paddingTop
+      if (layout.spacing.paddingRight) style.paddingRight = layout.spacing.paddingRight
+      if (layout.spacing.paddingBottom) style.paddingBottom = layout.spacing.paddingBottom
+      if (layout.spacing.paddingLeft) style.paddingLeft = layout.spacing.paddingLeft
+      if (layout.spacing.gap) style.gap = layout.spacing.gap
+    }
+    
+    if (layout?.size) {
+      if (layout.size.width) style.width = layout.size.width
+      if (layout.size.height) style.height = layout.size.height
+      if (layout.size.minWidth) style.minWidth = layout.size.minWidth
+      if (layout.size.minHeight) style.minHeight = layout.size.minHeight
+      if (layout.size.maxWidth) style.maxWidth = layout.size.maxWidth
+      if (layout.size.maxHeight) style.maxHeight = layout.size.maxHeight
+    }
+    
+    if (layout?.aspectRatio) {
+      style.aspectRatio = layout.aspectRatio
+    }
+    
+    if (layout?.borderRadius) {
+      style.borderRadius = layout.borderRadius
+    }
+    
+    if (layout?.positioning) {
+      if (layout.positioning.position) style.position = layout.positioning.position
+      if (layout.positioning.top !== undefined) style.top = layout.positioning.top
+      if (layout.positioning.right !== undefined) style.right = layout.positioning.right
+      if (layout.positioning.bottom !== undefined) style.bottom = layout.positioning.bottom
+      if (layout.positioning.left !== undefined) style.left = layout.positioning.left
+      if (layout.positioning.zIndex !== undefined) style.zIndex = layout.positioning.zIndex
+    }
+    
+    return style
+  }
+  
+  const dynamicStyle = buildStyle()
+  
   if (!isExpanded) {
     // Collapsed state: just the album artwork
     return (
-      <div className={`media-preview-window media-preview-window--collapsed ${className}`.trim()}>
+      <div 
+        className={`media-preview-window media-preview-window--collapsed ${className}`.trim()}
+        style={dynamicStyle}
+      >
         {albumArtworkUrl ? (
           <img
             src={albumArtworkUrl}
@@ -36,7 +93,10 @@ export function MediaPreviewWindow({
 
   // Expanded state: full layered design
   return (
-    <div className={`media-preview-window media-preview-window--expanded ${className}`.trim()}>
+    <div 
+      className={`media-preview-window media-preview-window--expanded ${className}`.trim()}
+      style={dynamicStyle}
+    >
       {/* Layer 1: Video Back - Video file, YouTube embed, or thumbnail image, extends beyond bounds */}
       {(videoUrl || videoThumbnailUrl || videoId) && (
         <div className="media-preview-video-back">

@@ -146,7 +146,8 @@
 }
 
 .module-card.chat-module-card:hover .module-resize-handle,
-.module-card.chat-module-card:has(:focus) .module-resize-handle {
+.module-card.chat-module-card:has(:focus) .module-resize-handle,
+.media-module--standalone:hover .module-resize-handle {
   background-color: rgba(76, 141, 255, 0.3);
 }
 
@@ -161,10 +162,10 @@
 /* Media Controls Styles */
 .media-controls {
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-base, 1rem);
+  flex-direction: var(--layout-controls-orientation, row);
+  align-items: var(--layout-controls-align, center);
+  justify-content: var(--layout-controls-justify, center);
+  gap: var(--layout-controls-gap, var(--spacing-base, 1rem));
   flex-wrap: nowrap;
 }
 

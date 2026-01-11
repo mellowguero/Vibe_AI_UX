@@ -338,6 +338,75 @@
   --media-preview-bg-width: 100.36%;
   
   /* ============================================
+     LAYOUT - SPACING
+     ============================================ */
+  
+  /* Component spacing defaults */
+  --layout-gap-xs: var(--spacing-xs, 0.25rem);
+  --layout-gap-sm: var(--spacing-sm, 0.5rem);
+  --layout-gap-md: var(--spacing-md, 0.75rem);
+  --layout-gap-base: var(--spacing-base, 1rem);
+  --layout-gap-lg: var(--spacing-lg, 1.5rem);
+  --layout-gap-xl: var(--spacing-xl, 2rem);
+  
+  /* Component margin/padding defaults */
+  --layout-margin-default: var(--spacing-base, 1rem);
+  --layout-padding-default: var(--spacing-base, 1rem);
+  
+  /* ============================================
+     LAYOUT - MEDIA PREVIEW WINDOW
+     ============================================ */
+  
+  --layout-media-preview-width: var(--size-media-preview-expanded-width, 280px);
+  --layout-media-preview-height: var(--size-media-preview-expanded-height, 192px);
+  --layout-media-preview-aspect-ratio: 280 / 192;
+  --layout-media-preview-border-radius: var(--radius-lg, 6px);
+  --layout-media-preview-overlay-opacity: 0.52;
+  
+  /* ============================================
+     LAYOUT - AUDIO PROGRESS BAR
+     ============================================ */
+  
+  --layout-progress-bar-height: 4px;
+  --layout-progress-bar-handle-size: 12px;
+  --layout-progress-bar-gap: var(--spacing-sm, 0.5rem);
+  
+  /* ============================================
+     LAYOUT - SONG TITLE
+     ============================================ */
+  
+  --layout-song-title-gap: var(--spacing-sm, 0.5rem);
+  --layout-song-title-text-align: left;
+  --layout-song-title-time-position: inline;
+  
+  /* ============================================
+     LAYOUT - MEDIA CONTROLS
+     ============================================ */
+  
+  --layout-controls-gap: var(--spacing-md, 0.75rem);
+  --layout-controls-orientation: row;
+  --layout-controls-align: center;
+  --layout-controls-justify: center;
+  
+  /* ============================================
+     LAYOUT - MEDIA MODULE CONTAINER
+     ============================================ */
+  
+  --layout-module-direction: column;
+  --layout-module-gap: var(--spacing-lg, 1.5rem);
+  --layout-module-align: stretch;
+  --layout-module-justify: flex-start;
+  
+  /* ============================================
+     LAYOUT - MEDIA CONTROLLER CONTAINER
+     ============================================ */
+  
+  --layout-controller-direction: column;
+  --layout-controller-gap: var(--spacing-md, 0.75rem);
+  --layout-controller-align: center;
+  --layout-controller-justify: center;
+  
+  /* ============================================
      BREAKPOINTS (for reference in media queries)
      ============================================ */
   

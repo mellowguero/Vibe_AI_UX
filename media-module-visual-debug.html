@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MediaModule Visual Debug</title>
+  <link rel="stylesheet" href="src/styles/tokens.css">
+  <link rel="stylesheet" href="src/styles/modules.css">
+  <link rel="stylesheet" href="src/styles/gui.css">
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: rgba(66, 66, 66, 1);
+      color: #333;
+      padding: 2rem;
+    }
+
+    .debug-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .debug-header {
+      margin-bottom: 2rem;
+    }
+
+    .debug-header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #1a1a1a;
+    }
+
+    .debug-header p {
+      font-size: 1rem;
+      color: #666;
+    }
+
+    #media-module-root {
+      padding: 1rem;
+      font-family: system-ui, -apple-system, sans-serif;
+      display: flex;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="debug-container">
+    <div class="debug-header">
+      <h1>MediaModule Visual Debug</h1>
+      <p>View the MediaModule with all components visible for layout and alignment debugging</p>
+    </div>
+
+    <div id="media-module-root"></div>
+  </div>
+
+  <script type="module" src="/src/media-module-visual-debug.tsx"></script>
+</body>
+</html>

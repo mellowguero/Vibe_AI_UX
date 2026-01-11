@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
+import type { SongTitleLayout } from '../../../types/layout'
 
 export interface SongTitleProps {
   title: string
@@ -7,6 +8,7 @@ export interface SongTitleProps {
   isActive?: boolean
   playerRef?: React.RefObject<HTMLIFrameElement | HTMLAudioElement>
   className?: string
+  layout?: SongTitleLayout
 }
 
 // Declare YouTube IFrame API types
@@ -34,10 +36,66 @@ export function SongTitle({
   isActive = false,
   playerRef,
   className = '',
+  layout,
 }: SongTitleProps) {
   const [currentTime, setCurrentTime] = useState<number>(propCurrentTime ?? 0)
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const youtubePlayerRef = useRef<any>(null)
+
+  // Build dynamic styles from layout config
+  const buildStyle = (): React.CSSProperties => {
+    const style: React.CSSProperties = {}
+    
+    if (layout?.spacing) {
+      if (layout.spacing.margin) style.margin = layout.spacing.margin
+      if (layout.spacing.marginTop) style.marginTop = layout.spacing.marginTop
+      if (layout.spacing.marginRight) style.marginRight = layout.spacing.marginRight
+      if (layout.spacing.marginBottom) style.marginBottom = layout.spacing.marginBottom
+      if (layout.spacing.marginLeft) style.marginLeft = layout.spacing.marginLeft
+      if (layout.spacing.padding) style.padding = layout.spacing.padding
+      if (layout.spacing.paddingTop) style.paddingTop = layout.spacing.paddingTop
+      if (layout.spacing.paddingRight) style.paddingRight = layout.spacing.paddingRight
+      if (layout.spacing.paddingBottom) style.paddingBottom = layout.spacing.paddingBottom
+      if (layout.spacing.paddingLeft) style.paddingLeft = layout.spacing.paddingLeft
+      if (layout.spacing.gap) style.gap = layout.spacing.gap
+    }
+    
+    if (layout?.size) {
+      if (layout.size.width) style.width = layout.size.width
+      if (layout.size.height) style.height = layout.size.height
+      if (layout.size.minWidth) style.minWidth = layout.size.minWidth
+      if (layout.size.minHeight) style.minHeight = layout.size.minHeight
+      if (layout.size.maxWidth) style.maxWidth = layout.size.maxWidth
+      if (layout.size.maxHeight) style.maxHeight = layout.size.maxHeight
+    }
+    
+    if (layout?.flex) {
+      if (layout.flex.direction) style.flexDirection = layout.flex.direction
+      if (layout.flex.align) style.alignItems = layout.flex.align
+      if (layout.flex.justify) style.justifyContent = layout.flex.justify
+      if (layout.flex.wrap) style.flexWrap = layout.flex.wrap
+      if (layout.flex.grow !== undefined) style.flexGrow = layout.flex.grow
+      if (layout.flex.shrink !== undefined) style.flexShrink = layout.flex.shrink
+      if (layout.flex.basis) style.flexBasis = layout.flex.basis
+    }
+    
+    if (layout?.textAlign) {
+      style.textAlign = layout.textAlign
+    }
+    
+    if (layout?.positioning) {
+      if (layout.positioning.position) style.position = layout.positioning.position
+      if (layout.positioning.top !== undefined) style.top = layout.positioning.top
+      if (layout.positioning.right !== undefined) style.right = layout.positioning.right
+      if (layout.positioning.bottom !== undefined) style.bottom = layout.positioning.bottom
+      if (layout.positioning.left !== undefined) style.left = layout.positioning.left
+      if (layout.positioning.zIndex !== undefined) style.zIndex = layout.positioning.zIndex
+    }
+    
+    return style
+  }
+  
+  const dynamicStyle = buildStyle()
 
   // Parse artist and song from title
   const parseTitle = (titleStr: string): { artist: string; song: string } => {
@@ -217,7 +275,7 @@ export function SongTitle({
   // Render based on variant
   if (variant === 'master') {
     return (
-      <div className={classes}>
+      <div className={classes} style={dynamicStyle}>
         <div className="song-title-title-container">
           <span className="song-title-title">{song}</span>
           {artist && (
@@ -237,7 +295,7 @@ export function SongTitle({
 
   // Chat and Collapsed variants (stacked layout)
   return (
-    <div className={classes}>
+    <div className={classes} style={dynamicStyle}>
       <div className="song-title-titles">
         <div className="song-title-title">{song}</div>
         {artist && <div className="song-title-artist">{artist}</div>}

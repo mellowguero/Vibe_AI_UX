@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import type { MediaModuleData } from '../../../types/modules'
+import type { MediaModuleLayout } from '../../../types/layout'
 import { searchYouTubeMusic, searchAlbumArtwork, searchOtherSongsByArtist } from '../../../api/services'
 import { MediaPreviewWindow } from './MediaPreviewWindow'
 import { extractDominantColor, rgbToRgba } from '../../../utils/colorExtraction'
@@ -12,6 +13,8 @@ interface MediaModuleProps {
   data: MediaModuleData
   onUpdate: (data: MediaModuleData) => void
   variant?: 'chat' | 'standalone'
+  layout?: MediaModuleLayout
+  debugCurrentTime?: number // For visual debugging - overrides internal currentTime
 }
 
 // Declare YouTube IFrame API types
@@ -49,7 +52,7 @@ declare global {
   }
 }
 
-export function MediaModule({ data, onUpdate, variant = 'standalone' }: MediaModuleProps) {
+export function MediaModule({ data, onUpdate, variant = 'standalone', layout, debugCurrentTime }: MediaModuleProps) {
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const albumArtworkTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const colorExtractionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -58,11 +61,79 @@ export function MediaModule({ data, onUpdate, variant = 'standalone' }: MediaMod
   // Store extracted color for future use (e.g., timebar)
   const [extractedColor, setExtractedColor] = useState<string | null>(null)
   
+  // Build dynamic styles from layout config
+  const buildModuleStyle = (): React.CSSProperties => {
+    const style: React.CSSProperties = {}
+    
+    if (layout?.spacing) {
+      if (layout.spacing.margin) style.margin = layout.spacing.margin
+      if (layout.spacing.marginTop) style.marginTop = layout.spacing.marginTop
+      if (layout.spacing.marginRight) style.marginRight = layout.spacing.marginRight
+      if (layout.spacing.marginBottom) style.marginBottom = layout.spacing.marginBottom
+      if (layout.spacing.marginLeft) style.marginLeft = layout.spacing.marginLeft
+      if (layout.spacing.padding) style.padding = layout.spacing.padding
+      if (layout.spacing.paddingTop) style.paddingTop = layout.spacing.paddingTop
+      if (layout.spacing.paddingRight) style.paddingRight = layout.spacing.paddingRight
+      if (layout.spacing.paddingBottom) style.paddingBottom = layout.spacing.paddingBottom
+      if (layout.spacing.paddingLeft) style.paddingLeft = layout.spacing.paddingLeft
+      if (layout.spacing.gap) style.gap = layout.spacing.gap
+    }
+    
+    if (layout?.size) {
+      if (layout.size.width) style.width = layout.size.width
+      if (layout.size.height) style.height = layout.size.height
+      if (layout.size.minWidth) style.minWidth = layout.size.minWidth
+      if (layout.size.minHeight) style.minHeight = layout.size.minHeight
+      if (layout.size.maxWidth) style.maxWidth = layout.size.maxWidth
+      if (layout.size.maxHeight) style.maxHeight = layout.size.maxHeight
+    }
+    
+    if (layout?.flex) {
+      if (layout.flex.direction) style.flexDirection = layout.flex.direction
+      if (layout.flex.align) style.alignItems = layout.flex.align
+      if (layout.flex.justify) style.justifyContent = layout.flex.justify
+      if (layout.flex.wrap) style.flexWrap = layout.flex.wrap
+      if (layout.flex.grow !== undefined) style.flexGrow = layout.flex.grow
+      if (layout.flex.shrink !== undefined) style.flexShrink = layout.flex.shrink
+      if (layout.flex.basis) style.flexBasis = layout.flex.basis
+    }
+    
+    if (layout?.grid) {
+      if (layout.grid.columns) style.gridTemplateColumns = layout.grid.columns
+      if (layout.grid.rows) style.gridTemplateRows = layout.grid.rows
+      if (layout.grid.gap) style.gap = layout.grid.gap
+      if (layout.grid.columnGap) style.columnGap = layout.grid.columnGap
+      if (layout.grid.rowGap) style.rowGap = layout.grid.rowGap
+    }
+    
+    if (layout?.positioning) {
+      if (layout.positioning.position) style.position = layout.positioning.position
+      if (layout.positioning.top !== undefined) style.top = layout.positioning.top
+      if (layout.positioning.right !== undefined) style.right = layout.positioning.right
+      if (layout.positioning.bottom !== undefined) style.bottom = layout.positioning.bottom
+      if (layout.positioning.left !== undefined) style.left = layout.positioning.left
+      if (layout.positioning.zIndex !== undefined) style.zIndex = layout.positioning.zIndex
+    }
+    
+    return style
+  }
+  
+  const moduleStyle = buildModuleStyle()
+  
   // Playback state
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
   const [isPlayerReady, setIsPlayerReady] = useState(false)
+  
+  // Use debugCurrentTime if provided, otherwise use internal currentTime
+  const displayCurrentTime = debugCurrentTime !== undefined ? debugCurrentTime : currentTime
+  
+  // Resize state
+  const [moduleWidth, setModuleWidth] = useState<number | null>(null)
+  const [isResizing, setIsResizing] = useState(false)
+  const resizeStartXRef = useRef<number>(0)
+  const resizeStartWidthRef = useRef<number>(0)
   
   // Refs
   const moduleRef = useRef<HTMLDivElement | null>(null)
@@ -684,6 +755,53 @@ export function MediaModule({ data, onUpdate, variant = 'standalone' }: MediaMod
     console.log('Repeat (not implemented)')
   }
 
+  // Resize handlers
+  const handleResizeStart = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    
+    if (moduleRef.current) {
+      const rect = moduleRef.current.getBoundingClientRect()
+      resizeStartXRef.current = e.clientX
+      resizeStartWidthRef.current = rect.width
+      setIsResizing(true)
+    }
+  }
+
+  // Handle resize during mouse move
+  useEffect(() => {
+    if (!isResizing) return
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (moduleRef.current) {
+        const deltaX = e.clientX - resizeStartXRef.current
+        const MIN_WIDTH = 280
+        const MAX_WIDTH = 800
+        const newWidth = Math.max(MIN_WIDTH, Math.min(MAX_WIDTH, resizeStartWidthRef.current + deltaX))
+        setModuleWidth(newWidth)
+      }
+    }
+
+    const handleMouseUp = () => {
+      setIsResizing(false)
+    }
+
+    document.addEventListener('mousemove', handleMouseMove)
+    document.addEventListener('mouseup', handleMouseUp)
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove)
+      document.removeEventListener('mouseup', handleMouseUp)
+    }
+  }, [isResizing])
+
+  // Update moduleStyle to include width if resized
+  const finalModuleStyle = {
+    ...moduleStyle,
+    ...(moduleWidth !== null ? { width: `${moduleWidth}px`, minWidth: '280px', maxWidth: '800px' } : {}),
+    position: 'relative' as const,
+  }
+
   // Determine if media is available
   const hasMedia = !!(data.videoId || data.audioUrl)
   const showPlayerComponents = hasMedia && !data.isLoading && variant === 'standalone'
@@ -692,7 +810,7 @@ export function MediaModule({ data, onUpdate, variant = 'standalone' }: MediaMod
   // Chat variant layout
   if (variant === 'chat' && showChatPlayer) {
     return (
-      <div className="media-module media-module--chat" ref={moduleRef}>
+      <div className="media-module media-module--chat" ref={moduleRef} style={moduleStyle}>
         <div className="media-module-chat-container">
           <MediaPreviewWindow
             isExpanded={false}
@@ -703,7 +821,7 @@ export function MediaModule({ data, onUpdate, variant = 'standalone' }: MediaMod
           <SongTitle
             title={data.title || ''}
             variant="chat"
-            currentTime={currentTime}
+            currentTime={displayCurrentTime}
             isActive={isPlaying}
           />
           <PlayButton
@@ -716,11 +834,18 @@ export function MediaModule({ data, onUpdate, variant = 'standalone' }: MediaMod
         {data.videoId && (
           <div 
             ref={youtubePlayerContainerRef} 
+            className="youtube-player-hidden"
             style={{ 
-              position: 'absolute', 
-              left: '-9999px', 
-              width: '320px', 
-              height: '240px' 
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              width: '320px',
+              height: '240px',
+              opacity: 0,
+              pointerEvents: 'none',
+              zIndex: -1,
+              overflow: 'hidden',
+              clipPath: 'inset(50%)',
             }} 
           />
         )}
@@ -754,7 +879,7 @@ export function MediaModule({ data, onUpdate, variant = 'standalone' }: MediaMod
 
   // Standalone variant layout
   return (
-    <div className="media-module media-module--standalone" ref={moduleRef}>
+    <div className="media-module media-module--standalone" ref={moduleRef} style={finalModuleStyle}>
       {/* Input field - only show when no media is available */}
       {!hasMedia && (
         <input
@@ -789,6 +914,7 @@ export function MediaModule({ data, onUpdate, variant = 'standalone' }: MediaMod
             videoThumbnailUrl={data.thumbnailUrl}
             videoId={data.videoId}
             title={data.title}
+            layout={layout?.previewWindowLayout}
           />
           
           {/* Media Controller Container */}
@@ -796,13 +922,14 @@ export function MediaModule({ data, onUpdate, variant = 'standalone' }: MediaMod
             {/* Progress Bar Section */}
             <div className="media-module-controller-progress">
               <AudioProgressBar
-                progress={duration > 0 ? currentTime / duration : 0}
+                progress={duration > 0 ? displayCurrentTime / duration : 0}
                 duration={duration}
-                currentTime={currentTime}
+                currentTime={displayCurrentTime}
                 onSeek={handleSeek}
                 color={extractedColor || undefined}
                 showHandle={true}
                 disabled={!hasMedia}
+                layout={layout?.progressBarLayout}
               />
             </div>
             
@@ -812,8 +939,9 @@ export function MediaModule({ data, onUpdate, variant = 'standalone' }: MediaMod
                 <SongTitle
                   title={data.title || ''}
                   variant="master"
-                  currentTime={currentTime}
+                  currentTime={displayCurrentTime}
                   isActive={isPlaying}
+                  layout={layout?.songTitleLayout}
                 />
               </div>
               
@@ -826,6 +954,7 @@ export function MediaModule({ data, onUpdate, variant = 'standalone' }: MediaMod
                 onShuffle={handleShuffle}
                 onRepeat={handleRepeat}
                 disabled={!hasMedia}
+                layout={layout?.controlsLayout}
               />
             </div>
           </div>
@@ -836,11 +965,18 @@ export function MediaModule({ data, onUpdate, variant = 'standalone' }: MediaMod
       {data.videoId && (
         <div 
           ref={youtubePlayerContainerRef} 
+          className="youtube-player-hidden"
           style={{ 
-            position: 'absolute', 
-            left: '-9999px', 
-            width: '320px', 
-            height: '240px' 
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '320px',
+            height: '240px',
+            opacity: 0,
+            pointerEvents: 'none',
+            zIndex: -1,
+            overflow: 'hidden',
+            clipPath: 'inset(50%)',
           }} 
         />
       )}
@@ -910,6 +1046,14 @@ export function MediaModule({ data, onUpdate, variant = 'standalone' }: MediaMod
         <div style={{ padding: '0.5rem', fontSize: '0.75rem', color: '#666', marginTop: '0.5rem' }}>
           Enter a song title to search YouTube, or add a manual audio URL below.
         </div>
+      )}
+
+      {/* Resize handle for standalone variant */}
+      {variant === 'standalone' && (
+        <div
+          className="module-resize-handle"
+          onMouseDown={handleResizeStart}
+        />
       )}
     </div>
   )
