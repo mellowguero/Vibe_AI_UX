@@ -18,9 +18,10 @@ interface ModuleCardProps {
   onDelete: () => void
   onExtractModule?: (moduleType: ModuleType, moduleData: any, position: { x: number; y: number }) => void
   onResizeStart?: (e: React.MouseEvent, moduleId: string) => void
+  onMouseDown?: (e: React.MouseEvent, moduleId: string, moduleX: number, moduleY: number) => void
 }
 
-export function ModuleCard({ module, isSelected, onSelect, onUpdate, moduleRef, onBringToFront, onDelete, onExtractModule, onResizeStart }: ModuleCardProps) {
+export function ModuleCard({ module, isSelected, onSelect, onUpdate, moduleRef, onBringToFront, onDelete, onExtractModule, onResizeStart, onMouseDown }: ModuleCardProps) {
   const cardRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -79,6 +80,11 @@ export function ModuleCard({ module, isSelected, onSelect, onUpdate, moduleRef, 
     >
       <div
         className="module-header"
+        onMouseDown={(e) => {
+          if (onMouseDown) {
+            onMouseDown(e, module.id, module.x, module.y)
+          }
+        }}
         onClick={(e) => {
           e.stopPropagation()
           onSelect()

@@ -37,6 +37,11 @@ function App() {
   const [resizingModuleId, setResizingModuleId] = useState<string | null>(null)
   const [resizeStartX, setResizeStartX] = useState(0)
   const [resizeStartWidth, setResizeStartWidth] = useState(0)
+  const [draggingModuleId, setDraggingModuleId] = useState<string | null>(null)
+  const [dragStartX, setDragStartX] = useState(0)
+  const [dragStartY, setDragStartY] = useState(0)
+  const [dragOffsetX, setDragOffsetX] = useState(0)
+  const [dragOffsetY, setDragOffsetY] = useState(0)
   const [pendingComposition, setPendingComposition] = useState<PendingComposition>(null)
   const canvasRef = useRef<HTMLDivElement>(null)
   const moduleRefs = useRef<Map<string, HTMLDivElement>>(new Map())
@@ -327,9 +332,26 @@ function App() {
       return
     }
     
-    // Only handle selection, no dragging
-    setSelectedModuleId(moduleId)
-    bringToFront(moduleId)
+    // Don't start dragging if clicking on resize handle
+    if (target.classList.contains('module-resize-handle') || target.closest('.module-resize-handle')) {
+      return
+    }
+    
+    // Start dragging
+    if (canvasRef.current) {
+      e.preventDefault() // Prevent text selection while dragging
+      const canvasRect = canvasRef.current.getBoundingClientRect()
+      const mouseX = e.clientX - canvasRect.left
+      const mouseY = e.clientY - canvasRect.top
+      
+      setDraggingModuleId(moduleId)
+      setDragStartX(mouseX)
+      setDragStartY(mouseY)
+      setDragOffsetX(mouseX - moduleX)
+      setDragOffsetY(mouseY - moduleY)
+      setSelectedModuleId(moduleId)
+      bringToFront(moduleId)
+    }
   }
 
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -347,6 +369,21 @@ function App() {
             : module
         )
       )
+    } else if (canvasRef.current && draggingModuleId) {
+      const canvasRect = canvasRef.current.getBoundingClientRect()
+      const mouseX = e.clientX - canvasRect.left
+      const mouseY = e.clientY - canvasRect.top
+
+      const newX = mouseX - dragOffsetX
+      const newY = mouseY - dragOffsetY
+
+      setModules((prevModules) =>
+        prevModules.map((module) =>
+          module.id === draggingModuleId
+            ? { ...module, x: Math.max(0, newX), y: Math.max(0, newY) }
+            : module
+        )
+      )
     }
   }
 
@@ -360,7 +397,7 @@ function App() {
   }
 
   const handleMouseUp = () => {
-    // No-op
+    setDraggingModuleId(null)
   }
 
   const handleResizeStart = (e: React.MouseEvent, moduleId: string) => {
@@ -429,6 +466,7 @@ function App() {
               onDelete={() => deleteModule(module.id)}
               onExtractModule={handleExtractModule}
               onResizeStart={handleResizeStart}
+              onMouseDown={(e) => handleMouseDown(e, module.id, module.x, module.y)}
             />
           ))}
           {pendingComposition && (

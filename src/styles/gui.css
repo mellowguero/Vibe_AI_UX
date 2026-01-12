@@ -30,12 +30,16 @@
   font-weight: 600;
   color: #666;
   border-radius: 6px 6px 0 0;
-  cursor: pointer;
+  cursor: grab;
   user-select: none;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.module-header:active {
+  cursor: grabbing;
 }
 
 .module-close-button {
