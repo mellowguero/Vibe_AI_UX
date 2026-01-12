@@ -393,7 +393,7 @@
      ============================================ */
   
   --layout-module-direction: column;
-  --layout-module-gap: var(--spacing-lg, 1.5rem);
+  --layout-module-gap: 0px;
   --layout-module-align: stretch;
   --layout-module-justify: flex-start;
   

@@ -276,18 +276,24 @@ export function SongTitle({
   if (variant === 'master') {
     return (
       <div className={classes} style={dynamicStyle}>
-        <div className="song-title-title-container">
-          <span className="song-title-title">{song}</span>
+        <div className="song-title-song-artist-wrapper">
+          <div className="song-title-title-wrapper">
+            <span className="song-title-title">{song}</span>
+          </div>
           {artist && (
             <>
-              <span className="song-title-separator"> - </span>
-              <span className="song-title-artist">{artist}</span>
+              <span className="song-title-separator">-</span>
+              <div className="song-title-artist-wrapper">
+                <span className="song-title-artist">{artist}</span>
+              </div>
             </>
           )}
         </div>
         <div className="song-title-time-container">
           <span className="song-title-separator">|</span>
-          <span className="song-title-time">{formatTime(currentTime)}</span>
+          <div className="song-title-time-wrapper">
+            <span className="song-title-time">{formatTime(currentTime)}</span>
+          </div>
         </div>
       </div>
     )
@@ -296,13 +302,19 @@ export function SongTitle({
   // Chat and Collapsed variants (stacked layout)
   return (
     <div className={classes} style={dynamicStyle}>
-      <div className="song-title-titles">
-        <div className="song-title-title">{song}</div>
-        {artist && <div className="song-title-artist">{artist}</div>}
+      <div className="song-title-song-artist-wrapper">
+        <div className="song-title-title-wrapper">
+          <div className="song-title-title">{song}</div>
+        </div>
+        {artist && (
+          <div className="song-title-artist-wrapper">
+            <div className="song-title-artist">{artist}</div>
+          </div>
+        )}
       </div>
       {variant === 'chat' && (
-        <div className="song-title-time">
-          {formatTime(currentTime)}
+        <div className="song-title-time-wrapper">
+          <span className="song-title-time">{formatTime(currentTime)}</span>
         </div>
       )}
     </div>
