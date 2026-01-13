@@ -1075,7 +1075,7 @@
   min-width: 0;
   overflow: hidden;
   /* Debug background */
-  background: rgba(212, 53, 191, 0.36);
+  background: rgba(212, 53, 191, 0);
 }
 
 /* Song Title Wrapper */
@@ -1085,7 +1085,7 @@
   justify-content: center;
   flex-shrink: 0;
   /* Debug background */
-  background: #23a823;
+  background: rgba(35, 168, 35, 0);
 }
 
 .song-title--master .song-title-title {
@@ -1125,7 +1125,7 @@
   min-width: 0;
   overflow: hidden;
   /* Debug background */
-  background: #4236c7;
+  background: rgba(66, 54, 199, 0);
 }
 
 .song-title--master .song-title-artist {
@@ -1605,7 +1605,7 @@
 }
 
 .media-module-controller-song-title {
-  background: var(--color-song-title-pill-bg, rgba(244, 78, 78, 1));
+  background: var(--color-song-title-pill-bg, rgba(244, 78, 78, 0));
   border-radius: var(--radius-song-title-pill, 0px);
   width: 100%;
   height: 40px;

@@ -1,6 +1,28 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import React from 'react';
 import { MediaModule } from './MediaModule/MediaModule';
 import { mediaWithVideo, mediaLoading, mediaAudioOnly } from '../../stories/mocks';
+
+const darkGlassDecorator = (Story: React.ComponentType) => (
+  <div
+    style={{
+      backgroundImage: 'url(https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1200&q=80)',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      padding: '2rem',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      minHeight: '200px',
+      // Override light glass variables with dark glass variables
+      '--glass-bg-light': 'rgba(42, 42, 42, 0.35)',
+      '--glass-border-light': 'rgba(255, 255, 255, 0.1)',
+      '--color-media-chat-bg': 'rgba(42, 42, 42, 0.7)',
+    } as React.CSSProperties}
+  >
+    <Story />
+  </div>
+);
 
 const meta: Meta<typeof MediaModule> = {
   title: 'Modules/MediaModule',
@@ -9,6 +31,7 @@ const meta: Meta<typeof MediaModule> = {
     layout: 'padded',
   },
   tags: ['autodocs'],
+  decorators: [darkGlassDecorator],
   argTypes: {
     data: {
       control: 'object',
