@@ -141,6 +141,9 @@ export function MediaModule({ data, onUpdate, variant = 'standalone', layout, de
   const [maxNaturalHeight, setMaxNaturalHeight] = useState<number | null>(null)
   const [moduleDimensions, setModuleDimensions] = useState<{ width: number; height: number } | null>(null)
   
+  // Determine if module is in compact mode (height <= 140px)
+  const isCompact = moduleDimensions ? moduleDimensions.height <= 140 : false
+  
   // Refs
   const moduleRef = useRef<HTMLDivElement | null>(null)
   const youtubePlayerRef = useRef<any>(null)
@@ -1035,11 +1038,11 @@ export function MediaModule({ data, onUpdate, variant = 'standalone', layout, de
             </div>
             
             {/* Song Title and Controls Section */}
-            <div className="media-module-controller-controls">
+            <div className={`media-module-controller-controls ${isCompact ? 'media-module-controller-controls--compact' : ''}`}>
               <div className="media-module-controller-song-title">
                 <SongTitle
                   title={data.title || ''}
-                  variant="master"
+                  variant={isCompact ? "collapsed" : "master"}
                   currentTime={displayCurrentTime}
                   isActive={isPlaying}
                   layout={layout?.songTitleLayout}
@@ -1047,7 +1050,7 @@ export function MediaModule({ data, onUpdate, variant = 'standalone', layout, de
               </div>
               
               <MediaControls
-                variant="Full"
+                variant={isCompact ? "Partial" : "Full"}
                 isPlaying={isPlaying}
                 onPlayPause={handlePlayPause}
                 onPrevious={handlePrevious}

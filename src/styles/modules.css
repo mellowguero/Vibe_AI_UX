@@ -1059,7 +1059,9 @@
   justify-content: center;
   width: fit-content;
   min-width: 0;
-  margin:0px 16px
+  margin:0px 16px;
+  transition: opacity 0.3s ease, width 0.3s ease, background 0.3s ease, border-radius 0.3s ease, padding 0.3s ease, transform 0.3s ease;
+  will-change: transform, opacity;
 }
 
 .song-title--master.song-title--active {
@@ -1146,6 +1148,7 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 /* Time Wrapper - Fixed width to prevent bouncing */
@@ -1183,6 +1186,13 @@
   justify-content: space-between;
   width: var(--size-song-title-chat-width, 264px);
   min-width: 0;
+  transition: opacity 0.3s ease, width 0.3s ease, background 0.3s ease, border-radius 0.3s ease, padding 0.3s ease, transform 0.3s ease;
+  will-change: transform, opacity;
+}
+
+/* Collapsed variant in media module controller - full width */
+.media-module-controller-song-title .song-title--collapsed {
+  width: 100%;
 }
 
 /* Song and Artist Wrapper - Chat Variant */
@@ -1623,6 +1633,59 @@
   align-items: center;
   height: fit-content;
   width: 100%;
+  transition: gap 0.3s ease;
+}
+
+/* Compact layout - switch to row */
+.media-module-controller-controls--compact {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-base, 8px);
+}
+
+.media-module-controller-controls > * {
+  transition: opacity 0.3s ease, transform 0.3s ease, width 0.3s ease, flex 0.3s ease;
+  will-change: transform, opacity;
+}
+
+/* Smooth transition when expanding back to column */
+.media-module-controller-controls:not(.media-module-controller-controls--compact) .media-module-controller-song-title {
+  animation: slideInFromRow 0.3s ease;
+}
+
+.media-module-controller-controls:not(.media-module-controller-controls--compact) .media-controls {
+  animation: slideInFromRow 0.3s ease 0.1s both;
+}
+
+/* Smooth transition when collapsing to row */
+.media-module-controller-controls--compact .media-module-controller-song-title {
+  animation: slideInToRow 0.3s ease;
+}
+
+.media-module-controller-controls--compact .media-controls {
+  animation: slideInToRow 0.3s ease 0.1s both;
+}
+
+@keyframes slideInFromRow {
+  from {
+    opacity: 0;
+    transform: translateX(-10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes slideInToRow {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .media-module-controller-song-title {
@@ -1639,5 +1702,11 @@
   padding-right: 0px;
   margin-left: 0px;
   margin-right: 0px;
+  transition: opacity 0.3s ease, width 0.3s ease, flex 0.3s ease, transform 0.3s ease;
+}
+
+.media-module-controller-controls--compact .media-module-controller-song-title {
+  flex: 1;
+  min-width: 0;
 }
 

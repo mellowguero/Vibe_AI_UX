@@ -191,6 +191,7 @@
 
 /* Media Controls Styles */
 .media-controls {
+  transition: opacity 0.3s ease;
   display: flex;
   flex-direction: var(--layout-controls-orientation, row);
   align-items: var(--layout-controls-align, center);
