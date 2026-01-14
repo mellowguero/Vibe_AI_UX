@@ -1193,6 +1193,12 @@
 /* Collapsed variant in media module controller - full width */
 .media-module-controller-song-title .song-title--collapsed {
   width: 100%;
+  transition: opacity 0.3s ease, width 0.3s ease, background 0.3s ease, border-radius 0.3s ease, padding 0.3s ease, transform 0.3s ease;
+}
+
+/* Remove background when in compact mode */
+.media-module-controller-controls--compact .media-module-controller-song-title .song-title--collapsed {
+  background: rgba(0, 0, 0, 0);
 }
 
 /* Song and Artist Wrapper - Chat Variant */
@@ -1621,6 +1627,8 @@
 .media-module-controller-progress {
   width: 100%;
   padding: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease, max-height 0.3s ease;
+  overflow: hidden;
 }
 
 .media-module-controller-controls {

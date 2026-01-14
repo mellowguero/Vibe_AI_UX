@@ -1010,32 +1010,39 @@ export function MediaModule({ data, onUpdate, variant = 'standalone', layout, de
       {/* Player components - only show when media is available */}
       {showPlayerComponents && (
         <>
-          <div ref={previewWindowRef} className="media-module-preview-wrapper">
-            <MediaPreviewWindow
-              isExpanded={true}
-              albumArtworkUrl={data.albumArtworkUrl}
-              videoThumbnailUrl={data.thumbnailUrl}
-              videoId={data.videoId}
-              title={data.title}
-              layout={layout?.previewWindowLayout}
-            />
-          </div>
+          {/* Media Preview - Hidden when compact */}
+          {!isCompact && (
+            <div ref={previewWindowRef} className="media-module-preview-wrapper">
+              <MediaPreviewWindow
+                isExpanded={true}
+                albumArtworkUrl={data.albumArtworkUrl}
+                videoThumbnailUrl={data.thumbnailUrl}
+                videoId={data.videoId}
+                title={data.title}
+                layout={layout?.previewWindowLayout}
+              />
+            </div>
+          )}
+          {/* Keep ref when hidden for measurements */}
+          {isCompact && <div ref={previewWindowRef} className="media-module-preview-wrapper" style={{ display: 'none' }} />}
           
           {/* Media Controller Container */}
           <div ref={controllerRef} className="media-module-controller">
-            {/* Progress Bar Section */}
-            <div className="media-module-controller-progress">
-              <AudioProgressBar
-                progress={duration > 0 ? displayCurrentTime / duration : 0}
-                duration={duration}
-                currentTime={displayCurrentTime}
-                onSeek={handleSeek}
-                color={extractedColor || undefined}
-                showHandle={true}
-                disabled={!hasMedia}
-                layout={layout?.progressBarLayout}
-              />
-            </div>
+            {/* Progress Bar Section - Hidden when compact */}
+            {!isCompact && (
+              <div className="media-module-controller-progress">
+                <AudioProgressBar
+                  progress={duration > 0 ? displayCurrentTime / duration : 0}
+                  duration={duration}
+                  currentTime={displayCurrentTime}
+                  onSeek={handleSeek}
+                  color={extractedColor || undefined}
+                  showHandle={true}
+                  disabled={!hasMedia}
+                  layout={layout?.progressBarLayout}
+                />
+              </div>
+            )}
             
             {/* Song Title and Controls Section */}
             <div className={`media-module-controller-controls ${isCompact ? 'media-module-controller-controls--compact' : ''}`}>
