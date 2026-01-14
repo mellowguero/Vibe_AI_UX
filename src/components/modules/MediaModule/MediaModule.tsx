@@ -51,6 +51,9 @@ declare global {
     onYouTubeIframeAPIReady?: () => void
   }
 }
+// Right here is where you change the trigger! 👇👇👇👇
+// Compact mode trigger height - change this to adjust when the module switches to compact layout
+const COMPACT_MODE_HEIGHT = 140
 
 export function MediaModule({ data, onUpdate, variant = 'standalone', layout, debugCurrentTime }: MediaModuleProps) {
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -141,8 +144,8 @@ export function MediaModule({ data, onUpdate, variant = 'standalone', layout, de
   const [maxNaturalHeight, setMaxNaturalHeight] = useState<number | null>(null)
   const [moduleDimensions, setModuleDimensions] = useState<{ width: number; height: number } | null>(null)
   
-  // Determine if module is in compact mode (height <= 140px)
-  const isCompact = moduleDimensions ? moduleDimensions.height <= 140 : false
+  // Determine if module is in compact mode
+  const isCompact = moduleDimensions ? moduleDimensions.height <= COMPACT_MODE_HEIGHT : false
   
   // Refs
   const moduleRef = useRef<HTMLDivElement | null>(null)
