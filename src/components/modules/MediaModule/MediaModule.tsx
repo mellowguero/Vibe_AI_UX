@@ -139,6 +139,7 @@ export function MediaModule({ data, onUpdate, variant = 'standalone', layout, de
   const resizeStartHeightRef = useRef<number>(0)
   const resizeDirectionRef = useRef<'width' | 'height' | 'both' | null>(null)
   const [maxNaturalHeight, setMaxNaturalHeight] = useState<number | null>(null)
+  const [moduleDimensions, setModuleDimensions] = useState<{ width: number; height: number } | null>(null)
   
   // Refs
   const moduleRef = useRef<HTMLDivElement | null>(null)
@@ -877,6 +878,34 @@ export function MediaModule({ data, onUpdate, variant = 'standalone', layout, de
     }
   }, [showPlayerComponents, data.albumArtworkUrl, data.thumbnailUrl, data.title])
 
+  // Track module dimensions for debug
+  useEffect(() => {
+    if (!moduleRef.current) return
+
+    const updateDimensions = () => {
+      if (moduleRef.current) {
+        setModuleDimensions({
+          width: moduleRef.current.offsetWidth,
+          height: moduleRef.current.offsetHeight,
+        })
+      }
+    }
+
+    // Measure immediately
+    updateDimensions()
+
+    // Use ResizeObserver to update when module size changes
+    const resizeObserver = new ResizeObserver(() => {
+      updateDimensions()
+    })
+
+    resizeObserver.observe(moduleRef.current)
+
+    return () => {
+      resizeObserver.disconnect()
+    }
+  }, [moduleWidth, moduleHeight])
+
   // Chat variant layout
   if (variant === 'chat' && showChatPlayer) {
     return (
@@ -1133,6 +1162,28 @@ export function MediaModule({ data, onUpdate, variant = 'standalone', layout, de
             onMouseDown={(e) => handleResizeStart(e, 'both')}
           />
         </>
+      )}
+
+      {/* Debug dimensions display */}
+      {variant === 'standalone' && moduleDimensions && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '8px',
+            left: '8px',
+            background: 'rgba(0, 0, 0, 0.7)',
+            color: '#fff',
+            padding: '4px 8px',
+            borderRadius: '4px',
+            fontSize: '11px',
+            fontFamily: 'monospace',
+            zIndex: 1000,
+            pointerEvents: 'none',
+            userSelect: 'none',
+          }}
+        >
+          {moduleDimensions.width} × {moduleDimensions.height}px
+        </div>
       )}
     </div>
   )
