@@ -1287,7 +1287,9 @@
 /* Expanded state */
 .media-preview-window--expanded {
   width: var(--layout-media-preview-width, 100%);
-  height: var(--layout-media-preview-height, 100%);
+  height: 100%;
+  flex: 1;
+  min-height: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1309,6 +1311,14 @@
 .media-module--standalone .media-preview-window--expanded {
   width: 100%;
   max-width: 100%;
+}
+
+/* Make preview window wrapper expand to fill available space */
+.media-module--standalone .media-module-preview-wrapper {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Collapsed state */
@@ -1527,6 +1537,10 @@
   border-radius: var(--radius-xl, 8px);
   box-sizing: border-box;
   position: relative;
+  background: var(--glass-bg-light, rgba(255, 255, 255, 0.1));
+  border: 1px solid var(--glass-border-light, rgba(255, 255, 255, 0.18));
+  display: flex;
+  flex-direction: column;
 }
 
 /* Ensure all children respect parent width */
@@ -1537,6 +1551,10 @@
 
 /* Exclude resize handle from max-width constraint */
 .media-module--standalone > .module-resize-handle {
+  max-width: none;
+}
+
+.media-module--standalone > .module-resize-handle-corner {
   max-width: none;
 }
 
@@ -1569,10 +1587,8 @@
 
 /* Media Controller Container (Standalone) */
 .media-module-controller {
-  background: var(--glass-bg-light, rgba(255, 255, 255, 0.1));
   backdrop-filter: var(--glass-blur, blur(10px));
   -webkit-backdrop-filter: var(--glass-blur-webkit, blur(10px));
-  border: 1px solid var(--glass-border-light, rgba(255, 255, 255, 0.18));
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: var(--layout-controller-direction, column);
@@ -1582,9 +1598,12 @@
   padding: 0;
   padding-left: 0px;
   padding-right: 0px;
-  padding-bottom: var(--spacing-base, 8px);
+  padding-bottom: 0px;
+  height: fit-content;
   width: 100%;
   box-sizing: border-box;
+  flex-shrink: 0;
+  margin-top: auto;
 }
 
 .media-module-controller-progress {

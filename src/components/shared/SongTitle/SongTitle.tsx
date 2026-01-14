@@ -15,14 +15,31 @@ export interface SongTitleProps {
 declare global {
   interface Window {
     YT?: {
-      Player: new (elementId: string, config: any) => {
+      Player: new (elementId: string, config: {
+        videoId: string
+        events?: {
+          onReady?: (event: { target: any }) => void
+          onStateChange?: (event: { data: number; target: any }) => void
+        }
+        playerVars?: {
+          enablejsapi?: number
+          origin?: string
+        }
+      }) => {
+        playVideo: () => void
+        pauseVideo: () => void
+        seekTo: (seconds: number, allowSeekAhead?: boolean) => void
         getCurrentTime: () => number
+        getDuration: () => number
         getPlayerState: () => number
+        destroy: () => void
       }
       PlayerState: {
+        ENDED: number
         PLAYING: number
         PAUSED: number
-        ENDED: number
+        BUFFERING: number
+        CUED: number
       }
     }
     onYouTubeIframeAPIReady?: () => void

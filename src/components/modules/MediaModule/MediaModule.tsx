@@ -131,16 +131,22 @@ export function MediaModule({ data, onUpdate, variant = 'standalone', layout, de
   
   // Resize state
   const [moduleWidth, setModuleWidth] = useState<number | null>(null)
+  const [moduleHeight, setModuleHeight] = useState<number | null>(null)
   const [isResizing, setIsResizing] = useState(false)
   const resizeStartXRef = useRef<number>(0)
   const resizeStartWidthRef = useRef<number>(0)
+  const resizeStartYRef = useRef<number>(0)
+  const resizeStartHeightRef = useRef<number>(0)
+  const resizeDirectionRef = useRef<'width' | 'height' | 'both' | null>(null)
+  const [maxNaturalHeight, setMaxNaturalHeight] = useState<number | null>(null)
   
   // Refs
   const moduleRef = useRef<HTMLDivElement | null>(null)
   const youtubePlayerRef = useRef<any>(null)
   const audioElementRef = useRef<HTMLAudioElement | null>(null)
-  const iframeRef = useRef<HTMLIFrameElement | null>(null)
   const youtubePlayerContainerRef = useRef<HTMLDivElement | null>(null)
+  const previewWindowRef = useRef<HTMLDivElement | null>(null)
+  const controllerRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     // Clear previous timer
@@ -391,6 +397,9 @@ export function MediaModule({ data, onUpdate, variant = 'standalone', layout, de
       return
     }
 
+    // Capture videoId to ensure type safety in async callbacks
+    const videoId = data.videoId
+
     // Wait for both YouTube API and container to be ready
     let retryCount = 0
     const initializePlayer = () => {
@@ -432,7 +441,7 @@ export function MediaModule({ data, onUpdate, variant = 'standalone', layout, de
       }
 
       // Use a stable container ID based on videoId to avoid React conflicts
-      const containerId = `youtube-player-${data.videoId}`
+      const containerId = `youtube-player-${videoId}`
       const container = youtubePlayerContainerRef.current
       
       // Only set ID if it's not already set (to avoid React conflicts)
@@ -441,8 +450,8 @@ export function MediaModule({ data, onUpdate, variant = 'standalone', layout, de
       }
 
       try {
-        const player = new window.YT.Player(containerId, {
-          videoId: data.videoId,
+        new window.YT.Player(containerId, {
+          videoId: videoId,
           events: {
             onReady: (event: { target: any }) => {
               youtubePlayerRef.current = event.target
@@ -629,6 +638,11 @@ export function MediaModule({ data, onUpdate, variant = 'standalone', layout, de
     setIsPlayerReady(false)
   }, [data.videoId, data.audioUrl])
 
+  // Determine if media is available (must be declared before useEffect that uses showPlayerComponents)
+  const hasMedia = !!(data.videoId || data.audioUrl)
+  const showPlayerComponents = hasMedia && !data.isLoading && variant === 'standalone'
+  const showChatPlayer = hasMedia && variant === 'chat'
+
   // Audio element control methods
   const playAudio = () => {
     if (audioElementRef.current) {
@@ -756,14 +770,24 @@ export function MediaModule({ data, onUpdate, variant = 'standalone', layout, de
   }
 
   // Resize handlers
-  const handleResizeStart = (e: React.MouseEvent) => {
+  const handleResizeStart = (e: React.MouseEvent, direction: 'width' | 'height' | 'both') => {
     e.preventDefault()
     e.stopPropagation()
     
     if (moduleRef.current) {
       const rect = moduleRef.current.getBoundingClientRect()
-      resizeStartXRef.current = e.clientX
-      resizeStartWidthRef.current = rect.width
+      resizeDirectionRef.current = direction
+      
+      if (direction === 'width' || direction === 'both') {
+        resizeStartXRef.current = e.clientX
+        resizeStartWidthRef.current = rect.width
+      }
+      
+      if (direction === 'height' || direction === 'both') {
+        resizeStartYRef.current = e.clientY
+        resizeStartHeightRef.current = rect.height
+      }
+      
       setIsResizing(true)
     }
   }
@@ -774,16 +798,29 @@ export function MediaModule({ data, onUpdate, variant = 'standalone', layout, de
 
     const handleMouseMove = (e: MouseEvent) => {
       if (moduleRef.current) {
-        const deltaX = e.clientX - resizeStartXRef.current
-        const MIN_WIDTH = 280
-        const MAX_WIDTH = 800
-        const newWidth = Math.max(MIN_WIDTH, Math.min(MAX_WIDTH, resizeStartWidthRef.current + deltaX))
-        setModuleWidth(newWidth)
+        const direction = resizeDirectionRef.current
+        
+        if (direction === 'width' || direction === 'both') {
+          const deltaX = e.clientX - resizeStartXRef.current
+          const MIN_WIDTH = 280
+          const MAX_WIDTH = 800
+          const newWidth = Math.max(MIN_WIDTH, Math.min(MAX_WIDTH, resizeStartWidthRef.current + deltaX))
+          setModuleWidth(newWidth)
+        }
+        
+        if (direction === 'height' || direction === 'both') {
+          const deltaY = e.clientY - resizeStartYRef.current
+          const MIN_HEIGHT = 72
+          const MAX_HEIGHT = Infinity
+          const newHeight = Math.max(MIN_HEIGHT, Math.min(MAX_HEIGHT, resizeStartHeightRef.current + deltaY))
+          setModuleHeight(newHeight)
+        }
       }
     }
 
     const handleMouseUp = () => {
       setIsResizing(false)
+      resizeDirectionRef.current = null
     }
 
     document.addEventListener('mousemove', handleMouseMove)
@@ -793,19 +830,52 @@ export function MediaModule({ data, onUpdate, variant = 'standalone', layout, de
       document.removeEventListener('mousemove', handleMouseMove)
       document.removeEventListener('mouseup', handleMouseUp)
     }
-  }, [isResizing])
+  }, [isResizing, maxNaturalHeight])
 
-  // Update moduleStyle to include width if resized
+  // Update moduleStyle to include width and height if resized
   const finalModuleStyle = {
     ...moduleStyle,
     ...(moduleWidth !== null ? { width: `${moduleWidth}px`, minWidth: '280px', maxWidth: '800px' } : {}),
+    ...(moduleHeight !== null ? { height: `${moduleHeight}px`, minHeight: '72px' } : {}),
     position: 'relative' as const,
   }
 
-  // Determine if media is available
-  const hasMedia = !!(data.videoId || data.audioUrl)
-  const showPlayerComponents = hasMedia && !data.isLoading && variant === 'standalone'
-  const showChatPlayer = hasMedia && variant === 'chat'
+  // Calculate natural content height (MediaPreviewWindow + media-module-controller)
+  useEffect(() => {
+    if (!showPlayerComponents) {
+      setMaxNaturalHeight(null)
+      return
+    }
+
+    const measureNaturalHeight = () => {
+      if (previewWindowRef.current && controllerRef.current) {
+        const previewHeight = previewWindowRef.current.offsetHeight
+        const controllerHeight = controllerRef.current.offsetHeight
+        const totalHeight = previewHeight + controllerHeight
+        // Add small buffer for rounding/margins
+        setMaxNaturalHeight(totalHeight + 4)
+      }
+    }
+
+    // Measure immediately
+    measureNaturalHeight()
+
+    // Use ResizeObserver to update when content size changes
+    const resizeObserver = new ResizeObserver(() => {
+      measureNaturalHeight()
+    })
+
+    if (previewWindowRef.current) {
+      resizeObserver.observe(previewWindowRef.current)
+    }
+    if (controllerRef.current) {
+      resizeObserver.observe(controllerRef.current)
+    }
+
+    return () => {
+      resizeObserver.disconnect()
+    }
+  }, [showPlayerComponents, data.albumArtworkUrl, data.thumbnailUrl, data.title])
 
   // Chat variant layout
   if (variant === 'chat' && showChatPlayer) {
@@ -908,17 +978,19 @@ export function MediaModule({ data, onUpdate, variant = 'standalone', layout, de
       {/* Player components - only show when media is available */}
       {showPlayerComponents && (
         <>
-          <MediaPreviewWindow
-            isExpanded={true}
-            albumArtworkUrl={data.albumArtworkUrl}
-            videoThumbnailUrl={data.thumbnailUrl}
-            videoId={data.videoId}
-            title={data.title}
-            layout={layout?.previewWindowLayout}
-          />
+          <div ref={previewWindowRef} className="media-module-preview-wrapper">
+            <MediaPreviewWindow
+              isExpanded={true}
+              albumArtworkUrl={data.albumArtworkUrl}
+              videoThumbnailUrl={data.thumbnailUrl}
+              videoId={data.videoId}
+              title={data.title}
+              layout={layout?.previewWindowLayout}
+            />
+          </div>
           
           {/* Media Controller Container */}
-          <div className="media-module-controller">
+          <div ref={controllerRef} className="media-module-controller">
             {/* Progress Bar Section */}
             <div className="media-module-controller-progress">
               <AudioProgressBar
@@ -949,8 +1021,8 @@ export function MediaModule({ data, onUpdate, variant = 'standalone', layout, de
                 variant="Full"
                 isPlaying={isPlaying}
                 onPlayPause={handlePlayPause}
-                onPrevious={undefined}
-                onNext={undefined}
+                onPrevious={handlePrevious}
+                onNext={handleNext}
                 onShuffle={handleShuffle}
                 onRepeat={handleRepeat}
                 disabled={!hasMedia}
@@ -1050,10 +1122,17 @@ export function MediaModule({ data, onUpdate, variant = 'standalone', layout, de
 
       {/* Resize handle for standalone variant */}
       {variant === 'standalone' && (
-        <div
-          className="module-resize-handle"
-          onMouseDown={handleResizeStart}
-        />
+        <>
+          <div
+            className="module-resize-handle"
+            onMouseDown={(e) => handleResizeStart(e, 'width')}
+          />
+          {/* Corner resize handle for width + height */}
+          <div
+            className="module-resize-handle-corner"
+            onMouseDown={(e) => handleResizeStart(e, 'both')}
+          />
+        </>
       )}
     </div>
   )
