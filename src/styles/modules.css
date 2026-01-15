@@ -1557,6 +1557,13 @@
   border: 1px solid var(--glass-border-light, rgba(255, 255, 255, 0.18));
   display: flex;
   flex-direction: column;
+  transition: backdrop-filter 0.1s ease, -webkit-backdrop-filter 0.1s ease;
+}
+
+/* Add blur to module when compact */
+.media-module--standalone-compact {
+  backdrop-filter: var(--glass-blur, blur(10px));
+  -webkit-backdrop-filter: var(--glass-blur-webkit, blur(10px));
 }
 
 /* Ensure all children respect parent width */
@@ -1622,6 +1629,14 @@
   margin-top: auto;
   position: relative;
   z-index: 10;
+  transition: backdrop-filter 0.1s ease, box-shadow 0.1s ease, -webkit-backdrop-filter 0.1s ease;
+}
+
+/* Remove blur and shadow when compact */
+.media-module-controller--compact {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
 }
 
 .media-module-controller-progress {

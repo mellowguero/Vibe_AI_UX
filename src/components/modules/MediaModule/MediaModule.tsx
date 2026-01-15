@@ -55,6 +55,9 @@ declare global {
 // Compact mode trigger height - change this to adjust when the module switches to compact layout
 const COMPACT_MODE_HEIGHT = 140
 
+
+
+
 export function MediaModule({ data, onUpdate, variant = 'standalone', layout, debugCurrentTime }: MediaModuleProps) {
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const albumArtworkTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -827,6 +830,12 @@ export function MediaModule({ data, onUpdate, variant = 'standalone', layout, de
 
     const handleMouseUp = () => {
       setIsResizing(false)
+      
+      // Auto-collapse to 72px if height is at or below breakpoint
+      if (moduleHeight !== null && moduleHeight <= COMPACT_MODE_HEIGHT) {
+        setModuleHeight(72)
+      }
+      
       resizeDirectionRef.current = null
     }
 
@@ -845,6 +854,8 @@ export function MediaModule({ data, onUpdate, variant = 'standalone', layout, de
     ...(moduleWidth !== null ? { width: `${moduleWidth}px`, minWidth: '280px', maxWidth: '800px' } : {}),
     ...(moduleHeight !== null ? { height: `${moduleHeight}px`, minHeight: '72px' } : {}),
     position: 'relative' as const,
+    // Disable transition during resize for smooth dragging
+    transition: isResizing ? 'none' : 'height 0.3s ease',
   }
 
   // Calculate natural content height (MediaPreviewWindow + media-module-controller)
@@ -984,7 +995,7 @@ export function MediaModule({ data, onUpdate, variant = 'standalone', layout, de
 
   // Standalone variant layout
   return (
-    <div className="media-module media-module--standalone" ref={moduleRef} style={finalModuleStyle}>
+    <div className={`media-module media-module--standalone ${isCompact ? 'media-module--standalone-compact' : ''}`} ref={moduleRef} style={finalModuleStyle}>
       {/* Input field - only show when no media is available */}
       {!hasMedia && (
         <input
@@ -1030,7 +1041,7 @@ export function MediaModule({ data, onUpdate, variant = 'standalone', layout, de
           {isCompact && <div ref={previewWindowRef} className="media-module-preview-wrapper" style={{ display: 'none' }} />}
           
           {/* Media Controller Container */}
-          <div ref={controllerRef} className="media-module-controller">
+          <div ref={controllerRef} className={`media-module-controller ${isCompact ? 'media-module-controller--compact' : ''}`}>
             {/* Progress Bar Section - Hidden when compact */}
             {!isCompact && (
               <div className="media-module-controller-progress">
