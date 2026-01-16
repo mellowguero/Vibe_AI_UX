@@ -1213,7 +1213,7 @@
   height: 36px;
   justify-content: center;
   /* Debug background */
-  background: rgba(212, 53, 191, 0.36);
+  background: rgba(35, 168, 35, 0);
 }
 
 /* Song Title Wrapper - Chat Variant */
@@ -1226,7 +1226,7 @@
   min-width: 0;
   overflow: hidden;
   /* Debug background */
-  background: #23a823;
+  background: rgba(35, 168, 35, 0);
 }
 
 .song-title--chat .song-title-title,
@@ -1251,7 +1251,7 @@
   min-width: 0;
   overflow: hidden;
   /* Debug background */
-  background: #4236c7;
+  background: rgba(35, 168, 35, 0);
 }
 
 .song-title--chat .song-title-artist,
@@ -1663,7 +1663,7 @@
 .media-module-controller-controls--compact {
   flex-direction: row;
   align-items: center;
-  gap: var(--spacing-base, 8px);
+  gap: 0;
 }
 
 .media-module-controller-controls > * {
@@ -1687,6 +1687,7 @@
 
 .media-module-controller-controls--compact .media-controls {
   animation: slideInToRow 0.3s ease 0.1s both;
+  gap: 0;
 }
 
 @keyframes slideInFromRow {
