@@ -13,11 +13,16 @@
       background-color: rgba(66, 66, 66, 1);
       color: #333;
       padding: 2rem;
+      height: fit-content;
+      display: flex;
+      flex-wrap: wrap;
+      width: 100%;
     }
 
     .debug-container {
       max-width: 1200px;
       margin: 0 auto;
+      height: 100vh;
     }
 
     .debug-header {
@@ -41,10 +46,49 @@
       font-family: system-ui, -apple-system, sans-serif;
       display: flex;
       justify-content: center;
+      align-items: center;
+    }
+
+    .debug-control-box {
+      position: fixed;
+      bottom: 8px;
+      left: 8px;
+      width: 769px;
+      height: fit-content;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      z-index: 10000;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    .debug-control-box h2 {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 0 0 12px 0;
+      color: #1a1a1a;
+    }
+
+    .debug-control-box label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: #333;
+      cursor: pointer;
+    }
+
+    .debug-control-box input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
+
   <div class="debug-container">
     <div class="debug-header">
       <h1>MediaModule Visual Debug</h1>
@@ -53,6 +97,14 @@
 
     <div id="media-module-root"></div>
   </div>
+  <div class="debug-control-box">
+    <h2>Debug Controls</h2>
+    <label>
+      <input type="checkbox" id="toggle-dimensions" checked>
+      <span>Show dimensions (width × height)</span>
+    </label>
+  </div>
+
 
   <script type="module" src="/src/media-module-visual-debug.tsx"></script>
 </body>

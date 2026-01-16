@@ -16,6 +16,7 @@ const mockMediaModuleData: MediaModuleData = {
 
 function VisualDebugApp() {
   const [currentTime, setCurrentTime] = useState(0)
+  const [showDimensions, setShowDimensions] = useState(true)
   const MAX_TIME = 9 * 60 // 9 minutes in seconds (540 seconds)
 
   // Timer that increments every second and resets at 9 minutes
@@ -31,6 +32,18 @@ function VisualDebugApp() {
     return () => clearInterval(interval)
   }, [MAX_TIME])
 
+  // Listen for checkbox changes
+  useEffect(() => {
+    const checkbox = document.getElementById('toggle-dimensions') as HTMLInputElement
+    if (checkbox) {
+      const handleChange = () => {
+        setShowDimensions(checkbox.checked)
+      }
+      checkbox.addEventListener('change', handleChange)
+      return () => checkbox.removeEventListener('change', handleChange)
+    }
+  }, [])
+
   // No-op handler since we're just viewing the component
   const handleUpdate = (data: MediaModuleData) => {
     // Visual debug - updates are ignored
@@ -43,6 +56,7 @@ function VisualDebugApp() {
       onUpdate={handleUpdate}
       variant="standalone"
       debugCurrentTime={currentTime}
+      showDebugDimensions={showDimensions}
     />
   )
 }

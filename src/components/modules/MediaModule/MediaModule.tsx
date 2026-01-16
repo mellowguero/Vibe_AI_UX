@@ -15,6 +15,7 @@ interface MediaModuleProps {
   variant?: 'chat' | 'standalone'
   layout?: MediaModuleLayout
   debugCurrentTime?: number // For visual debugging - overrides internal currentTime
+  showDebugDimensions?: boolean // For visual debugging - controls dimensions display
 }
 
 // Declare YouTube IFrame API types
@@ -58,7 +59,7 @@ const COMPACT_MODE_HEIGHT = 140
 
 
 
-export function MediaModule({ data, onUpdate, variant = 'standalone', layout, debugCurrentTime }: MediaModuleProps) {
+export function MediaModule({ data, onUpdate, variant = 'standalone', layout, debugCurrentTime, showDebugDimensions = true }: MediaModuleProps) {
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const albumArtworkTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const colorExtractionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -1189,7 +1190,7 @@ export function MediaModule({ data, onUpdate, variant = 'standalone', layout, de
       )}
 
       {/* Debug dimensions display */}
-      {variant === 'standalone' && moduleDimensions && (
+      {variant === 'standalone' && moduleDimensions && showDebugDimensions && (
         <div
           style={{
             position: 'absolute',
